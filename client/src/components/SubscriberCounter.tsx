@@ -13,35 +13,40 @@ export function SubscriberCounter({ initialCount = 633000, className }: Subscrib
   useEffect(() => {
     let isMounted = true;
 
-    const fetchStats = async () => {
-      const stats = await getChannelStats();
-      if (isMounted && stats) {
-        setCount(stats.subscriberCount);
-      }
-    };
-
-    // Try to fetch real stats immediately
-    fetchStats();
-
-    // If no API key is present (simulation mode), run the fake counter
-    // We check import.meta.env directly here to decide whether to simulate
-    // Also check if we have a hardcoded key in the lib file (which we now do)
-    const hasKey = import.meta.env.VITE_YOUTUBE_API_KEY || "AIzaSyATfNbtD_0hwWt49smGHA9ki4Kb_GGaXJU";
-    
-    if (!hasKey) {
+    const startSimulation = () => {
       const interval = setInterval(() => {
         if (Math.random() > 0.7) {
           setCount(prev => prev + 1);
         }
       }, 3000);
-      return () => {
-        isMounted = false;
-        clearInterval(interval);
-      };
-    }
+      return interval;
+    };
+
+    const fetchStats = async () => {
+      try {
+        const stats = await getChannelStats();
+        if (isMounted && stats) {
+          setCount(stats.subscriberCount);
+        } else if (isMounted) {
+          // If stats are null (API failed/blocked), fallback to simulation
+          console.warn("API blocked or failed, falling back to simulation");
+          const interval = startSimulation();
+          return () => clearInterval(interval);
+        }
+      } catch (e) {
+        if (isMounted) {
+          const interval = startSimulation();
+          return () => clearInterval(interval);
+        }
+      }
+    };
+
+    // Try to fetch real stats immediately
+    const cleanupPromise = fetchStats();
 
     return () => {
       isMounted = false;
+      cleanupPromise.then(cleanup => cleanup && cleanup());
     };
   }, []);
 
