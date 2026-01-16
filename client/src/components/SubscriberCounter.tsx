@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { getChannelStats } from "@/lib/youtube";
 
 interface SubscriberCounterProps {
   initialCount?: number;
@@ -10,19 +11,38 @@ export function SubscriberCounter({ initialCount = 633000, className }: Subscrib
   const [count, setCount] = useState(initialCount);
 
   useEffect(() => {
-    // SIMULATION MODE:
-    // In a real production app, you would fetch this from the YouTube Data API:
-    // GET https://www.googleapis.com/youtube/v3/channels?part=statistics&id=YOUR_CHANNEL_ID&key=YOUR_API_KEY
-    
-    // For now, we simulate organic growth to make the site feel "alive"
-    const interval = setInterval(() => {
-      // 30% chance to increment subscriber count
-      if (Math.random() > 0.7) {
-        setCount(prev => prev + 1);
-      }
-    }, 3000);
+    let isMounted = true;
 
-    return () => clearInterval(interval);
+    const fetchStats = async () => {
+      const stats = await getChannelStats();
+      if (isMounted && stats) {
+        setCount(stats.subscriberCount);
+      }
+    };
+
+    // Try to fetch real stats immediately
+    fetchStats();
+
+    // If no API key is present (simulation mode), run the fake counter
+    // We check import.meta.env directly here to decide whether to simulate
+    // Also check if we have a hardcoded key in the lib file (which we now do)
+    const hasKey = import.meta.env.VITE_YOUTUBE_API_KEY || "AIzaSyATfNbtD_0hwWt49smGHA9ki4Kb_GGaXJU";
+    
+    if (!hasKey) {
+      const interval = setInterval(() => {
+        if (Math.random() > 0.7) {
+          setCount(prev => prev + 1);
+        }
+      }, 3000);
+      return () => {
+        isMounted = false;
+        clearInterval(interval);
+      };
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
