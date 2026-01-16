@@ -57,5 +57,12 @@
 - [x] Connect frontend to backend search endpoint
 - [x] Test search with real artist and track names (Astrix, Infected Mushroom - working)
 
-## Pending: Background Images
-- [ ] Add background images for Psychedelic Trance and Psychill sections
+## Pending: Background Images (Complete)
+- [x] Generate background image for Psychedelic Trance genre card
+- [x] Generate background image for Psychill/Ambient genre card
+- [x] Add images to website (saved directly to public/images/)
+
+## Radio Streaming Setup
+- [x] Research free radio streaming solutions
+- [x] Create comprehensive guide for user
+- [ ] Connect live radio stream URL to persistent player (waiting for user to set up stream)
