@@ -31,3 +31,22 @@
 - [ ] Connect real audio stream URL (Icecast/Shoutcast) to make player functional
 - [ ] Auto-fetch latest YouTube videos using API
 - [ ] Publish to permanent domain to enable live subscriber counter
+
+## YouTube Channel Scan
+- [x] Fetch all 5000+ videos from Psychedelic Universe channel (5350 fetched)
+- [x] Extract artist names from video titles
+- [x] Compile deduplicated artist list with video counts (1622 unique artists)
+- [x] Deliver comprehensive artist list for categorization
+
+## Artist Genre Categorization Project
+- [x] Clean duplicates and false entries from artist CSV (1368 unique artists)
+- [x] Research genre classifications (Progressive, Psychedelic, Goa, Full On, Psychill)
+- [x] Cross-reference artists with genre research (318 artists with 5+ tracks categorized)
+- [x] Create comprehensive artist-genre mapping document
+
+## Follow-Up: Website Genre Updates (Complete)
+- [x] Add new "Psychedelic Trance" section to website
+- [x] Reorder genres: Progressive Psytrance / Psychedelic Trance / Goa Trance / Full On / Psychill Ambient
+- [x] Update genre count from 4 to 5 sections
+- [x] Update database schema (added psychedelic-trance category)
+- [x] Update frontend components (MixGrid, Footer, Admin)

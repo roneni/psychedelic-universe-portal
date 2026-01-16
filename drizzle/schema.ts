@@ -32,7 +32,7 @@ export const mixes = mysqlTable("mixes", {
   id: int("id").autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
   youtubeId: varchar("youtubeId", { length: 20 }).notNull(),
-  category: mysqlEnum("category", ["goa-trance", "progressive-psy", "full-on", "psychill"]).notNull(),
+  category: mysqlEnum("category", ["progressive-psy", "psychedelic-trance", "goa-trance", "full-on", "psychill"]).notNull(),
   description: text("description"),
   thumbnailUrl: varchar("thumbnailUrl", { length: 500 }),
   featured: boolean("featured").default(false).notNull(),

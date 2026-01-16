@@ -30,8 +30,9 @@ export function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-6 text-white">EXPLORE</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
+              <li><a href="#" className="hover:text-primary transition-colors">Progressive Psytrance</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Psychedelic Trance</a></li>
               <li><a href="#" className="hover:text-primary transition-colors">Goa Trance</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Progressive Psy</a></li>
               <li><a href="#" className="hover:text-primary transition-colors">Full-On</a></li>
               <li><a href="#" className="hover:text-primary transition-colors">Psychill / Ambient</a></li>
               <li><a href="#" className="hover:text-primary transition-colors">Festivals 2026</a></li>

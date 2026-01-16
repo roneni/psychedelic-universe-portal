@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
 
-type Category = "goa-trance" | "progressive-psy" | "full-on" | "psychill";
+type Category = "progressive-psy" | "psychedelic-trance" | "goa-trance" | "full-on" | "psychill";
 
 interface MixFormData {
   title: string;
@@ -37,7 +37,7 @@ interface PartnerFormData {
 const defaultMixForm: MixFormData = {
   title: "",
   youtubeId: "",
-  category: "goa-trance",
+  category: "progressive-psy",
   description: "",
   featured: false,
   sortOrder: 0,
@@ -347,8 +347,9 @@ export default function Admin() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent className="bg-slate-900 border-slate-700">
+                              <SelectItem value="progressive-psy">Progressive Psytrance</SelectItem>
+                              <SelectItem value="psychedelic-trance">Psychedelic Trance</SelectItem>
                               <SelectItem value="goa-trance">Goa Trance</SelectItem>
-                              <SelectItem value="progressive-psy">Progressive Psy</SelectItem>
                               <SelectItem value="full-on">Full-On</SelectItem>
                               <SelectItem value="psychill">Psychill / Ambient</SelectItem>
                             </SelectContent>

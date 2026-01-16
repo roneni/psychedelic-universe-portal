@@ -2,28 +2,34 @@ import { CategoryCard } from "./CategoryCard";
 
 const categories = [
   {
+    title: "PROGRESSIVE PSYTRANCE",
+    image: "/images/progressive-psy.jpg",
+    description: "Deep, rolling basslines and hypnotic atmospheres for the modern dancefloor.",
+    id: "progressive-psy"
+  },
+  {
+    title: "PSYCHEDELIC TRANCE",
+    image: "/images/psychedelic-trance.jpg",
+    description: "Driving basslines, FM synthesis, and futuristic sounds from the UK psy scene.",
+    id: "psychedelic-trance"
+  },
+  {
     title: "GOA TRANCE",
     image: "/images/goa-trance.jpg",
     description: "The roots of the movement. Melodic, spiritual, and organic sounds from the golden era.",
-    id: "goa"
-  },
-  {
-    title: "PROGRESSIVE PSY",
-    image: "/images/progressive-psy.jpg",
-    description: "Deep, rolling basslines and hypnotic atmospheres for the modern dancefloor.",
-    id: "prog"
+    id: "goa-trance"
   },
   {
     title: "FULL-ON",
     image: "/images/full-on.jpg",
     description: "High energy, driving beats, and dynamic melodies designed to blast the night away.",
-    id: "fullon"
+    id: "full-on"
   },
   {
     title: "PSYCHILL / AMBIENT",
-    image: "/images/hero-bg.jpg", // Reusing hero bg for now as it fits ambient
+    image: "/images/psychill.jpg",
     description: "Downtempo beats and spacious soundscapes for relaxation and inner exploration.",
-    id: "chill"
+    id: "psychill"
   }
 ];
 
@@ -40,7 +46,7 @@ export function MixGrid() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {categories.map((category) => (
             <CategoryCard
               key={category.id}

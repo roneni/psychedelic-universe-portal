@@ -15,6 +15,13 @@
       "when": 1768587661570,
       "tag": "0001_previous_frightful_four",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1768597790731,
+      "tag": "0002_lying_edwin_jarvis",
+      "breakpoints": true
     }
   ]
 }

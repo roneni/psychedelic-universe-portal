@@ -1,0 +1,1 @@
+ALTER TABLE `mixes` MODIFY COLUMN `category` enum('progressive-psy','psychedelic-trance','goa-trance','full-on','psychill') NOT NULL;
