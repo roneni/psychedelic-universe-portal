@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Youtube, Radio, Facebook, Instagram, Twitter } from "lucide-react";
+import { SubscriberCounter } from "./SubscriberCounter";
 
 export function Footer() {
   return (
@@ -52,10 +53,13 @@ export function Footer() {
           {/* Primary Actions */}
           <div className="space-y-4">
             <h4 className="text-lg font-semibold mb-6 text-white">STAY CONNECTED</h4>
-            <Button className="w-full bg-[#FF0000] hover:bg-[#CC0000] text-white font-bold tracking-wide shadow-lg group">
-              <Youtube className="mr-2 w-5 h-5 group-hover:animate-pulse" />
-              SUBSCRIBE ON YOUTUBE
-              <span className="ml-2 text-xs bg-black/20 px-2 py-0.5 rounded-full">633K</span>
+            <Button className="w-full bg-[#FF0000] hover:bg-[#CC0000] text-white font-bold tracking-wide shadow-lg group relative overflow-hidden">
+              <Youtube className="mr-2 w-5 h-5 group-hover:animate-pulse relative z-10" />
+              <span className="relative z-10">SUBSCRIBE</span>
+              <span className="ml-2 text-xs bg-black/20 px-2 py-0.5 rounded-full relative z-10 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                <SubscriberCounter className="text-white" />
+              </span>
             </Button>
             <Button variant="outline" className="w-full border-primary/50 text-primary hover:bg-primary/10 hover:text-primary font-bold tracking-wide">
               <Radio className="mr-2 w-5 h-5" />
