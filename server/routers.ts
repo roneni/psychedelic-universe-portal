@@ -1,0 +1,157 @@
+import { COOKIE_NAME } from "@shared/const";
+import { z } from "zod";
+import { getSessionCookieOptions } from "./_core/cookies";
+import { systemRouter } from "./_core/systemRouter";
+import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
+import {
+  getAllMixes,
+  getMixesByCategory,
+  getFeaturedMixes,
+  createMix,
+  updateMix,
+  deleteMix,
+  getAllPartners,
+  getActivePartners,
+  createPartner,
+  updatePartner,
+  deletePartner,
+  getAllSettings,
+  getSetting,
+  upsertSetting,
+  getAllSubscribers,
+  addSubscriber,
+  removeSubscriber,
+} from "./db";
+
+const categoryEnum = z.enum(["goa-trance", "progressive-psy", "full-on", "psychill"]);
+
+export const appRouter = router({
+  system: systemRouter,
+  auth: router({
+    me: publicProcedure.query(opts => opts.ctx.user),
+    logout: publicProcedure.mutation(({ ctx }) => {
+      const cookieOptions = getSessionCookieOptions(ctx.req);
+      ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
+      return {
+        success: true,
+      } as const;
+    }),
+  }),
+
+  // ============ MIXES ============
+  mixes: router({
+    // Public endpoints
+    list: publicProcedure.query(() => getAllMixes()),
+    byCategory: publicProcedure
+      .input(z.object({ category: categoryEnum }))
+      .query(({ input }) => getMixesByCategory(input.category)),
+    featured: publicProcedure.query(() => getFeaturedMixes()),
+
+    // Admin endpoints
+    create: adminProcedure
+      .input(z.object({
+        title: z.string().min(1),
+        youtubeId: z.string().min(1),
+        category: categoryEnum,
+        description: z.string().optional(),
+        thumbnailUrl: z.string().optional(),
+        featured: z.boolean().optional(),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(({ input }) => createMix(input)),
+
+    update: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        title: z.string().min(1).optional(),
+        youtubeId: z.string().min(1).optional(),
+        category: categoryEnum.optional(),
+        description: z.string().optional(),
+        thumbnailUrl: z.string().optional(),
+        featured: z.boolean().optional(),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(({ input }) => {
+        const { id, ...data } = input;
+        return updateMix(id, data);
+      }),
+
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input }) => deleteMix(input.id)),
+  }),
+
+  // ============ PARTNERS ============
+  partners: router({
+    // Public endpoints
+    list: publicProcedure.query(() => getAllPartners()),
+    active: publicProcedure.query(() => getActivePartners()),
+
+    // Admin endpoints
+    create: adminProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        logoUrl: z.string().min(1),
+        websiteUrl: z.string().optional(),
+        quote: z.string().optional(),
+        active: z.boolean().optional(),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(({ input }) => createPartner(input)),
+
+    update: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().min(1).optional(),
+        logoUrl: z.string().min(1).optional(),
+        websiteUrl: z.string().optional(),
+        quote: z.string().optional(),
+        active: z.boolean().optional(),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(({ input }) => {
+        const { id, ...data } = input;
+        return updatePartner(id, data);
+      }),
+
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input }) => deletePartner(input.id)),
+  }),
+
+  // ============ SETTINGS ============
+  settings: router({
+    // Public endpoints
+    get: publicProcedure
+      .input(z.object({ key: z.string() }))
+      .query(({ input }) => getSetting(input.key)),
+
+    // Admin endpoints
+    list: adminProcedure.query(() => getAllSettings()),
+    
+    upsert: adminProcedure
+      .input(z.object({
+        key: z.string().min(1),
+        value: z.string(),
+        description: z.string().optional(),
+      }))
+      .mutation(({ input }) => upsertSetting(input.key, input.value, input.description)),
+  }),
+
+  // ============ SUBSCRIBERS ============
+  subscribers: router({
+    // Public endpoint for subscribing
+    subscribe: publicProcedure
+      .input(z.object({ email: z.string().email() }))
+      .mutation(({ input }) => addSubscriber(input.email)),
+
+    // Admin endpoints
+    list: adminProcedure.query(() => getAllSubscribers()),
+    
+    remove: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input }) => removeSubscriber(input.id)),
+  }),
+});
+
+export type AppRouter = typeof appRouter;

@@ -1,14 +1,23 @@
 import { YouTubeEmbed } from "./YouTubeEmbed";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { trpc } from "@/lib/trpc";
 
-const featuredMixes = [
-  { id: "mix1", videoId: "dQw4w9WgXcQ", title: "Back to Goa | Retro Goa Trance DJ Mix" }, // Placeholder ID, will update if real one found
-  { id: "mix2", videoId: "dQw4w9WgXcQ", title: "Journey To The Depth of the Universe (Pt. 2)" },
-  { id: "mix3", videoId: "dQw4w9WgXcQ", title: "Happy New Year 2026 | Progressive Psytrance" }
+// Fallback data for when database is empty or loading
+const fallbackMixes = [
+  { id: 1, videoId: "dQw4w9WgXcQ", title: "Back to Goa | Retro Goa Trance DJ Mix" },
+  { id: 2, videoId: "dQw4w9WgXcQ", title: "Journey To The Depth of the Universe (Pt. 2)" },
+  { id: 3, videoId: "dQw4w9WgXcQ", title: "Happy New Year 2026 | Progressive Psytrance" }
 ];
 
 export function FeaturedMixes() {
+  const { data: mixes, isLoading } = trpc.mixes.featured.useQuery();
+
+  // Use database mixes if available, otherwise use fallback
+  const displayMixes = mixes && mixes.length > 0 
+    ? mixes.map(mix => ({ id: mix.id, videoId: mix.youtubeId, title: mix.title }))
+    : fallbackMixes;
+
   return (
     <section className="py-24 bg-black/20 relative overflow-hidden">
       {/* Decorative background elements */}
@@ -26,16 +35,22 @@ export function FeaturedMixes() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredMixes.map((mix) => (
-            <div key={mix.id} className="space-y-4">
-              <YouTubeEmbed videoId={mix.videoId} title={mix.title} />
-              <h3 className="text-lg font-semibold line-clamp-2 hover:text-primary transition-colors cursor-pointer">
-                {mix.title}
-              </h3>
-            </div>
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {displayMixes.map((mix) => (
+              <div key={mix.id} className="space-y-4">
+                <YouTubeEmbed videoId={mix.videoId} title={mix.title} />
+                <h3 className="text-lg font-semibold line-clamp-2 hover:text-primary transition-colors cursor-pointer">
+                  {mix.title}
+                </h3>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
