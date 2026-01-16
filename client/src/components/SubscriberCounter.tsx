@@ -29,7 +29,7 @@ export function SubscriberCounter({ initialCount = 633000, className }: Subscrib
           setCount(stats.subscriberCount);
         } else if (isMounted) {
           // If stats are null (API failed/blocked), fallback to simulation
-          console.warn("API blocked or failed, falling back to simulation");
+          // console.debug("API blocked or failed, falling back to simulation");
           const interval = startSimulation();
           return () => clearInterval(interval);
         }

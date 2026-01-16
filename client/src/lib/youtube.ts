@@ -26,7 +26,8 @@ export async function getChannelStats() {
     }
     return null;
   } catch (error) {
-    console.error("YouTube API Error:", error);
+    // Suppress error logging for expected restrictions in development
+    // console.warn("YouTube API unavailable (likely restricted domain):", error);
     return null;
   }
 }
