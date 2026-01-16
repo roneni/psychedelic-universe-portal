@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Play, Radio } from "lucide-react";
+import { SearchBar } from "@/components/SearchBar";
+import { Play } from "lucide-react";
 
 export function Hero() {
   return (
@@ -37,8 +38,13 @@ export function Hero() {
           </p>
         </div>
 
+        {/* Search Bar */}
+        <div className="w-full max-w-xl pt-4">
+          <SearchBar placeholder="Search 5,400+ mixes by artist or track name..." />
+        </div>
+
         {/* CTA Button */}
-        <div className="pt-8">
+        <div className="pt-4">
           <Button 
             size="lg" 
             className="group relative px-8 py-8 text-xl rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/50 hover:border-primary transition-all duration-500 shadow-[0_0_30px_-5px_rgba(34,211,238,0.3)] hover:shadow-[0_0_50px_-10px_rgba(34,211,238,0.6)] overflow-hidden"

@@ -50,3 +50,12 @@
 - [x] Update genre count from 4 to 5 sections
 - [x] Update database schema (added psychedelic-trance category)
 - [x] Update frontend components (MixGrid, Footer, Admin)
+
+## YouTube Search Feature (Complete)
+- [x] Set up YouTube Data API integration on server
+- [x] Create search bar component with auto-complete UI
+- [x] Connect frontend to backend search endpoint
+- [x] Test search with real artist and track names (Astrix, Infected Mushroom - working)
+
+## Pending: Background Images
+- [ ] Add background images for Psychedelic Trance and Psychill sections

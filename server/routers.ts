@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
+import { searchChannelVideos } from "./youtube";
 import {
   getAllMixes,
   getMixesByCategory,
@@ -136,6 +137,23 @@ export const appRouter = router({
         description: z.string().optional(),
       }))
       .mutation(({ input }) => upsertSetting(input.key, input.value, input.description)),
+  }),
+
+  // ============ YOUTUBE SEARCH ============
+  youtube: router({
+    search: publicProcedure
+      .input(z.object({
+        query: z.string().min(2).max(100),
+        maxResults: z.number().min(1).max(25).optional().default(10),
+      }))
+      .query(async ({ input }) => {
+        // Get API key from settings or environment
+        const apiKey = await getSetting("youtube_api_key");
+        if (!apiKey) {
+          throw new Error("YouTube API key not configured. Please add it in Admin Settings.");
+        }
+        return searchChannelVideos(input.query, apiKey, input.maxResults);
+      }),
   }),
 
   // ============ SUBSCRIBERS ============
