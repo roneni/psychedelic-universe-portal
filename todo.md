@@ -66,3 +66,14 @@
 - [x] Research free radio streaming solutions
 - [x] Create comprehensive guide for user
 - [ ] Connect live radio stream URL to persistent player (waiting for user to set up stream)
+
+## YouTube Playlist Player Integration
+- [x] Create Radio Mode section under Psy Portal with YouTube mixes player
+- [x] Link "Listen Live 24/7" button to Radio Mode section
+- [x] Maintain cosmic psychedelic design in new section
+- [x] Update bottom persistent player to use main playlist (3200+ tracks)
+- [x] Show track title data on bottom player
+- [x] Make YouTube logo and track name clickable (links to YouTube)
+- [x] Clickable elements only visible on hover
+- [ ] Main playlist: https://www.youtube.com/playlist?list=PLIVLAENoBSJfgJbBPOUFmjoKxkMeKMM4P
+- [ ] Mixes playlist: https://www.youtube.com/playlist?list=PLIVLAENoBSJcudnp-NfZUcJbPYj7SWrws

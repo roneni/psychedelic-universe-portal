@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { SearchBar } from "@/components/SearchBar";
 import { Play } from "lucide-react";
+import { Link } from "wouter";
 
 export function Hero() {
   return (
@@ -45,20 +46,22 @@ export function Hero() {
 
         {/* CTA Button */}
         <div className="pt-4">
-          <Button 
-            size="lg" 
-            className="group relative px-8 py-8 text-xl rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/50 hover:border-primary transition-all duration-500 shadow-[0_0_30px_-5px_rgba(34,211,238,0.3)] hover:shadow-[0_0_50px_-10px_rgba(34,211,238,0.6)] overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-            <span className="flex items-center gap-3 relative z-10">
-              <span className="relative flex h-4 w-4">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-cyan-500"></span>
+          <Link href="/radio">
+            <Button 
+              size="lg" 
+              className="group relative px-8 py-8 text-xl rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/50 hover:border-primary transition-all duration-500 shadow-[0_0_30px_-5px_rgba(34,211,238,0.3)] hover:shadow-[0_0_50px_-10px_rgba(34,211,238,0.6)] overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+              <span className="flex items-center gap-3 relative z-10">
+                <span className="relative flex h-4 w-4">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-4 w-4 bg-cyan-500"></span>
+                </span>
+                LISTEN LIVE 24/7
+                <Play className="w-6 h-6 fill-current ml-1" />
               </span>
-              LISTEN LIVE 24/7
-              <Play className="w-6 h-6 fill-current ml-1" />
-            </span>
-          </Button>
+            </Button>
+          </Link>
         </div>
 
         {/* Scroll Indicator */}
