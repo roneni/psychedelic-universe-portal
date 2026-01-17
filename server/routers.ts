@@ -23,6 +23,12 @@ import {
   getAllSubscribers,
   addSubscriber,
   removeSubscriber,
+  getAllArtists,
+  getFeaturedArtists,
+  getArtistBySlug,
+  createArtist,
+  updateArtist,
+  deleteArtist,
 } from "./db";
 
 const categoryEnum = z.enum(["progressive-psy", "psychedelic-trance", "goa-trance", "full-on"]);
@@ -177,6 +183,67 @@ export const appRouter = router({
         const result = await storagePut(key, buffer, input.contentType);
         return { url: result.url };
       }),
+  }),
+
+  // ============ ARTISTS ============
+  artists: router({
+    // Public endpoints
+    list: publicProcedure.query(() => getAllArtists()),
+    featured: publicProcedure.query(() => getFeaturedArtists()),
+    bySlug: publicProcedure
+      .input(z.object({ slug: z.string() }))
+      .query(({ input }) => getArtistBySlug(input.slug)),
+
+    // Admin endpoints
+    create: adminProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        slug: z.string().min(1),
+        realName: z.string().optional(),
+        country: z.string().optional(),
+        primaryGenre: categoryEnum.optional(),
+        bio: z.string().optional(),
+        imageUrl: z.string().optional(),
+        websiteUrl: z.string().optional(),
+        youtubeUrl: z.string().optional(),
+        soundcloudUrl: z.string().optional(),
+        spotifyUrl: z.string().optional(),
+        instagramUrl: z.string().optional(),
+        facebookUrl: z.string().optional(),
+        trackCount: z.number().optional(),
+        featured: z.boolean().optional(),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(({ input }) => createArtist(input)),
+
+    update: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().min(1).optional(),
+        slug: z.string().min(1).optional(),
+        realName: z.string().optional(),
+        country: z.string().optional(),
+        primaryGenre: categoryEnum.optional(),
+        bio: z.string().optional(),
+        imageUrl: z.string().optional(),
+        websiteUrl: z.string().optional(),
+        youtubeUrl: z.string().optional(),
+        soundcloudUrl: z.string().optional(),
+        spotifyUrl: z.string().optional(),
+        instagramUrl: z.string().optional(),
+        facebookUrl: z.string().optional(),
+        trackCount: z.number().optional(),
+        featured: z.boolean().optional(),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(({ input }) => {
+        const { id, ...data } = input;
+        return updateArtist(id, data);
+      }),
+
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input }) => deleteArtist(input.id)),
   }),
 
   // ============ SUBSCRIBERS ============

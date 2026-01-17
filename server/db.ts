@@ -5,7 +5,8 @@ import {
   mixes, InsertMix, Mix,
   partners, InsertPartner, Partner,
   siteSettings, InsertSiteSetting, SiteSetting,
-  subscribers, InsertSubscriber, Subscriber
+  subscribers, InsertSubscriber, Subscriber,
+  artists, InsertArtist, Artist
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -216,4 +217,43 @@ export async function removeSubscriber(id: number): Promise<void> {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   await db.delete(subscribers).where(eq(subscribers.id, id));
+}
+
+// ============ ARTISTS ============
+
+export async function getAllArtists(): Promise<Artist[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(artists).orderBy(asc(artists.sortOrder), desc(artists.trackCount));
+}
+
+export async function getFeaturedArtists(): Promise<Artist[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(artists).where(eq(artists.featured, true)).orderBy(asc(artists.sortOrder));
+}
+
+export async function getArtistBySlug(slug: string): Promise<Artist | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(artists).where(eq(artists.slug, slug)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createArtist(artist: InsertArtist): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(artists).values(artist);
+}
+
+export async function updateArtist(id: number, artist: Partial<InsertArtist>): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(artists).set(artist).where(eq(artists.id, id));
+}
+
+export async function deleteArtist(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(artists).where(eq(artists.id, id));
 }

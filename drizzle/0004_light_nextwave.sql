@@ -1,0 +1,23 @@
+CREATE TABLE `artists` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`name` varchar(255) NOT NULL,
+	`slug` varchar(255) NOT NULL,
+	`realName` varchar(255),
+	`country` varchar(100),
+	`primaryGenre` enum('progressive-psy','psychedelic-trance','goa-trance','full-on'),
+	`bio` text,
+	`imageUrl` varchar(500),
+	`websiteUrl` varchar(500),
+	`youtubeUrl` varchar(500),
+	`soundcloudUrl` varchar(500),
+	`spotifyUrl` varchar(500),
+	`instagramUrl` varchar(500),
+	`facebookUrl` varchar(500),
+	`trackCount` int NOT NULL DEFAULT 0,
+	`featured` boolean NOT NULL DEFAULT false,
+	`sortOrder` int NOT NULL DEFAULT 0,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `artists_id` PRIMARY KEY(`id`),
+	CONSTRAINT `artists_slug_unique` UNIQUE(`slug`)
+);

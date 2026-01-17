@@ -1,0 +1,90 @@
+{
+  "query": "SELECT artist, COUNT(*) as track_count FROM mixes WHERE artist IS NOT NULL GROUP BY artist ORDER BY track_count DESC LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2yfGtcjrWZjLtC9.root --database juiXTJyFerhciE5fv2h2Ms --execute SELECT artist, COUNT(*) as track_count FROM mixes WHERE artist IS NOT NULL GROUP BY artist ORDER BY track_count DESC LIMIT 20;",
+  "rows": [
+    {
+      "artist": "Static Movement",
+      "track_count": "112"
+    },
+    {
+      "artist": "Astrix",
+      "track_count": "73"
+    },
+    {
+      "artist": "Zyce",
+      "track_count": "72"
+    },
+    {
+      "artist": "Liquid Soul",
+      "track_count": "72"
+    },
+    {
+      "artist": "Infected Mushroom",
+      "track_count": "69"
+    },
+    {
+      "artist": "Ace Ventura",
+      "track_count": "55"
+    },
+    {
+      "artist": "Egorythmia",
+      "track_count": "55"
+    },
+    {
+      "artist": "Avalon",
+      "track_count": "46"
+    },
+    {
+      "artist": "Djantrix",
+      "track_count": "42"
+    },
+    {
+      "artist": "Outsiders",
+      "track_count": "42"
+    },
+    {
+      "artist": "Ritmo",
+      "track_count": "41"
+    },
+    {
+      "artist": "Lunatica",
+      "track_count": "39"
+    },
+    {
+      "artist": "Sonic Species",
+      "track_count": "38"
+    },
+    {
+      "artist": "Captain Hook",
+      "track_count": "37"
+    },
+    {
+      "artist": "Vini Vici",
+      "track_count": "37"
+    },
+    {
+      "artist": "Astral Projection",
+      "track_count": "35"
+    },
+    {
+      "artist": "Side Effects",
+      "track_count": "32"
+    },
+    {
+      "artist": "One Function",
+      "track_count": "31"
+    },
+    {
+      "artist": "Electric Universe",
+      "track_count": "30"
+    },
+    {
+      "artist": "Freedom Fighters",
+      "track_count": "28"
+    }
+  ],
+  "messages": [],
+  "stdout": "artist\ttrack_count\nStatic Movement\t112\nAstrix\t73\nZyce\t72\nLiquid Soul\t72\nInfected Mushroom\t69\nAce Ventura\t55\nEgorythmia\t55\nAvalon\t46\nDjantrix\t42\nOutsiders\t42\nRitmo\t41\nLunatica\t39\nSonic Species\t38\nCaptain Hook\t37\nVini Vici\t37\nAstral Projection\t35\nSide Effects\t32\nOne Function\t31\nElectric Universe\t30\nFreedom Fighters\t28\n",
+  "stderr": "",
+  "execution_time_ms": 1528
+}

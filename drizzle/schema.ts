@@ -89,3 +89,31 @@ export const subscribers = mysqlTable("subscribers", {
 
 export type Subscriber = typeof subscribers.$inferSelect;
 export type InsertSubscriber = typeof subscribers.$inferInsert;
+
+/**
+ * Artists table - stores featured artist profiles for the Artist Directory
+ */
+export const artists = mysqlTable("artists", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  realName: varchar("realName", { length: 255 }),
+  country: varchar("country", { length: 100 }),
+  primaryGenre: mysqlEnum("primaryGenre", ["progressive-psy", "psychedelic-trance", "goa-trance", "full-on"]),
+  bio: text("bio"),
+  imageUrl: varchar("imageUrl", { length: 500 }),
+  websiteUrl: varchar("websiteUrl", { length: 500 }),
+  youtubeUrl: varchar("youtubeUrl", { length: 500 }),
+  soundcloudUrl: varchar("soundcloudUrl", { length: 500 }),
+  spotifyUrl: varchar("spotifyUrl", { length: 500 }),
+  instagramUrl: varchar("instagramUrl", { length: 500 }),
+  facebookUrl: varchar("facebookUrl", { length: 500 }),
+  trackCount: int("trackCount").default(0).notNull(),
+  featured: boolean("featured").default(false).notNull(),
+  sortOrder: int("sortOrder").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Artist = typeof artists.$inferSelect;
+export type InsertArtist = typeof artists.$inferInsert;
