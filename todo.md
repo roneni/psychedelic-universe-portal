@@ -82,6 +82,12 @@
 
 ## SUGGESTED NEXT STEPS & FOLLOW-UPS
 
+### Bug Fixes
+- [x] Fix partners section not displaying on homepage (added 11 partner logos via database)
+- [x] Fix manually added partners not showing up (partners carousel now working)
+- [x] Fix Featured Mixes showing placeholder videos (updated fallback to real Psychedelic Universe videos)
+- [ ] Improve partner logo upload functionality in Admin panel
+
 ### High Priority - Site Functionality
 - [ ] Add genre-specific pages - Make "Explore Mixes" buttons on genre cards link to dedicated pages filtering mixes by that genre
 - [ ] Populate genre mixes via Admin - Use the artist categorization data to add YouTube videos to each genre section through Admin Dashboard

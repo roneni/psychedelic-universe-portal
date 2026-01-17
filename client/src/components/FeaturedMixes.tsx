@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 
-// Fallback data for when database is empty or loading
+// Fallback data for when database is empty - using real Psychedelic Universe videos
 const fallbackMixes = [
-  { id: 1, videoId: "dQw4w9WgXcQ", title: "Back to Goa | Retro Goa Trance DJ Mix" },
-  { id: 2, videoId: "dQw4w9WgXcQ", title: "Journey To The Depth of the Universe (Pt. 2)" },
-  { id: 3, videoId: "dQw4w9WgXcQ", title: "Happy New Year 2026 | Progressive Psytrance" }
+  { id: 1, videoId: "cZr28nrsLUI", title: "Journey To The Depth of the Universe (Pt. 2) DJ Mix" },
+  { id: 2, videoId: "57hl5ZnGB_s", title: "November 2025 Progressive Psytrance DJ Mix" },
+  { id: 3, videoId: "xu-WzEwEs9c", title: "Progressive Psytrance Classic Mix 2025 | Indian Spirit" }
 ];
 
 export function FeaturedMixes() {
@@ -30,7 +30,11 @@ export function FeaturedMixes() {
             <h2 className="text-3xl md:text-4xl font-bold mb-2">LATEST TRANSMISSIONS</h2>
             <p className="text-muted-foreground">Fresh mixes from the Psychedelic Universe headquarters.</p>
           </div>
-          <Button variant="outline" className="group border-primary/30 hover:border-primary hover:bg-primary/10">
+          <Button 
+            variant="outline" 
+            className="group border-primary/30 hover:border-primary hover:bg-primary/10"
+            onClick={() => window.open("https://www.youtube.com/@PsychedelicUniverse/videos", "_blank")}
+          >
             VIEW ALL VIDEOS <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>

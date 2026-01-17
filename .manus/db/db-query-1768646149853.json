@@ -1,0 +1,65 @@
+{
+  "query": "SELECT id, name, logoUrl FROM partners;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2yfGtcjrWZjLtC9.root --database juiXTJyFerhciE5fv2h2Ms --execute SELECT id, name, logoUrl FROM partners;",
+  "rows": [
+    {
+      "id": "2",
+      "name": "Iboga Records",
+      "logoUrl": "/images/partners/IbogaRecordsMusic.jpg"
+    },
+    {
+      "id": "3",
+      "name": "Iono Music",
+      "logoUrl": "/images/partners/IONOMUSIC.jpg"
+    },
+    {
+      "id": "4",
+      "name": "Nano Records",
+      "logoUrl": "/images/partners/NanoRecords.jpg"
+    },
+    {
+      "id": "5",
+      "name": "Trancentral",
+      "logoUrl": "/images/partners/Trancentral.jpg"
+    },
+    {
+      "id": "6",
+      "name": "Tip World Records",
+      "logoUrl": "/images/partners/TipWorldRecords.jpg"
+    },
+    {
+      "id": "7",
+      "name": "TesseracT Studio",
+      "logoUrl": "/images/partners/TesseracTstudio.jpg"
+    },
+    {
+      "id": "8",
+      "name": "Techsafari Records",
+      "logoUrl": "/images/partners/TechsafariRecords.jpg"
+    },
+    {
+      "id": "9",
+      "name": "Phantasm Records",
+      "logoUrl": "/images/partners/PhantasmRecords.jpg"
+    },
+    {
+      "id": "10",
+      "name": "Digital Om Productions",
+      "logoUrl": "/images/partners/DigitalOm.jpg"
+    },
+    {
+      "id": "11",
+      "name": "Dacru Records",
+      "logoUrl": "/images/partners/DacruRecords.jpg"
+    },
+    {
+      "id": "12",
+      "name": "HOMmega Productions",
+      "logoUrl": "/images/partners/HOMmega.jpg"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tlogoUrl\n2\tIboga Records\t/images/partners/IbogaRecordsMusic.jpg\n3\tIono Music\t/images/partners/IONOMUSIC.jpg\n4\tNano Records\t/images/partners/NanoRecords.jpg\n5\tTrancentral\t/images/partners/Trancentral.jpg\n6\tTip World Records\t/images/partners/TipWorldRecords.jpg\n7\tTesseracT Studio\t/images/partners/TesseracTstudio.jpg\n8\tTechsafari Records\t/images/partners/TechsafariRecords.jpg\n9\tPhantasm Records\t/images/partners/PhantasmRecords.jpg\n10\tDigital Om Productions\t/images/partners/DigitalOm.jpg\n11\tDacru Records\t/images/partners/DacruRecords.jpg\n12\tHOMmega Productions\t/images/partners/HOMmega.jpg\n",
+  "stderr": "",
+  "execution_time_ms": 1636
+}

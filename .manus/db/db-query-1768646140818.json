@@ -1,0 +1,65 @@
+{
+  "query": "SELECT * FROM partners LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2yfGtcjrWZjLtC9.root --database juiXTJyFerhciE5fv2h2Ms --execute SELECT * FROM partners LIMIT 5;",
+  "rows": [
+    {
+      "id": "2",
+      "name": "Iboga Records",
+      "logoUrl": "/images/partners/IbogaRecordsMusic.jpg",
+      "websiteUrl": "https://www.iboga-records.com",
+      "quote": "NULL",
+      "active": "1",
+      "sortOrder": "1",
+      "createdAt": "2026-01-17 10:33:27",
+      "updatedAt": "2026-01-17 10:33:27"
+    },
+    {
+      "id": "3",
+      "name": "Iono Music",
+      "logoUrl": "/images/partners/IONOMUSIC.jpg",
+      "websiteUrl": "https://www.ionomusic.com",
+      "quote": "NULL",
+      "active": "1",
+      "sortOrder": "2",
+      "createdAt": "2026-01-17 10:33:27",
+      "updatedAt": "2026-01-17 10:33:27"
+    },
+    {
+      "id": "4",
+      "name": "Nano Records",
+      "logoUrl": "/images/partners/NanoRecords.jpg",
+      "websiteUrl": "https://www.nanorecords.co.uk",
+      "quote": "NULL",
+      "active": "1",
+      "sortOrder": "3",
+      "createdAt": "2026-01-17 10:33:27",
+      "updatedAt": "2026-01-17 10:33:27"
+    },
+    {
+      "id": "5",
+      "name": "Trancentral",
+      "logoUrl": "/images/partners/Trancentral.jpg",
+      "websiteUrl": "https://trancentral.tv",
+      "quote": "NULL",
+      "active": "1",
+      "sortOrder": "4",
+      "createdAt": "2026-01-17 10:33:27",
+      "updatedAt": "2026-01-17 10:33:27"
+    },
+    {
+      "id": "6",
+      "name": "Tip World Records",
+      "logoUrl": "/images/partners/TipWorldRecords.jpg",
+      "websiteUrl": "https://www.tiprecords.com",
+      "quote": "NULL",
+      "active": "1",
+      "sortOrder": "5",
+      "createdAt": "2026-01-17 10:33:27",
+      "updatedAt": "2026-01-17 10:33:27"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tlogoUrl\twebsiteUrl\tquote\tactive\tsortOrder\tcreatedAt\tupdatedAt\n2\tIboga Records\t/images/partners/IbogaRecordsMusic.jpg\thttps://www.iboga-records.com\tNULL\t1\t1\t2026-01-17 10:33:27\t2026-01-17 10:33:27\n3\tIono Music\t/images/partners/IONOMUSIC.jpg\thttps://www.ionomusic.com\tNULL\t1\t2\t2026-01-17 10:33:27\t2026-01-17 10:33:27\n4\tNano Records\t/images/partners/NanoRecords.jpg\thttps://www.nanorecords.co.uk\tNULL\t1\t3\t2026-01-17 10:33:27\t2026-01-17 10:33:27\n5\tTrancentral\t/images/partners/Trancentral.jpg\thttps://trancentral.tv\tNULL\t1\t4\t2026-01-17 10:33:27\t2026-01-17 10:33:27\n6\tTip World Records\t/images/partners/TipWorldRecords.jpg\thttps://www.tiprecords.com\tNULL\t1\t5\t2026-01-17 10:33:27\t2026-01-17 10:33:27\n",
+  "stderr": "",
+  "execution_time_ms": 1534
+}

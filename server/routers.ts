@@ -4,6 +4,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_core/trpc";
 import { searchChannelVideos } from "./youtube";
+import { storagePut } from "./storage";
 import {
   getAllMixes,
   getMixesByCategory,
@@ -153,6 +154,28 @@ export const appRouter = router({
           throw new Error("YouTube API key not configured. Please add it in Admin Settings.");
         }
         return searchChannelVideos(input.query, apiKey, input.maxResults);
+      }),
+  }),
+
+  // ============ FILE UPLOAD ============
+  upload: router({
+    logo: adminProcedure
+      .input(z.object({
+        fileName: z.string(),
+        fileData: z.string(), // base64 encoded
+        contentType: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        // Decode base64 to buffer
+        const buffer = Buffer.from(input.fileData, "base64");
+        // Generate unique filename
+        const timestamp = Date.now();
+        const randomSuffix = Math.random().toString(36).substring(2, 8);
+        const extension = input.fileName.split(".").pop() || "png";
+        const key = `partners/${timestamp}-${randomSuffix}.${extension}`;
+        // Upload to S3
+        const result = await storagePut(key, buffer, input.contentType);
+        return { url: result.url };
       }),
   }),
 
