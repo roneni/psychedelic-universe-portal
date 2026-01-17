@@ -77,3 +77,36 @@
 - [x] Clickable elements only visible on hover
 - [ ] Main playlist: https://www.youtube.com/playlist?list=PLIVLAENoBSJfgJbBPOUFmjoKxkMeKMM4P
 - [ ] Mixes playlist: https://www.youtube.com/playlist?list=PLIVLAENoBSJcudnp-NfZUcJbPYj7SWrws
+
+---
+
+## SUGGESTED NEXT STEPS & FOLLOW-UPS
+
+### High Priority - Site Functionality
+- [ ] Add genre-specific pages - Make "Explore Mixes" buttons on genre cards link to dedicated pages filtering mixes by that genre
+- [ ] Populate genre mixes via Admin - Use the artist categorization data to add YouTube videos to each genre section through Admin Dashboard
+- [ ] Connect your live radio stream - Add Icecast/Shoutcast URL in Admin → Settings → Stream URL (if you set up Listen2MyRadio or similar)
+
+### User Experience Enhancements
+- [ ] Create a favorites/playlist feature - Let logged-in users save their favorite mixes to a personal playlist
+- [ ] Add social sharing buttons - Include share buttons on Radio Mode page so listeners can share what they're currently playing
+- [ ] Make genre cards clickable - Link each category card to a dedicated page showing all mixes for that genre
+
+### Content & Data
+- [ ] Complete the main playlist - User mentioned will add remaining tracks to the 3200+ playlist later
+- [ ] Use artist categorization data - 318 artists categorized by genre available in /home/ubuntu/artists_by_genre_5plus.csv
+
+### Technical Improvements
+- [ ] Auto-fetch latest YouTube videos using API - Keep site content fresh automatically
+- [ ] Publish to permanent domain - Enable live subscriber counter functionality
+
+### Resources Created
+- Artist Genre Guide: /home/ubuntu/Psychedelic_Universe_Artist_Genre_Guide.md
+- Artist CSV (categorized): /home/ubuntu/artists_by_genre_5plus.csv
+- Radio Streaming Guide: /home/ubuntu/Radio_Streaming_Setup_Guide.md
+- All video titles: /home/ubuntu/psychedelic_universe_titles.txt
+- Full video data (JSON): /home/ubuntu/psychedelic_universe_videos.json
+
+### Playlists Reference
+- Main playlist (3200+ tracks): https://www.youtube.com/playlist?list=PLIVLAENoBSJfgJbBPOUFmjoKxkMeKMM4P
+- Mixes playlist: https://www.youtube.com/playlist?list=PLIVLAENoBSJcudnp-NfZUcJbPYj7SWrws
