@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
 import RadioMode from "./pages/RadioMode";
+import Genre from "./pages/Genre";
 import { PersistentPlayer } from "./components/PersistentPlayer";
 
 function Router() {
@@ -16,6 +17,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/admin"} component={Admin} />
       <Route path={"/radio"} component={RadioMode} />
+      <Route path={"/genre/:id"} component={Genre} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

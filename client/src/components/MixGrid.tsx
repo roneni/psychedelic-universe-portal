@@ -24,12 +24,6 @@ const categories = [
     image: "/images/full-on.jpg",
     description: "High energy, driving beats, and dynamic melodies designed to blast the night away.",
     id: "full-on"
-  },
-  {
-    title: "PSYCHILL / AMBIENT",
-    image: "/images/psychill.jpg",
-    description: "Downtempo beats and spacious soundscapes for relaxation and inner exploration.",
-    id: "psychill"
   }
 ];
 
@@ -46,13 +40,14 @@ export function MixGrid() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
           {categories.map((category) => (
             <CategoryCard
               key={category.id}
               title={category.title}
               image={category.image}
               description={category.description}
+              genreId={category.id}
             />
           ))}
         </div>

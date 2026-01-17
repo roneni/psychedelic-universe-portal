@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
 
-type Category = "progressive-psy" | "psychedelic-trance" | "goa-trance" | "full-on" | "psychill";
+type Category = "progressive-psy" | "psychedelic-trance" | "goa-trance" | "full-on";
 
 interface MixFormData {
   title: string;
@@ -351,7 +351,6 @@ export default function Admin() {
                               <SelectItem value="psychedelic-trance">Psychedelic Trance</SelectItem>
                               <SelectItem value="goa-trance">Goa Trance</SelectItem>
                               <SelectItem value="full-on">Full-On</SelectItem>
-                              <SelectItem value="psychill">Psychill / Ambient</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>

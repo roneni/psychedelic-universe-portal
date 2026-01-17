@@ -25,7 +25,7 @@ import {
   removeSubscriber,
 } from "./db";
 
-const categoryEnum = z.enum(["progressive-psy", "psychedelic-trance", "goa-trance", "full-on", "psychill"]);
+const categoryEnum = z.enum(["progressive-psy", "psychedelic-trance", "goa-trance", "full-on"]);
 
 export const appRouter = router({
   system: systemRouter,

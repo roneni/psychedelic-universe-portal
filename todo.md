@@ -116,3 +116,14 @@
 ### Playlists Reference
 - Main playlist (3200+ tracks): https://www.youtube.com/playlist?list=PLIVLAENoBSJfgJbBPOUFmjoKxkMeKMM4P
 - Mixes playlist: https://www.youtube.com/playlist?list=PLIVLAENoBSJcudnp-NfZUcJbPYj7SWrws
+
+## Genre Playlist Auto-Population (Completed)
+- [x] Filter artists to 20+ tracks only (73 artists across 4 genres)
+- [x] Reduce genres from 5 to 4 (removed Psychill/Ambient)
+- [x] Fetch all 4,975 videos from main YouTube playlist
+- [x] Cross-reference videos with categorized artists (2,046 matched)
+- [x] Populate database with genre-tagged mixes
+- [x] Update genre pages with Play All and Shuffle buttons
+- [x] Remove Psychill/Ambient section from MixGrid and database schema
+- [x] Create Genre page component with embedded YouTube player
+
