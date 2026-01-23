@@ -28,8 +28,13 @@ export function Navigation() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/30">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo - Text only, no icon */}
-          <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
+          {/* Logo with icon */}
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <img 
+              src="/images/nav-logo.png" 
+              alt="Psychedelic Universe" 
+              className="h-8 w-8"
+            />
             <span className="font-orbitron font-bold text-lg text-cyan-400">
               PSY UNIVERSE
             </span>
