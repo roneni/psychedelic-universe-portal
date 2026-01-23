@@ -21,7 +21,7 @@ declare global {
   }
 }
 
-// Main playlist with 3200+ tracks
+// Main playlist with 5000+ tracks
 const MAIN_PLAYLIST_ID = "PLIVLAENoBSJfgJbBPOUFmjoKxkMeKMM4P";
 
 export function PersistentPlayer() {
@@ -221,7 +221,7 @@ export function PersistentPlayer() {
                     Click play to start
                   </h4>
                   <p className="text-primary text-sm truncate">
-                    3,200+ tracks ready
+                    5,000+ tracks ready
                   </p>
                 </>
               )}
@@ -273,7 +273,7 @@ export function PersistentPlayer() {
                   )}
                 ></div>
               </div>
-              <span>3,200+ tracks</span>
+              <span>5,000+ tracks</span>
             </div>
           </div>
 

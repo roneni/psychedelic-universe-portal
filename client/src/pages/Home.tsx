@@ -1,4 +1,5 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
 import { MixGrid } from "@/components/MixGrid";
 import { FeaturedMixes } from "@/components/FeaturedMixes";
@@ -13,7 +14,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden selection:bg-primary selection:text-primary-foreground">
-      <main className="flex-1">
+      <Navigation />
+      <main className="flex-1 pt-16">
         <Hero />
         <MixGrid />
         <FeaturedMixes />

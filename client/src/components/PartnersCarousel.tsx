@@ -30,7 +30,7 @@ export function PartnersCarousel() {
     <section className="py-16 border-y border-white/5 bg-black/20">
       <div className="container">
         <h3 className="text-center text-xl font-semibold text-muted-foreground mb-12 tracking-[0.2em] uppercase">
-          Trusted by Global Labels
+          Universed by Global Labels
         </h3>
         
         <Carousel

@@ -142,3 +142,13 @@
 - [x] Build Artist Directory page component with search and genre filters
 - [x] Populate 20 artist profiles with images, bios, and social links
 - [ ] Add admin interface for artist management (future enhancement)
+
+
+## Site Restructuring & Updates (Completed)
+- [x] Add site-wide navigation header (Home, Artists, Genres dropdown, Radio)
+- [x] Update track count from 3200+ to 5000+
+- [x] Add subscribe button link (http://bit.ly/PsyUniverseSubscribe)
+- [x] Live YouTube subscriber count already implemented (uses YouTube API)
+- [x] Update footer social links - YouTube and SoundCloud only
+- [x] Change "sound" to "trance" in tagline
+- [x] Change "TRUSTED" to "UNIVERSED" in partners section
