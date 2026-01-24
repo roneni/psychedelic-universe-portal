@@ -163,3 +163,22 @@
 - [x] Update index.html with SEO meta tags and Open Graph
 - [x] Verify responsive design on all platforms
 - [ ] User testing: Add to Home Screen on iPhone
+
+
+## Bug Fixes & Updates (Jan 24) - Completed
+- [x] Remove non-channel video from Featured Mixes (replaced Indian Spirit with StarLab - Oceans from Silence)
+- [x] Investigate why non-channel video appeared (was manually added fallback - added comment to prevent future cases)
+- [x] Center logo on PWA app icon (regenerated all icons with proper centering)
+- [x] Implement shuffle start for 5000-track playlist player (starts from random track each time)
+- [x] Update search placeholder: "mixes" → "tracks/albums/mixes"
+- [x] Fix favicon with channel logo (proper sizes: 16x16, 32x32, 48x48)
+
+## In-Site Notification System - Completed
+- [x] Create notifications database table
+- [x] Build notification component for site header (bell icon)
+- [x] Implement "New upload!" notifications with track link
+- [x] Implement "Username commented" notifications (no link)
+- [x] Notifications display within site only (no push notifications)
+
+## Future: Community Features (Follow-up)
+- [ ] Research and suggest community feature implementations

@@ -41,7 +41,7 @@ export function Hero() {
 
         {/* Search Bar */}
         <div className="w-full max-w-xl pt-4">
-          <SearchBar placeholder="Search 5,000+ mixes by artist or track name..." />
+          <SearchBar placeholder="Search 5,000+ tracks/albums/mixes by artist or track name..." />
         </div>
 
         {/* CTA Button */}

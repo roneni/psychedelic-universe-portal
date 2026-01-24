@@ -29,6 +29,12 @@ import {
   createArtist,
   updateArtist,
   deleteArtist,
+  getRecentNotifications,
+  getUnreadNotifications,
+  createNotification,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+  deleteNotification,
 } from "./db";
 
 const categoryEnum = z.enum(["progressive-psy", "psychedelic-trance", "goa-trance", "full-on"]);
@@ -259,6 +265,39 @@ export const appRouter = router({
     remove: adminProcedure
       .input(z.object({ id: z.number() }))
       .mutation(({ input }) => removeSubscriber(input.id)),
+  }),
+
+  // ============ NOTIFICATIONS ============
+  notifications: router({
+    // Public endpoints - anyone can view notifications
+    recent: publicProcedure
+      .input(z.object({ limit: z.number().min(1).max(50).optional().default(20) }))
+      .query(({ input }) => getRecentNotifications(input.limit)),
+    
+    unread: publicProcedure.query(() => getUnreadNotifications()),
+
+    // Admin endpoints - only admin can create/manage notifications
+    create: adminProcedure
+      .input(z.object({
+        type: z.enum(["upload", "comment"]),
+        title: z.string().min(1),
+        message: z.string().min(1),
+        link: z.string().optional(),
+        username: z.string().optional(),
+        referenceId: z.string().optional(),
+      }))
+      .mutation(({ input }) => createNotification(input)),
+
+    markAsRead: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input }) => markNotificationAsRead(input.id)),
+
+    markAllAsRead: publicProcedure
+      .mutation(() => markAllNotificationsAsRead()),
+
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input }) => deleteNotification(input.id)),
   }),
 });
 

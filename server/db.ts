@@ -6,7 +6,8 @@ import {
   partners, InsertPartner, Partner,
   siteSettings, InsertSiteSetting, SiteSetting,
   subscribers, InsertSubscriber, Subscriber,
-  artists, InsertArtist, Artist
+  artists, InsertArtist, Artist,
+  notifications, InsertNotification, Notification
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -256,4 +257,43 @@ export async function deleteArtist(id: number): Promise<void> {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   await db.delete(artists).where(eq(artists.id, id));
+}
+
+
+// ============ NOTIFICATIONS ============
+
+export async function getRecentNotifications(limit: number = 20): Promise<Notification[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(notifications).orderBy(desc(notifications.createdAt)).limit(limit);
+}
+
+export async function getUnreadNotifications(): Promise<Notification[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(notifications).where(eq(notifications.read, false)).orderBy(desc(notifications.createdAt));
+}
+
+export async function createNotification(notification: InsertNotification): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(notifications).values(notification);
+}
+
+export async function markNotificationAsRead(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(notifications).set({ read: true }).where(eq(notifications.id, id));
+}
+
+export async function markAllNotificationsAsRead(): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(notifications).set({ read: true }).where(eq(notifications.read, false));
+}
+
+export async function deleteNotification(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(notifications).where(eq(notifications.id, id));
 }

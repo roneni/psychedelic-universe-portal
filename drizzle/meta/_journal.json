@@ -36,6 +36,13 @@
       "when": 1768679058352,
       "tag": "0004_light_nextwave",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1769188444136,
+      "tag": "0005_cool_solo",
+      "breakpoints": true
     }
   ]
 }

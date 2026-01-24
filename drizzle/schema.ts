@@ -117,3 +117,25 @@ export const artists = mysqlTable("artists", {
 
 export type Artist = typeof artists.$inferSelect;
 export type InsertArtist = typeof artists.$inferInsert;
+
+
+/**
+ * Notifications table - stores in-site notifications for uploads and comments
+ */
+export const notifications = mysqlTable("notifications", {
+  id: int("id").autoincrement().primaryKey(),
+  type: mysqlEnum("type", ["upload", "comment"]).notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  message: text("message").notNull(),
+  /** For uploads: link to the track/video */
+  link: varchar("link", { length: 500 }),
+  /** For comments: username who commented */
+  username: varchar("username", { length: 255 }),
+  /** Reference to the related content (e.g., youtubeId) */
+  referenceId: varchar("referenceId", { length: 100 }),
+  read: boolean("read").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = typeof notifications.$inferInsert;

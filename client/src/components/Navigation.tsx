@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Menu, X, ChevronDown, Home, Users, Radio, Music2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { NotificationBell } from "@/components/NotificationBell";
 
 const genres = [
   { id: "progressive-psy", name: "Progressive Psytrance" },
@@ -104,15 +105,22 @@ export function Navigation() {
             </div>
           </div>
 
+          {/* Notification Bell */}
+          <div className="hidden md:flex items-center">
+            <NotificationBell />
+          </div>
+
           {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </Button>
+          <div className="flex items-center gap-2 md:hidden">
+            <NotificationBell />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </Button>
+          </div>
         </div>
       </div>
 

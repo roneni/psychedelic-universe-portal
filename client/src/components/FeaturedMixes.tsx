@@ -4,10 +4,12 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 
 // Fallback data for when database is empty - using real Psychedelic Universe videos
+// IMPORTANT: Only add videos from the Psychedelic Universe channel (@PsychedelicUniverse)
+// Verify channel name before adding any video ID to prevent non-channel content
 const fallbackMixes = [
   { id: 1, videoId: "cZr28nrsLUI", title: "Journey To The Depth of the Universe (Pt. 2) DJ Mix" },
   { id: 2, videoId: "57hl5ZnGB_s", title: "November 2025 Progressive Psytrance DJ Mix" },
-  { id: 3, videoId: "xu-WzEwEs9c", title: "Progressive Psytrance Classic Mix 2025 | Indian Spirit" }
+  { id: 3, videoId: "_ZQ1E-1MUKw", title: "StarLab - Oceans from Silence" }
 ];
 
 export function FeaturedMixes() {

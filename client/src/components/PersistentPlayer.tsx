@@ -85,6 +85,12 @@ export function PersistentPlayer() {
           setPlayer(event.target);
           event.target.setShuffle(true);
           event.target.setVolume(80);
+          // Start from a random position in the playlist (shuffle start)
+          // Get playlist length and jump to a random index
+          const playlistLength = event.target.getPlaylist()?.length || 5000;
+          const randomIndex = Math.floor(Math.random() * playlistLength);
+          event.target.playVideoAt(randomIndex);
+          event.target.pauseVideo(); // Pause immediately so user controls when to start
         },
         onStateChange: (event: any) => {
           setIsPlaying(event.data === window.YT.PlayerState.PLAYING);
