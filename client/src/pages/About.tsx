@@ -1,7 +1,8 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { Youtube, Calendar, MapPin, Heart } from "lucide-react";
+import { Youtube, Calendar, MapPin, Heart, Radio, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 
 export default function About() {
   return (
@@ -73,6 +74,29 @@ export default function About() {
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                 To promote and spread psychedelic trance culture worldwide, connecting artists, labels, and fans through the power of trance. We believe in the transformative power of music and its ability to unite people across borders and cultures.
               </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Explore More */}
+        <section className="py-12">
+          <div className="container max-w-4xl">
+            <h2 className="text-2xl font-orbitron font-bold text-white mb-8 text-center">Explore More</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Link href="/radio">
+                <div className="bg-surface/30 backdrop-blur-sm border border-border/30 rounded-xl p-6 hover:border-cyan-500/50 transition-all cursor-pointer group">
+                  <Radio className="w-8 h-8 text-cyan-400 mb-4 group-hover:scale-110 transition-transform" />
+                  <h3 className="text-lg font-semibold text-white mb-2">Listen to Radio</h3>
+                  <p className="text-sm text-muted-foreground">24/7 streaming of the best psytrance music from around the world</p>
+                </div>
+              </Link>
+              <Link href="/artists">
+                <div className="bg-surface/30 backdrop-blur-sm border border-border/30 rounded-xl p-6 hover:border-cyan-500/50 transition-all cursor-pointer group">
+                  <Users className="w-8 h-8 text-cyan-400 mb-4 group-hover:scale-110 transition-transform" />
+                  <h3 className="text-lg font-semibold text-white mb-2">Featured Artists</h3>
+                  <p className="text-sm text-muted-foreground">Discover the talented artists behind the music we love</p>
+                </div>
+              </Link>
             </div>
           </div>
         </section>

@@ -13,9 +13,19 @@
     
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://psychedelic-universe.com" />
+    <meta property="og:site_name" content="Psychedelic Universe" />
     <meta property="og:title" content="Psychedelic Universe - The Global Hub for Psytrance Culture" />
-    <meta property="og:description" content="5,000+ mixes from Progressive Psytrance, Goa Trance, Full-On, and more." />
-    <meta property="og:image" content="/icons/logo-512x512.png" />
+    <meta property="og:description" content="The global hub for psychedelic trance culture. 5,000+ mixes from Progressive Psytrance, Goa Trance, Full-On, and more. Connecting artists, labels, and fans since 2013." />
+    <meta property="og:image" content="https://psychedelic-universe.com/icons/logo-512x512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Psychedelic Universe - The Global Hub for Psytrance Culture" />
+    <meta name="twitter:description" content="5,000+ mixes from Progressive Psytrance, Goa Trance, Full-On, and more." />
+    <meta name="twitter:image" content="https://psychedelic-universe.com/icons/logo-512x512.png" />
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json" />
@@ -41,6 +51,56 @@
     
     <!-- Mobile Web App -->
     <meta name="mobile-web-app-capable" content="yes" />
+    
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://psychedelic-universe.com/#organization",
+          "name": "Psychedelic Universe",
+          "url": "https://psychedelic-universe.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://psychedelic-universe.com/icons/logo-512x512.png",
+            "width": 512,
+            "height": 512
+          },
+          "description": "The global hub for psychedelic trance culture. Connecting artists, labels, and fans through the power of trance since 2013.",
+          "foundingDate": "2013",
+          "sameAs": [
+            "https://www.youtube.com/@PsychedelicUniverse",
+            "https://soundcloud.com/psychedelic_universe"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://psychedelic-universe.com/#website",
+          "url": "https://psychedelic-universe.com",
+          "name": "Psychedelic Universe",
+          "description": "The global hub for psychedelic trance culture. 5,000+ mixes from Progressive Psytrance, Goa Trance, Full-On, and more.",
+          "publisher": {
+            "@id": "https://psychedelic-universe.com/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://psychedelic-universe.com/?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "MusicGroup",
+          "@id": "https://psychedelic-universe.com/#musicgroup",
+          "name": "Psychedelic Universe",
+          "url": "https://psychedelic-universe.com",
+          "genre": ["Psytrance", "Psychedelic Trance", "Goa Trance", "Progressive Psytrance", "Full-On"],
+          "description": "Curating and promoting the best psychedelic trance music from around the globe since 2013."
+        }
+      ]
+    }
+    </script>
     
     <!-- Google Fonts - Orbitron for cyber-shamanic aesthetic -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

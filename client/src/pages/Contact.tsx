@@ -2,6 +2,7 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Mail, Youtube, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 
 // SoundCloud icon component
 function SoundCloudIcon({ className }: { className?: string }) {
@@ -87,7 +88,7 @@ export default function Contact() {
             <ul className="space-y-3 text-muted-foreground">
               <li className="flex items-start gap-3">
                 <span className="text-cyan-400">•</span>
-                <span><strong className="text-white">Music Submissions:</strong> Visit our <a href="/submit" className="text-cyan-400 hover:underline">Submit Music</a> page</span>
+                <span><strong className="text-white">Music Submissions:</strong> Visit our <Link href="/submit" className="text-cyan-400 hover:underline">Submit Music</Link> page</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-cyan-400">•</span>

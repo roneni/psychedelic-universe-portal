@@ -4,6 +4,7 @@ import { Mail, CheckCircle, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ShareButtons } from "./ShareButtons";
 
 export function Newsletter() {
   const [email, setEmail] = useState("");
@@ -93,6 +94,17 @@ export function Newsletter() {
               <p className="text-xs text-muted-foreground mt-6">
                 No spam, only good vibes. Unsubscribe at any time.
               </p>
+              
+              {/* Share Buttons */}
+              <div className="mt-8 pt-6 border-t border-white/10">
+                <p className="text-sm text-muted-foreground mb-4">Spread the cosmic vibes</p>
+                <ShareButtons 
+                  variant="compact" 
+                  title="Psychedelic Universe - The Global Hub for Psytrance Culture"
+                  description="Check out this amazing psytrance music portal!"
+                  className="justify-center"
+                />
+              </div>
             </>
           )}
         </div>
