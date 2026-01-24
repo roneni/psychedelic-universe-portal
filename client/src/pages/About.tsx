@@ -36,10 +36,10 @@ export default function About() {
 
               <div className="prose prose-invert prose-cyan max-w-none">
                 <p className="text-lg text-foreground/90 leading-relaxed mb-6">
-                  I founded the channel in 2013 because of my love for trance. It started at raves, continued in Goa, which I visited twice, and since then it has always been with me.
+                  I founded the channel in 2013 because of my love for trance. It started at raves, continued in Goa, where I visited twice, and since then it has always been with me.
                 </p>
                 <p className="text-lg text-foreground/90 leading-relaxed mb-6">
-                  I decided to establish the site for exactly the same reason. This site will provide a response to the needs and elements that are not available on the channel, and in this way I aspire to reach additional audiences 🙏🏼
+                  I decided to establish the website for exactly the same reason. This website will provide a response to the needs and elements that are not available on the channel, and in this way I aspire to reach additional audiences 🙏🏼
                 </p>
               </div>
 

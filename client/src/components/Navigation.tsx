@@ -32,9 +32,9 @@ export function Navigation() {
           {/* Logo with icon */}
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <img 
-              src="/images/nav-logo.png" 
+              src="/images/nav-logo-final.png" 
               alt="Psychedelic Universe" 
-              className="h-6 w-6"
+              className="h-7 w-7"
             />
             <span className="font-orbitron font-bold text-lg text-cyan-400">
               PSY UNIVERSE
