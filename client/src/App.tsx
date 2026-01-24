@@ -9,6 +9,10 @@ import Admin from "./pages/Admin";
 import RadioMode from "./pages/RadioMode";
 import Genre from "./pages/Genre";
 import Artists from "./pages/Artists";
+import Privacy from "./pages/Privacy";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Submit from "./pages/Submit";
 import { PersistentPlayer } from "./components/PersistentPlayer";
 
 function Router() {
@@ -20,6 +24,10 @@ function Router() {
       <Route path={"/radio"} component={RadioMode} />
       <Route path={"/genre/:id"} component={Genre} />
       <Route path={"/artists"} component={Artists} />
+      <Route path={"/privacy"} component={Privacy} />
+      <Route path={"/about"} component={About} />
+      <Route path={"/contact"} component={Contact} />
+      <Route path={"/submit"} component={Submit} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

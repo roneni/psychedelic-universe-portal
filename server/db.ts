@@ -204,6 +204,19 @@ export async function addSubscriber(email: string): Promise<{ success: boolean; 
   
   try {
     await db.insert(subscribers).values({ email });
+    
+    // Send notification to owner about new subscriber
+    try {
+      const { notifyOwner } = await import('./_core/notification');
+      await notifyOwner({
+        title: 'New Newsletter Subscriber!',
+        content: `A new user has subscribed to the Psychedelic Universe newsletter: ${email}`
+      });
+    } catch (notifyError) {
+      // Don't fail the subscription if notification fails
+      console.warn('[Newsletter] Failed to notify owner:', notifyError);
+    }
+    
     return { success: true, message: "Successfully subscribed!" };
   } catch (error: unknown) {
     // Check for duplicate entry error

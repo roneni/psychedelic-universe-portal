@@ -34,7 +34,7 @@ export function Navigation() {
             <img 
               src="/images/nav-logo.png" 
               alt="Psychedelic Universe" 
-              className="h-8 w-8"
+              className="h-6 w-6"
             />
             <span className="font-orbitron font-bold text-lg text-cyan-400">
               PSY UNIVERSE
