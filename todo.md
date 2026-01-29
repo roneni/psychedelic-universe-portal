@@ -205,3 +205,14 @@
 
 ## Pending Reminders
 - [ ] Remind user about Bing Webmaster Tools setup
+
+
+## YouTube Analytics Dashboard (Jan 29)
+- [x] Update PWA icon with new logo (cyan eye/orbit design on dark background)
+- [x] Create YouTube Analytics OAuth backend integration
+- [x] Store OAuth tokens securely in database
+- [x] Build Statistics Dashboard page (/stats)
+- [x] Display curated positive metrics (subscribers, views, top videos)
+- [x] Design differently from YouTube Studio
+- [x] Filter out negative/sensitive data (revenue, declining metrics)
+- [ ] User to connect YouTube account via OAuth to unlock advanced analytics

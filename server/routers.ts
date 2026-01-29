@@ -6,6 +6,12 @@ import { publicProcedure, protectedProcedure, adminProcedure, router } from "./_
 import { searchChannelVideos } from "./youtube";
 import { storagePut } from "./storage";
 import {
+  getOAuthUrl,
+  exchangeCodeForTokens,
+  getDashboardStats,
+  isOAuthConfigured,
+} from "./youtubeAnalytics";
+import {
   getAllMixes,
   getMixesByCategory,
   getFeaturedMixes,
@@ -298,6 +304,36 @@ export const appRouter = router({
     delete: adminProcedure
       .input(z.object({ id: z.number() }))
       .mutation(({ input }) => deleteNotification(input.id)),
+  }),
+
+  // ============ YOUTUBE ANALYTICS ============
+  youtubeAnalytics: router({
+    // Get OAuth URL for connecting YouTube account
+    getOAuthUrl: adminProcedure.query(() => {
+      return { url: getOAuthUrl() };
+    }),
+
+    // Check if OAuth is connected
+    isConnected: publicProcedure.query(async () => {
+      return { connected: await isOAuthConfigured() };
+    }),
+
+    // Get dashboard statistics
+    getDashboardStats: publicProcedure.query(async () => {
+      const apiKey = await getSetting("youtube_api_key");
+      if (!apiKey) {
+        throw new Error("YouTube API key not configured");
+      }
+      return getDashboardStats(apiKey);
+    }),
+
+    // Handle OAuth callback (exchange code for tokens)
+    handleCallback: adminProcedure
+      .input(z.object({ code: z.string() }))
+      .mutation(async ({ input }) => {
+        await exchangeCodeForTokens(input.code);
+        return { success: true };
+      }),
   }),
 });
 

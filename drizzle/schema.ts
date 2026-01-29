@@ -139,3 +139,35 @@ export const notifications = mysqlTable("notifications", {
 
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
+
+
+/**
+ * YouTube OAuth Tokens table - stores OAuth credentials for YouTube Analytics API
+ * Only one row should exist (for the channel owner)
+ */
+export const youtubeOAuthTokens = mysqlTable("youtube_oauth_tokens", {
+  id: int("id").autoincrement().primaryKey(),
+  accessToken: text("accessToken").notNull(),
+  refreshToken: text("refreshToken").notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  scope: text("scope"),
+  tokenType: varchar("tokenType", { length: 50 }).default("Bearer"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type YouTubeOAuthToken = typeof youtubeOAuthTokens.$inferSelect;
+export type InsertYouTubeOAuthToken = typeof youtubeOAuthTokens.$inferInsert;
+
+/**
+ * YouTube Analytics Cache table - caches analytics data to reduce API calls
+ */
+export const youtubeAnalyticsCache = mysqlTable("youtube_analytics_cache", {
+  id: int("id").autoincrement().primaryKey(),
+  metricKey: varchar("metricKey", { length: 100 }).notNull().unique(),
+  metricValue: text("metricValue").notNull(),
+  cachedAt: timestamp("cachedAt").defaultNow().notNull(),
+});
+
+export type YouTubeAnalyticsCache = typeof youtubeAnalyticsCache.$inferSelect;
+export type InsertYouTubeAnalyticsCache = typeof youtubeAnalyticsCache.$inferInsert;

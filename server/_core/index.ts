@@ -35,6 +35,23 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
+
+  // YouTube Analytics OAuth callback
+  app.get("/api/oauth/youtube/callback", async (req, res) => {
+    const code = req.query.code as string;
+    if (!code) {
+      return res.status(400).send("Missing authorization code");
+    }
+    try {
+      const { exchangeCodeForTokens } = await import("../youtubeAnalytics");
+      await exchangeCodeForTokens(code);
+      // Redirect to stats page on success
+      res.redirect("/stats?connected=true");
+    } catch (error) {
+      console.error("YouTube OAuth error:", error);
+      res.redirect("/stats?error=oauth_failed");
+    }
+  });
   // tRPC API
   app.use(
     "/api/trpc",

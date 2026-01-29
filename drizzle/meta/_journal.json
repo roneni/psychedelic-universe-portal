@@ -43,6 +43,13 @@
       "when": 1769188444136,
       "tag": "0005_cool_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1769722362111,
+      "tag": "0006_puzzling_franklin_storm",
+      "breakpoints": true
     }
   ]
 }

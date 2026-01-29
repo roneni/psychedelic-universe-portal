@@ -13,6 +13,7 @@ import Privacy from "./pages/Privacy";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Submit from "./pages/Submit";
+import Stats from "./pages/Stats";
 import { PersistentPlayer } from "./components/PersistentPlayer";
 
 function Router() {
@@ -28,6 +29,7 @@ function Router() {
       <Route path={"/about"} component={About} />
       <Route path={"/contact"} component={Contact} />
       <Route path={"/submit"} component={Submit} />
+      <Route path={"/stats"} component={Stats} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
