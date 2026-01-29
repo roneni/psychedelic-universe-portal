@@ -216,3 +216,5 @@
 - [x] Design differently from YouTube Studio
 - [x] Filter out negative/sensitive data (revenue, declining metrics)
 - [ ] User to connect YouTube account via OAuth to unlock advanced analytics
+
+- [x] Add Stats page link to navigation menu
