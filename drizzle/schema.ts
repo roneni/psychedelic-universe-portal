@@ -171,3 +171,20 @@ export const youtubeAnalyticsCache = mysqlTable("youtube_analytics_cache", {
 
 export type YouTubeAnalyticsCache = typeof youtubeAnalyticsCache.$inferSelect;
 export type InsertYouTubeAnalyticsCache = typeof youtubeAnalyticsCache.$inferInsert;
+
+
+/**
+ * Suggestions table - stores user suggestions for site improvements
+ */
+export const suggestions = mysqlTable("suggestions", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).default("Anonymous").notNull(),
+  email: varchar("email", { length: 320 }),
+  category: mysqlEnum("category", ["feature", "improvement", "content", "other"]).default("feature").notNull(),
+  suggestion: text("suggestion").notNull(),
+  status: mysqlEnum("status", ["pending", "reviewed", "implemented", "declined"]).default("pending").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Suggestion = typeof suggestions.$inferSelect;
+export type InsertSuggestion = typeof suggestions.$inferInsert;

@@ -7,7 +7,8 @@ import {
   siteSettings, InsertSiteSetting, SiteSetting,
   subscribers, InsertSubscriber, Subscriber,
   artists, InsertArtist, Artist,
-  notifications, InsertNotification, Notification
+  notifications, InsertNotification, Notification,
+  suggestions, InsertSuggestion, Suggestion
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -309,4 +310,50 @@ export async function deleteNotification(id: number): Promise<void> {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   await db.delete(notifications).where(eq(notifications.id, id));
+}
+
+
+// ============ SUGGESTIONS ============
+
+export async function getAllSuggestions(): Promise<Suggestion[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(suggestions).orderBy(desc(suggestions.createdAt));
+}
+
+export async function createSuggestion(suggestion: InsertSuggestion): Promise<{ success: boolean; message: string }> {
+  const db = await getDb();
+  if (!db) return { success: false, message: "Database not available" };
+  
+  try {
+    await db.insert(suggestions).values(suggestion);
+    
+    // Send notification to owner about new suggestion
+    try {
+      const { notifyOwner } = await import('./_core/notification');
+      await notifyOwner({
+        title: 'New Site Suggestion!',
+        content: `Category: ${suggestion.category}\nFrom: ${suggestion.name}${suggestion.email ? ` (${suggestion.email})` : ''}\n\nSuggestion:\n${suggestion.suggestion}`
+      });
+    } catch (notifyError) {
+      console.warn('[Suggestions] Failed to notify owner:', notifyError);
+    }
+    
+    return { success: true, message: "Suggestion submitted successfully!" };
+  } catch (error) {
+    console.error('[Suggestions] Failed to create suggestion:', error);
+    throw error;
+  }
+}
+
+export async function updateSuggestionStatus(id: number, status: Suggestion["status"]): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(suggestions).set({ status }).where(eq(suggestions.id, id));
+}
+
+export async function deleteSuggestion(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(suggestions).where(eq(suggestions.id, id));
 }

@@ -41,6 +41,10 @@ import {
   markNotificationAsRead,
   markAllNotificationsAsRead,
   deleteNotification,
+  getAllSuggestions,
+  createSuggestion,
+  updateSuggestionStatus,
+  deleteSuggestion,
 } from "./db";
 
 const categoryEnum = z.enum(["progressive-psy", "psychedelic-trance", "goa-trance", "full-on"]);
@@ -334,6 +338,33 @@ export const appRouter = router({
         await exchangeCodeForTokens(input.code);
         return { success: true };
       }),
+  }),
+
+  // ============ SUGGESTIONS ============
+  suggestions: router({
+    // Public endpoint for submitting suggestions
+    submit: publicProcedure
+      .input(z.object({
+        name: z.string().optional().default("Anonymous"),
+        email: z.string().email().optional(),
+        category: z.enum(["feature", "improvement", "content", "other"]).default("feature"),
+        suggestion: z.string().min(10, "Suggestion must be at least 10 characters"),
+      }))
+      .mutation(({ input }) => createSuggestion(input)),
+
+    // Admin endpoints
+    list: adminProcedure.query(() => getAllSuggestions()),
+    
+    updateStatus: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        status: z.enum(["pending", "reviewed", "implemented", "declined"]),
+      }))
+      .mutation(({ input }) => updateSuggestionStatus(input.id, input.status)),
+
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input }) => deleteSuggestion(input.id)),
   }),
 });
 

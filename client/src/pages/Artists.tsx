@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Globe, Youtube, Music2, Headphones, Instagram, Facebook, ExternalLink, Search, Users } from "lucide-react";
+import { ArrowLeft, Globe, Youtube, Music2, Headphones, Instagram, Facebook, ExternalLink, Search, Users, Sparkles, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
@@ -348,6 +348,55 @@ export default function Artists() {
             </p>
           </div>
         )}
+      </div>
+
+      {/* Artist Contact Section */}
+      <div className="container mx-auto px-4 pb-24">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="max-w-3xl mx-auto"
+        >
+          <div className="relative overflow-hidden bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-cyan-500/10 rounded-3xl p-8 md:p-12 border border-cyan-500/20">
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+            
+            <div className="relative text-center">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Sparkles className="w-8 h-8 text-cyan-400" />
+                <h2 className="text-2xl md:text-3xl font-bold font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+                  Want to Be Featured Here?
+                </h2>
+                <Sparkles className="w-8 h-8 text-purple-400" />
+              </div>
+              
+              <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
+                Are you a psytrance artist or producer? We're always looking to showcase talented artists 
+                from the psychedelic music scene. Get in touch and join our growing directory!
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a
+                  href="mailto:psyuniverse9@gmail.com?subject=Artist%20Directory%20Feature%20Request"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,255,255,0.3)]"
+                >
+                  <Mail className="w-5 h-5" />
+                  Contact Us
+                </a>
+                <Link href="/submit">
+                  <Button
+                    variant="outline"
+                    className="px-8 py-4 h-auto rounded-xl border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-500"
+                  >
+                    Submit Your Music
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

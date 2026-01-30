@@ -218,3 +218,15 @@
 - [ ] User to connect YouTube account via OAuth to unlock advanced analytics
 
 - [x] Add Stats page link to navigation menu
+
+- [ ] Fix Connect YouTube Account button not appearing/clickable on Stats page
+
+
+## Noted Bugs (To Fix Later)
+- [ ] PWA logo not updating on mobile (still showing old logo) - cache issue
+- [ ] Notifications not working (uploaded tracks but no notifications appeared)
+
+## New Features (Jan 30)
+- [x] Site Suggestions/Feedback page - Allow users to submit improvement ideas (/suggestions)
+- [x] Artist Directory contact section - "Want to Be Featured Here?" CTA at bottom of Artists page
+- [ ] Standalone audio player for unlisted mixes - ON HOLD (copyright risk without YouTube's Content ID protection)
