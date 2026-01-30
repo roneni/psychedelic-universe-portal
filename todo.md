@@ -230,3 +230,9 @@
 - [x] Site Suggestions/Feedback page - Allow users to submit improvement ideas (/suggestions)
 - [x] Artist Directory contact section - "Want to Be Featured Here?" CTA at bottom of Artists page
 - [ ] Standalone audio player for unlisted mixes - ON HOLD (copyright risk without YouTube's Content ID protection)
+
+## Noted Issues (Jan 30) - To Fix Later
+- [ ] Suggestions form not sending email/notification to owner - needs debugging
+- [ ] Automatic notifications for new YouTube uploads - currently requires manual creation, should auto-detect
+- [ ] YouTube comment notifications - not implemented yet, was discussed as automatic feature
+- [ ] Underground/Private mixes feature - user wants to share mixes with uncertain rights privately (password-protected listening room idea)
