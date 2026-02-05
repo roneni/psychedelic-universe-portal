@@ -236,3 +236,9 @@
 - [ ] Automatic notifications for new YouTube uploads - currently requires manual creation, should auto-detect
 - [ ] YouTube comment notifications - not implemented yet, was discussed as automatic feature
 - [ ] Underground/Private mixes feature - user wants to share mixes with uncertain rights privately (password-protected listening room idea)
+
+## PWA Icon Fix (Feb 5)
+- [x] Regenerated all PWA icons with new centered logo (cyan on dark background)
+- [x] Updated apple-touch-icon.png for iOS
+- [x] Updated favicon.ico with new design
+- [ ] User needs to: Delete the app from phone, clear browser cache, then re-add to home screen
