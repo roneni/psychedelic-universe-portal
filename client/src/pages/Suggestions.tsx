@@ -153,6 +153,7 @@ export default function Suggestions() {
               <div className="mb-6">
                 <label htmlFor="suggestion" className="block text-sm font-medium text-white mb-2">
                   Your Suggestion <span className="text-red-400">*</span>
+                  <span className="text-muted-foreground text-xs ml-2">(minimum 10 characters)</span>
                 </label>
                 <Textarea
                   id="suggestion"
@@ -162,7 +163,11 @@ export default function Suggestions() {
                   rows={6}
                   className="bg-surface/50 border-border/50 focus:border-cyan-500 resize-none"
                   required
+                  minLength={10}
                 />
+                <div className="text-xs text-muted-foreground mt-1">
+                  {suggestion.length}/10 characters {suggestion.length >= 10 && <span className="text-green-400">✓</span>}
+                </div>
               </div>
 
               {/* Submit Button */}

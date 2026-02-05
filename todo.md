@@ -242,3 +242,45 @@
 - [x] Updated apple-touch-icon.png for iOS
 - [x] Updated favicon.ico with new design
 - [ ] User needs to: Delete the app from phone, clear browser cache, then re-add to home screen
+
+
+---
+
+## IMPLEMENTATION ROADMAP (Feb 5, 2026)
+*Goal: Complete before YouTube community announcement*
+
+### Phase 2: Community Features
+- [ ] Karma System - gamification for user engagement
+  - [ ] Add karma field to users table
+  - [ ] Create karma_history table
+  - [ ] Build Karma Leaderboard page
+  - [ ] Add karma display to user profile
+  - [ ] Create special badge for top 10 users
+- [ ] User Favorites/Playlists
+  - [ ] Create favorites table
+  - [ ] Add heart icon to mix cards
+  - [ ] Build Favorites page for logged-in users
+  - [ ] Create "Ronen's Picks" curated section (personal favorites not on YouTube)
+
+### Phase 3: Content Features
+- [ ] Festival Calendar
+  - [ ] Research/scrape festival data from goabase.net, psytrance-calendar.com
+  - [ ] Build calendar component with monthly view
+  - [ ] Add region/country filters
+  - [ ] Implement auto-update mechanism
+- [ ] Weekly Staff Pick
+  - [ ] Add staff_pick fields to mixes table
+  - [ ] Create Staff Pick component for homepage
+  - [ ] Build admin interface for selecting picks
+
+### Phase 4: Artist Features
+- [ ] Artist Invitation System (admin-only, not public submissions)
+- [ ] Admin interface for artist management
+
+### Milestones Before YouTube Announcement
+- [ ] All Phase 1 bugs fixed
+- [ ] Karma system implemented
+- [ ] User favorites working
+- [ ] Festival calendar with current data
+- [ ] Staff Pick feature live
+- [ ] Full site testing complete
