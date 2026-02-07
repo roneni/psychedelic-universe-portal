@@ -230,7 +230,7 @@ export default function Festivals() {
           <div className="container mx-auto px-4">
             <h2 className="font-orbitron text-xl font-bold text-cyan-400 mb-6 flex items-center gap-2">
               <Sparkles className="w-5 h-5" />
-              Flagship Events 2026
+              Major Events 2026
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {featuredFestivals.map((f, i) => (
@@ -416,7 +416,7 @@ export default function Festivals() {
                               </h4>
                               {f.featured && (
                                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                                  FLAGSHIP
+                                  MAJOR
                                 </span>
                               )}
                               {sizeBadge && (

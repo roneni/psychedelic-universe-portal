@@ -4,39 +4,41 @@ const categories = [
   {
     title: "PROGRESSIVE PSYTRANCE",
     image: "/images/progressive-psy.jpg",
-    description: "Deep, rolling basslines and hypnotic atmospheres for the modern dancefloor.",
+    description: "Deep rolling basslines, hypnotic layers, and evolving atmospheres that take you on a journey.",
     id: "progressive-psy"
   },
   {
     title: "PSYCHEDELIC TRANCE",
     image: "/images/psychedelic-trance.jpg",
-    description: "Driving basslines, FM synthesis, and futuristic sounds from the UK psy scene.",
+    description: "Driving rhythms, twisted acid lines, and mind-bending soundscapes from the heart of the scene.",
     id: "psychedelic-trance"
   },
   {
     title: "GOA TRANCE",
     image: "/images/goa-trance.jpg",
-    description: "The roots of the movement. Melodic, spiritual, and organic sounds from the golden era.",
+    description: "Where it all began. Melodic, spiritual, and timeless sounds born on the beaches of Goa.",
     id: "goa-trance"
   },
   {
     title: "FULL-ON",
     image: "/images/full-on.jpg",
-    description: "High energy, driving beats, and dynamic melodies designed to blast the night away.",
+    description: "Peak-time energy. Powerful beats and uplifting melodies built for the dancefloor.",
     id: "full-on"
   }
 ];
 
 export function MixGrid() {
   return (
-    <section className="py-24 relative">
-      <div className="container">
+    <section className="py-24 relative section-nebula">
+      <div className="container relative z-10">
         <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-            THE PSY-PORTAL
+          <h2 className="text-4xl md:text-5xl font-bold neon-glow">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-purple-300">
+              CHOOSE YOUR FREQUENCY
+            </span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Choose your frequency. Explore our curated collections across the psychedelic spectrum.
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+            Four pillars of the psychedelic spectrum. Each one a different dimension.
           </p>
         </div>
 

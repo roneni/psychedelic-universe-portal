@@ -314,3 +314,19 @@
 - [x] YouTube embed player for vault mixes
 - [ ] Ronen to set custom passphrase (default: cosmicunderground2026)
 - [ ] Ronen to add mixes via Admin panel
+
+
+## Visual Overhaul (Feb 7)
+- [x] Study YouTube channel cover for sci-fi style reference
+- [x] Generate cosmic/Goa background images (planetary landscape with palm trees)
+- [x] Animated star field / nebula background (CSS nebula blobs + floating particles)
+- [x] Floating particles (CSS-only, 12 particles in hero)
+- [x] Neon glow headings with sci-fi font (Orbitron)
+- [x] Glassmorphism cards with animated gradient borders
+- [x] Parallax hero section with pulsing logo glow
+- [x] Cosmic section dividers (gradient line dividers)
+- [x] Cyan + purple/magenta nebula color palette
+- [x] Card hover tilt + glow animations
+- [x] Remove "since 2013" - tagline: "Promoting & Spreading Psychedelic Trance Worldwide"
+- [x] Fix all generic AI wording ("Flagship" → "Major", rewrote partner quotes, genre descriptions)
+- [x] Blend Goa/India elements (palm trees in hero, Goa Trance desc references beaches of Goa)

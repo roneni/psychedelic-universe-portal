@@ -29,7 +29,7 @@ export function Navigation() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/30">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-cyan-500/10">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo with icon */}
@@ -37,7 +37,7 @@ export function Navigation() {
             <img 
               src="/images/nav-logo-final.png" 
               alt="Psychedelic Universe" 
-              className="h-7 w-7"
+              className="h-7 w-7 drop-shadow-[0_0_6px_rgba(34,211,238,0.5)]"
             />
             <span className="font-orbitron font-bold text-lg text-cyan-400">
               PSY UNIVERSE

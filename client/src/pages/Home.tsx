@@ -8,18 +8,24 @@ import { PartnersCarousel } from "@/components/PartnersCarousel";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
-  // The userAuth hooks provides authentication state
-  // To implement login/logout functionality, simply call logout() or redirect to getLoginUrl()
   let { user, loading, error, isAuthenticated, logout } = useAuth();
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden selection:bg-primary selection:text-primary-foreground">
+    <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden selection:bg-primary selection:text-primary-foreground cosmic-bg">
+      {/* Nebula color blobs - floating ambient light */}
+      <div className="nebula-blob nebula-blob-1"></div>
+      <div className="nebula-blob nebula-blob-2"></div>
+      <div className="nebula-blob nebula-blob-3"></div>
+      
       <Navigation />
-      <main className="flex-1 pt-16">
+      <main className="flex-1 pt-16 relative z-[1]">
         <Hero />
+        <div className="cosmic-divider my-0"></div>
         <MixGrid />
+        <div className="cosmic-divider my-0"></div>
         <FeaturedMixes />
         <PartnersCarousel />
+        <div className="cosmic-divider my-0"></div>
         <Newsletter />
       </main>
       <Footer />

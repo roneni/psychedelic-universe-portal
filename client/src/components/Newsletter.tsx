@@ -36,20 +36,24 @@ export function Newsletter() {
 
   return (
     <section className="py-24 relative overflow-hidden">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background z-0"></div>
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent z-0"></div>
       
       <div className="container relative z-10">
-        <div className="max-w-4xl mx-auto bg-card/30 backdrop-blur-md border border-white/10 rounded-3xl p-8 md:p-12 text-center shadow-2xl relative overflow-hidden">
-          {/* Glow Effect */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent blur-sm"></div>
+        <div className="max-w-4xl mx-auto glass-card gradient-border rounded-3xl p-8 md:p-12 text-center shadow-2xl relative overflow-hidden">
+          {/* Top glow line */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-primary to-transparent blur-sm"></div>
           
           {isSubscribed ? (
             <>
               <CheckCircle className="w-12 h-12 mx-auto mb-6 text-green-400" />
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">WELCOME TO THE TRIBE</h2>
-              <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-                You're now connected to the Psychedelic Universe. Check your inbox for a confirmation and get ready for some cosmic updates!
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 neon-glow">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-green-300">
+                  WELCOME TO THE TRIBE
+                </span>
+              </h2>
+              <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
+                You're now connected to the Psychedelic Universe. Check your inbox for a confirmation.
               </p>
               <Button 
                 variant="outline" 
@@ -63,9 +67,13 @@ export function Newsletter() {
             <>
               <Mail className="w-12 h-12 mx-auto mb-6 text-primary animate-pulse-slow" />
               
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">JOIN THE TRIBE</h2>
-              <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-                Get exclusive mix alerts, festival news, and psychedelic culture updates delivered straight to your digital consciousness.
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 neon-glow">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-purple-300">
+                  JOIN THE TRIBE
+                </span>
+              </h2>
+              <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
+                Get mix alerts, festival news, and psychedelic culture updates straight to your inbox.
               </p>
               
               <form className="flex flex-col md:flex-row gap-4 max-w-md mx-auto" onSubmit={handleSubmit}>
@@ -91,13 +99,13 @@ export function Newsletter() {
                 </Button>
               </form>
               
-              <p className="text-xs text-muted-foreground mt-6">
+              <p className="text-xs text-gray-500 mt-6">
                 No spam, only good vibes. Unsubscribe at any time.
               </p>
               
               {/* Share Buttons */}
               <div className="mt-8 pt-6 border-t border-white/10">
-                <p className="text-sm text-muted-foreground mb-4">Spread the cosmic vibes</p>
+                <p className="text-sm text-gray-500 mb-4">Spread the cosmic vibes</p>
                 <ShareButtons 
                   variant="compact" 
                   title="Psychedelic Universe - The Global Hub for Psytrance Culture"

@@ -11,11 +11,11 @@ import { trpc } from "@/lib/trpc";
 
 // Fallback partners for when database is empty
 const fallbackPartners = [
-  { id: 1, name: "Iono Music", logoUrl: "https://placehold.co/200x100/000000/FFFFFF?text=Iono+Music", quote: "The premier destination for psychedelic sounds." },
+  { id: 1, name: "Iono Music", logoUrl: "https://placehold.co/200x100/000000/FFFFFF?text=Iono+Music", quote: "Psychedelic sounds from around the globe." },
   { id: 2, name: "Digital Om", logoUrl: "https://placehold.co/200x100/000000/FFFFFF?text=Digital+Om", quote: "Connecting the global tribe through music." },
-  { id: 3, name: "Nano Records", logoUrl: "https://placehold.co/200x100/000000/FFFFFF?text=Nano+Records", quote: "Always pushing the boundaries of reality." },
-  { id: 4, name: "Iboga Records", logoUrl: "https://placehold.co/200x100/000000/FFFFFF?text=Iboga", quote: "Pure progressive bliss." },
-  { id: 5, name: "Hommega", logoUrl: "https://placehold.co/200x100/000000/FFFFFF?text=Hommega", quote: "Legends of the scene." },
+  { id: 3, name: "Nano Records", logoUrl: "https://placehold.co/200x100/000000/FFFFFF?text=Nano+Records", quote: "Where reality meets the dancefloor." },
+  { id: 4, name: "Iboga Records", logoUrl: "https://placehold.co/200x100/000000/FFFFFF?text=Iboga", quote: "Progressive psy at its finest." },
+  { id: 5, name: "Hommega", logoUrl: "https://placehold.co/200x100/000000/FFFFFF?text=Hommega", quote: "Israeli psy royalty." },
 ];
 
 export function PartnersCarousel() {
@@ -27,10 +27,10 @@ export function PartnersCarousel() {
     : fallbackPartners;
 
   return (
-    <section className="py-16 border-y border-white/5 bg-black/20">
+    <section className="py-16 bg-black/20 relative">
       <div className="container">
         <h3 className="text-center text-xl font-semibold text-muted-foreground mb-12 tracking-[0.2em] uppercase">
-          Universed by Global Labels
+          Labels & Partners
         </h3>
         
         <Carousel
