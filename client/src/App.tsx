@@ -15,6 +15,9 @@ import Contact from "./pages/Contact";
 import Submit from "./pages/Submit";
 import Stats from "./pages/Stats";
 import Suggestions from "./pages/Suggestions";
+import Festivals from "./pages/Festivals";
+import Community from "./pages/Community";
+import Underground from "./pages/Underground";
 import { PersistentPlayer } from "./components/PersistentPlayer";
 
 function Router() {
@@ -32,6 +35,9 @@ function Router() {
       <Route path={"/submit"} component={Submit} />
       <Route path={"/stats"} component={Stats} />
       <Route path={"/suggestions"} component={Suggestions} />
+      <Route path={"/festivals"} component={Festivals} />
+      <Route path={"/community"} component={Community} />
+      <Route path={"/underground"} component={Underground} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

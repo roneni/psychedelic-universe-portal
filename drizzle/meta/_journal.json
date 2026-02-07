@@ -57,6 +57,20 @@
       "when": 1769790505681,
       "tag": "0007_misty_betty_ross",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1770489638818,
+      "tag": "0008_wise_overlord",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1770489969179,
+      "tag": "0009_outstanding_paper_doll",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,6 @@
-import { eq, desc, asc } from "drizzle-orm";
+
 import { drizzle } from "drizzle-orm/mysql2";
+import { eq, desc, asc, and, sql } from "drizzle-orm";
 import { 
   InsertUser, users, 
   mixes, InsertMix, Mix,
@@ -8,7 +9,10 @@ import {
   subscribers, InsertSubscriber, Subscriber,
   artists, InsertArtist, Artist,
   notifications, InsertNotification, Notification,
-  suggestions, InsertSuggestion, Suggestion
+  suggestions, InsertSuggestion, Suggestion,
+  karmaPoints, InsertKarmaPoint, KarmaPoint,
+  favorites, InsertFavorite, Favorite,
+  ronensPicks, InsertRonensPick, RonensPick
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -356,4 +360,270 @@ export async function deleteSuggestion(id: number): Promise<void> {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   await db.delete(suggestions).where(eq(suggestions.id, id));
+}
+
+
+// ============ KARMA POINTS ============
+
+const KARMA_VALUES: Record<string, number> = {
+  signup: 50,
+  favorite: 5,
+  unfavorite: -5,
+  suggestion: 15,
+  newsletter: 10,
+  daily_visit: 2,
+  share: 10,
+  artist_submit: 20,
+};
+
+export async function awardKarma(
+  userId: number,
+  action: InsertKarmaPoint["action"],
+  description?: string,
+  referenceId?: string
+): Promise<{ points: number; totalKarma: number }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const points = KARMA_VALUES[action] || 0;
+
+  await db.insert(karmaPoints).values({
+    userId,
+    action,
+    points,
+    description,
+    referenceId,
+  });
+
+  const totalKarma = await getUserTotalKarma(userId);
+  return { points, totalKarma };
+}
+
+export async function getUserTotalKarma(userId: number): Promise<number> {
+  const db = await getDb();
+  if (!db) return 0;
+
+  const result = await db
+    .select({ total: sql<number>`COALESCE(SUM(${karmaPoints.points}), 0)` })
+    .from(karmaPoints)
+    .where(eq(karmaPoints.userId, userId));
+
+  return result[0]?.total || 0;
+}
+
+export async function getUserKarmaHistory(userId: number, limit: number = 20): Promise<KarmaPoint[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db
+    .select()
+    .from(karmaPoints)
+    .where(eq(karmaPoints.userId, userId))
+    .orderBy(desc(karmaPoints.createdAt))
+    .limit(limit);
+}
+
+export async function getKarmaLeaderboard(limit: number = 20): Promise<Array<{ userId: number; name: string | null; totalKarma: number }>> {
+  const db = await getDb();
+  if (!db) return [];
+
+  const result = await db
+    .select({
+      userId: karmaPoints.userId,
+      name: users.name,
+      totalKarma: sql<number>`COALESCE(SUM(${karmaPoints.points}), 0)`,
+    })
+    .from(karmaPoints)
+    .leftJoin(users, eq(karmaPoints.userId, users.id))
+    .groupBy(karmaPoints.userId, users.name)
+    .orderBy(sql`COALESCE(SUM(${karmaPoints.points}), 0) DESC`)
+    .limit(limit);
+
+  return result.map(r => ({
+    userId: r.userId,
+    name: r.name,
+    totalKarma: Number(r.totalKarma),
+  }));
+}
+
+export async function hasEarnedKarmaToday(userId: number, action: string): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+
+  const result = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(karmaPoints)
+    .where(
+      and(
+        eq(karmaPoints.userId, userId),
+        eq(karmaPoints.action, action as InsertKarmaPoint["action"]),
+        sql`DATE(${karmaPoints.createdAt}) = CURDATE()`
+      )
+    );
+
+  return (result[0]?.count || 0) > 0;
+}
+
+// ============ FAVORITES ============
+
+export async function getUserFavorites(userId: number): Promise<Array<Favorite & { mix?: Mix }>> {
+  const db = await getDb();
+  if (!db) return [];
+
+  const result = await db
+    .select()
+    .from(favorites)
+    .leftJoin(mixes, eq(favorites.mixId, mixes.id))
+    .where(eq(favorites.userId, userId))
+    .orderBy(desc(favorites.createdAt));
+
+  return result.map(r => ({
+    ...r.favorites,
+    mix: r.mixes || undefined,
+  }));
+}
+
+export async function addFavorite(userId: number, mixId: number): Promise<{ success: boolean; message: string }> {
+  const db = await getDb();
+  if (!db) return { success: false, message: "Database not available" };
+
+  try {
+    // Check if already favorited
+    const existing = await db
+      .select()
+      .from(favorites)
+      .where(and(eq(favorites.userId, userId), eq(favorites.mixId, mixId)))
+      .limit(1);
+
+    if (existing.length > 0) {
+      return { success: false, message: "Already in favorites" };
+    }
+
+    await db.insert(favorites).values({ userId, mixId });
+
+    // Award karma for favoriting
+    await awardKarma(userId, "favorite", "Favorited a mix", String(mixId));
+
+    return { success: true, message: "Added to favorites!" };
+  } catch (error) {
+    console.error("[Favorites] Failed to add favorite:", error);
+    throw error;
+  }
+}
+
+export async function removeFavorite(userId: number, mixId: number): Promise<{ success: boolean }> {
+  const db = await getDb();
+  if (!db) return { success: false };
+
+  await db
+    .delete(favorites)
+    .where(and(eq(favorites.userId, userId), eq(favorites.mixId, mixId)));
+
+  // Deduct karma for unfavoriting
+  await awardKarma(userId, "unfavorite", "Removed a favorite", String(mixId));
+
+  return { success: true };
+}
+
+export async function isFavorited(userId: number, mixId: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+
+  const result = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(favorites)
+    .where(and(eq(favorites.userId, userId), eq(favorites.mixId, mixId)));
+
+  return (result[0]?.count || 0) > 0;
+}
+
+export async function getUserFavoriteIds(userId: number): Promise<number[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  const result = await db
+    .select({ mixId: favorites.mixId })
+    .from(favorites)
+    .where(eq(favorites.userId, userId));
+
+  return result.map(r => r.mixId);
+}
+
+// ============ RONEN'S PICKS ============
+
+export async function getAllRonensPicks(): Promise<RonensPick[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(ronensPicks).orderBy(asc(ronensPicks.sortOrder), desc(ronensPicks.createdAt));
+}
+
+export async function createRonensPick(pick: InsertRonensPick): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(ronensPicks).values(pick);
+}
+
+export async function deleteRonensPick(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(ronensPicks).where(eq(ronensPicks.id, id));
+}
+
+
+// ============ VAULT ============
+
+import { vaultAccess, vaultMixes, VaultMix } from "../drizzle/schema";
+
+const VAULT_PASSPHRASE = process.env.VAULT_PASSPHRASE || "cosmicunderground2026";
+
+export async function verifyVaultPassphrase(userId: number, passphrase: string): Promise<boolean> {
+  if (passphrase.toLowerCase().trim() !== VAULT_PASSPHRASE.toLowerCase().trim()) {
+    return false;
+  }
+
+  const db = await getDb();
+  if (!db) return false;
+
+  // Check if already has access
+  const existing = await db
+    .select()
+    .from(vaultAccess)
+    .where(eq(vaultAccess.userId, userId))
+    .limit(1);
+
+  if (existing.length === 0) {
+    await db.insert(vaultAccess).values({ userId });
+  }
+
+  return true;
+}
+
+export async function checkVaultAccess(userId: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+
+  const result = await db
+    .select()
+    .from(vaultAccess)
+    .where(eq(vaultAccess.userId, userId))
+    .limit(1);
+
+  return result.length > 0;
+}
+
+export async function getVaultMixes(): Promise<VaultMix[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(vaultMixes).orderBy(asc(vaultMixes.sortOrder), desc(vaultMixes.createdAt));
+}
+
+export async function createVaultMix(mix: { title: string; youtubeId: string; description?: string; duration?: string; sortOrder?: number }): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(vaultMixes).values(mix);
+}
+
+export async function deleteVaultMix(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(vaultMixes).where(eq(vaultMixes.id, id));
 }

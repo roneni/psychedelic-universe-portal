@@ -188,3 +188,91 @@ export const suggestions = mysqlTable("suggestions", {
 
 export type Suggestion = typeof suggestions.$inferSelect;
 export type InsertSuggestion = typeof suggestions.$inferInsert;
+
+
+/**
+ * Karma Points table - tracks user karma and engagement rewards
+ * Users earn karma for actions like signing up, favoriting, suggesting, etc.
+ */
+export const karmaPoints = mysqlTable("karma_points", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  action: mysqlEnum("action", [
+    "signup",           // +50 - First registration
+    "favorite",         // +5 - Favoriting a mix/track
+    "unfavorite",       // -5 - Removing a favorite
+    "suggestion",       // +15 - Submitting a site suggestion
+    "newsletter",       // +10 - Subscribing to newsletter
+    "daily_visit",      // +2 - Visiting the site (once per day)
+    "share",            // +10 - Sharing content
+    "artist_submit",    // +20 - Submitting artist for directory
+  ]).notNull(),
+  points: int("points").notNull(),
+  description: varchar("description", { length: 255 }),
+  referenceId: varchar("referenceId", { length: 100 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type KarmaPoint = typeof karmaPoints.$inferSelect;
+export type InsertKarmaPoint = typeof karmaPoints.$inferInsert;
+
+/**
+ * User Favorites table - stores user's favorited mixes/tracks
+ */
+export const favorites = mysqlTable("favorites", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  mixId: int("mixId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Favorite = typeof favorites.$inferSelect;
+export type InsertFavorite = typeof favorites.$inferInsert;
+
+/**
+ * Ronen's Picks - curated personal favorites from the channel owner
+ * "A personal selection from my own listening journey"
+ */
+export const ronensPicks = mysqlTable("ronens_picks", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  youtubeId: varchar("youtubeId", { length: 20 }).notNull(),
+  description: text("description"),
+  thumbnailUrl: varchar("thumbnailUrl", { length: 500 }),
+  /** Can be "mix" or "track" */
+  contentType: mysqlEnum("contentType", ["mix", "track"]).default("mix").notNull(),
+  sortOrder: int("sortOrder").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type RonensPick = typeof ronensPicks.$inferSelect;
+export type InsertRonensPick = typeof ronensPicks.$inferInsert;
+
+
+/**
+ * Vault Access table - tracks which users have unlocked the Underground Vault
+ */
+export const vaultAccess = mysqlTable("vault_access", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  grantedAt: timestamp("grantedAt").defaultNow().notNull(),
+});
+
+export type VaultAccess = typeof vaultAccess.$inferSelect;
+export type InsertVaultAccess = typeof vaultAccess.$inferInsert;
+
+/**
+ * Vault Mixes table - stores exclusive mixes for the Underground Vault
+ */
+export const vaultMixes = mysqlTable("vault_mixes", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  youtubeId: varchar("youtubeId", { length: 20 }).notNull(),
+  description: text("description"),
+  duration: varchar("duration", { length: 20 }),
+  sortOrder: int("sortOrder").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type VaultMix = typeof vaultMixes.$inferSelect;
+export type InsertVaultMix = typeof vaultMixes.$inferInsert;

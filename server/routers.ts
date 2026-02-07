@@ -45,6 +45,23 @@ import {
   createSuggestion,
   updateSuggestionStatus,
   deleteSuggestion,
+  awardKarma,
+  getUserTotalKarma,
+  getUserKarmaHistory,
+  getKarmaLeaderboard,
+  hasEarnedKarmaToday,
+  getUserFavorites,
+  addFavorite,
+  removeFavorite,
+  getUserFavoriteIds,
+  getAllRonensPicks,
+  createRonensPick,
+  deleteRonensPick,
+  verifyVaultPassphrase,
+  checkVaultAccess,
+  getVaultMixes,
+  createVaultMix,
+  deleteVaultMix,
 } from "./db";
 
 const categoryEnum = z.enum(["progressive-psy", "psychedelic-trance", "goa-trance", "full-on"]);
@@ -365,6 +382,124 @@ export const appRouter = router({
     delete: adminProcedure
       .input(z.object({ id: z.number() }))
       .mutation(({ input }) => deleteSuggestion(input.id)),
+  }),
+
+  // ============ KARMA ============
+  karma: router({
+    // Get current user's total karma
+    myKarma: protectedProcedure.query(async ({ ctx }) => {
+      const total = await getUserTotalKarma(ctx.user.id);
+      return { totalKarma: total };
+    }),
+
+    // Get current user's karma history
+    myHistory: protectedProcedure
+      .input(z.object({ limit: z.number().min(1).max(50).optional().default(20) }))
+      .query(({ ctx, input }) => getUserKarmaHistory(ctx.user.id, input.limit)),
+
+    // Get leaderboard
+    leaderboard: publicProcedure
+      .input(z.object({ limit: z.number().min(1).max(50).optional().default(20) }))
+      .query(({ input }) => getKarmaLeaderboard(input.limit)),
+
+    // Record a daily visit (once per day)
+    recordVisit: protectedProcedure.mutation(async ({ ctx }) => {
+      const alreadyVisited = await hasEarnedKarmaToday(ctx.user.id, "daily_visit");
+      if (alreadyVisited) {
+        return { awarded: false, message: "Already earned daily visit karma" };
+      }
+      const result = await awardKarma(ctx.user.id, "daily_visit", "Daily site visit");
+      return { awarded: true, ...result };
+    }),
+
+    // Record a share action
+    recordShare: protectedProcedure
+      .input(z.object({ referenceId: z.string().optional() }))
+      .mutation(async ({ ctx, input }) => {
+        const result = await awardKarma(ctx.user.id, "share", "Shared content", input.referenceId);
+        return result;
+      }),
+  }),
+
+  // ============ FAVORITES ============
+  favorites: router({
+    // Get current user's favorites
+    list: protectedProcedure.query(({ ctx }) => getUserFavorites(ctx.user.id)),
+
+    // Get current user's favorite IDs (for quick heart button state)
+    ids: protectedProcedure.query(({ ctx }) => getUserFavoriteIds(ctx.user.id)),
+
+    // Add a favorite
+    add: protectedProcedure
+      .input(z.object({ mixId: z.number() }))
+      .mutation(({ ctx, input }) => addFavorite(ctx.user.id, input.mixId)),
+
+    // Remove a favorite
+    remove: protectedProcedure
+      .input(z.object({ mixId: z.number() }))
+      .mutation(({ ctx, input }) => removeFavorite(ctx.user.id, input.mixId)),
+  }),
+
+  // ============ RONEN'S PICKS ============
+  ronensPicks: router({
+    // Public endpoint to view picks
+    list: publicProcedure.query(() => getAllRonensPicks()),
+
+    // Admin endpoints
+    create: adminProcedure
+      .input(z.object({
+        title: z.string().min(1),
+        youtubeId: z.string().min(1),
+        description: z.string().optional(),
+        thumbnailUrl: z.string().optional(),
+        contentType: z.enum(["mix", "track"]).optional().default("mix"),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(({ input }) => createRonensPick(input)),
+
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input }) => deleteRonensPick(input.id)),
+  }),
+
+  // ============ UNDERGROUND VAULT ============
+  vault: router({
+    // Check if user has vault access
+    checkAccess: protectedProcedure.query(async ({ ctx }) => {
+      const hasAccess = await checkVaultAccess(ctx.user.id);
+      return { hasAccess };
+    }),
+
+    // Verify passphrase and grant access
+    verify: protectedProcedure
+      .input(z.object({ passphrase: z.string().min(1) }))
+      .mutation(async ({ ctx, input }) => {
+        const granted = await verifyVaultPassphrase(ctx.user.id, input.passphrase);
+        return { granted };
+      }),
+
+    // List vault mixes (only for users with access)
+    listMixes: protectedProcedure.query(async ({ ctx }) => {
+      const hasAccess = await checkVaultAccess(ctx.user.id);
+      if (!hasAccess) return [];
+      return getVaultMixes();
+    }),
+
+    // Admin: add a mix to the vault
+    addMix: adminProcedure
+      .input(z.object({
+        title: z.string().min(1),
+        youtubeId: z.string().min(1),
+        description: z.string().optional(),
+        duration: z.string().optional(),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(({ input }) => createVaultMix(input)),
+
+    // Admin: remove a mix from the vault
+    removeMix: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input }) => deleteVaultMix(input.id)),
   }),
 });
 

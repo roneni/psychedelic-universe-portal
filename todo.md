@@ -284,3 +284,33 @@
 - [ ] Festival calendar with current data
 - [ ] Staff Pick feature live
 - [ ] Full site testing complete
+
+
+## Sprint Feb 7, 2026
+
+### Festival Calendar
+- [x] Research top 5 psytrance festival data sources (goabase.net, psymedia.co.za, psycalendar.com, psytranceportal.com)
+- [x] Scrape/collect festival data (56 festivals Feb-Dec 2026)
+- [x] Build Festival Calendar page with static data, search, region/month filters
+- [x] Add to navigation and footer
+
+### YouTube Notification Fixes
+- [x] Implement YouTube poller (checks every 5 min for new uploads, creates notifications automatically)
+- [ ] YouTube comment notifications (deferred - requires more complex API setup)
+
+### Community/Karma System
+- [x] Design karma reward program (points for actions: login, favorite, suggestion, daily visit, streak)
+- [x] Create karma database tables (karma_points, favorites)
+- [x] Build favorites system (FavoriteButton component with heart animation + karma tooltip)
+- [x] Build Community page with karma leaderboard, level badges, and user stats
+- [x] Add Community to navigation and footer
+- [ ] Integrate FavoriteButton into mix cards across the site
+- [ ] Add Ronen's Picks section
+
+### Underground Vault
+- [x] Build passphrase-protected page (/underground) for private mixes
+- [x] Implement access control (login required + passphrase verification, stored in DB)
+- [x] Vault mix management via admin API (add/remove mixes)
+- [x] YouTube embed player for vault mixes
+- [ ] Ronen to set custom passphrase (default: cosmicunderground2026)
+- [ ] Ronen to add mixes via Admin panel

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, ChevronDown, Home, Users, Radio, Music2, BarChart3 } from "lucide-react";
+import { Menu, X, ChevronDown, Home, Users, Radio, Music2, BarChart3, Tent, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { NotificationBell } from "@/components/NotificationBell";
@@ -24,6 +24,8 @@ export function Navigation() {
     { href: "/artists", label: "Artists", icon: Users },
     { href: "/radio", label: "Radio", icon: Radio },
     { href: "/stats", label: "Stats", icon: BarChart3 },
+    { href: "/festivals", label: "Festivals", icon: Tent },
+    { href: "/community", label: "Community", icon: Sparkles },
   ];
 
   return (

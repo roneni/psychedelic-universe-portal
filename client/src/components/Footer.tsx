@@ -58,6 +58,8 @@ export function Footer() {
               <li><Link href="/genre/goa-trance" className="hover:text-primary transition-colors">Goa Trance</Link></li>
               <li><Link href="/genre/full-on" className="hover:text-primary transition-colors">Full-On</Link></li>
               <li><Link href="/artists" className="hover:text-primary transition-colors">Artists</Link></li>
+              <li><Link href="/festivals" className="hover:text-primary transition-colors">Festivals</Link></li>
+              <li><Link href="/community" className="hover:text-primary transition-colors">Community</Link></li>
             </ul>
           </div>
 
