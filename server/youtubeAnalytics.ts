@@ -7,9 +7,9 @@ import { getDb } from "./db";
 import { youtubeOAuthTokens, youtubeAnalyticsCache } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 
-// YouTube OAuth configuration
-const YOUTUBE_CLIENT_ID = "13355284875-aavdku6eggv53abiq43b520nf81cdobn.apps.googleusercontent.com";
-const YOUTUBE_CLIENT_SECRET = "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";
+// YouTube OAuth configuration - loaded from environment variables
+const YOUTUBE_CLIENT_ID = process.env.YOUTUBE_CLIENT_ID ?? "";
+const YOUTUBE_CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET ?? "";
 const YOUTUBE_REDIRECT_URI = "https://psychedelic-universe.com/api/oauth/youtube/callback";
 
 // Scopes needed for analytics
@@ -198,7 +198,8 @@ async function setCachedData(key: string, value: string): Promise<void> {
       metricValue: value,
       cachedAt: new Date(),
     })
-    .onDuplicateKeyUpdate({
+    .onConflictDoUpdate({
+      target: youtubeAnalyticsCache.metricKey,
       set: {
         metricValue: value,
         cachedAt: new Date(),

@@ -25,7 +25,7 @@ export function Hero() {
       <div className="absolute inset-0 z-0">
         <div ref={bgRef} className="absolute inset-[-10%] transition-transform duration-100 ease-out">
           <img 
-            src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/IWXNNUxJgZREdluX.jpg" 
+            src="/images/hero-cosmic-bg.jpg" 
             alt="Cosmic Planetary Landscape" 
             className="w-full h-full object-cover"
           />

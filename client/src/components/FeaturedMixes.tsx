@@ -2,6 +2,7 @@ import { YouTubeEmbed } from "./YouTubeEmbed";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 // Fallback data for when database is empty - using real Psychedelic Universe videos
 // IMPORTANT: Only add videos from the Psychedelic Universe channel (@PsychedelicUniverse)
@@ -56,6 +57,7 @@ export function FeaturedMixes() {
                 <h3 className="text-lg font-semibold line-clamp-2 hover:text-primary transition-colors cursor-pointer px-1">
                   {mix.title}
                 </h3>
+                <FavoriteButton mixId={mix.id} size="sm" />
               </div>
             ))}
           </div>

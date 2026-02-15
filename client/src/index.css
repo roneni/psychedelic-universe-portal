@@ -376,7 +376,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/ymyfqhZrqpGnMkVj.jpg') center/cover no-repeat;
+  background: url('/images/cosmic-nebula-bg.jpg') center/cover no-repeat;
   opacity: 0.15;
   pointer-events: none;
   z-index: 0;

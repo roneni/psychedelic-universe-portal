@@ -3,6 +3,7 @@ import type { Express, Request, Response } from "express";
 import * as db from "../db";
 import { getSessionCookieOptions } from "./cookies";
 import { sdk } from "./sdk";
+import { supabase } from "../supabase";
 
 function getQueryParam(req: Request, key: string): string | undefined {
   const value = req.query[key];
@@ -12,32 +13,33 @@ function getQueryParam(req: Request, key: string): string | undefined {
 export function registerOAuthRoutes(app: Express) {
   app.get("/api/oauth/callback", async (req: Request, res: Response) => {
     const code = getQueryParam(req, "code");
-    const state = getQueryParam(req, "state");
 
-    if (!code || !state) {
-      res.status(400).json({ error: "code and state are required" });
+    if (!code) {
+      res.status(400).json({ error: "code is required" });
       return;
     }
 
     try {
-      const tokenResponse = await sdk.exchangeCodeForToken(code, state);
-      const userInfo = await sdk.getUserInfo(tokenResponse.accessToken);
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-      if (!userInfo.openId) {
-        res.status(400).json({ error: "openId missing from user info" });
+      if (error || !data.user) {
+        console.error("[OAuth] Supabase exchange failed:", error);
+        res.status(400).json({ error: "Failed to exchange code for session" });
         return;
       }
 
+      const user = data.user;
+
       await db.upsertUser({
-        openId: userInfo.openId,
-        name: userInfo.name || null,
-        email: userInfo.email ?? null,
-        loginMethod: userInfo.loginMethod ?? userInfo.platform ?? null,
+        openId: user.id,
+        name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+        email: user.email ?? null,
+        loginMethod: user.app_metadata?.provider ?? null,
         lastSignedIn: new Date(),
       });
 
-      const sessionToken = await sdk.createSessionToken(userInfo.openId, {
-        name: userInfo.name || "",
+      const sessionToken = await sdk.createSessionToken(user.id, {
+        name: user.user_metadata?.full_name || user.user_metadata?.name || "",
         expiresInMs: ONE_YEAR_MS,
       });
 

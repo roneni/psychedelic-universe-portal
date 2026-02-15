@@ -1,9 +1,0 @@
-{
-  "query": "INSERT INTO site_settings (`key`, `value`, description, updatedAt) VALUES ('youtube_api_key', 'AIzaSyD33_80RFuZeVc6i4J28OHSvbXwFLUPokE', 'YouTube Data API key for channel search', NOW()) ON DUPLICATE KEY UPDATE `value` = 'AIzaSyD33_80RFuZeVc6i4J28OHSvbXwFLUPokE', updatedAt = NOW();",
-  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2yfGtcjrWZjLtC9.root --database juiXTJyFerhciE5fv2h2Ms --execute INSERT INTO site_settings (`key`, `value`, description, updatedAt) VALUES ('youtube_api_key', 'AIzaSyD33_80RFuZeVc6i4J28OHSvbXwFLUPokE', 'YouTube Data API key for channel search', NOW()) ON DUPLICATE KEY UPDATE `value` = 'AIzaSyD33_80RFuZeVc6i4J28OHSvbXwFLUPokE', updatedAt = NOW();",
-  "rows": [],
-  "messages": [],
-  "stdout": "",
-  "stderr": "",
-  "execution_time_ms": 1509
-}

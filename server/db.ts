@@ -1,8 +1,9 @@
 
-import { drizzle } from "drizzle-orm/mysql2";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
 import { eq, desc, asc, and, sql } from "drizzle-orm";
-import { 
-  InsertUser, users, 
+import {
+  InsertUser, users,
   mixes, InsertMix, Mix,
   partners, InsertPartner, Partner,
   siteSettings, InsertSiteSetting, SiteSetting,
@@ -22,7 +23,8 @@ let _db: ReturnType<typeof drizzle> | null = null;
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      const client = postgres(process.env.DATABASE_URL);
+      _db = drizzle(client);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
@@ -81,7 +83,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       updateSet.lastSignedIn = new Date();
     }
 
-    await db.insert(users).values(values).onDuplicateKeyUpdate({
+    await db.insert(users).values(values).onConflictDoUpdate({
+      target: users.openId,
       set: updateSet,
     });
   } catch (error) {
@@ -190,7 +193,8 @@ export async function getSetting(key: string): Promise<string | null> {
 export async function upsertSetting(key: string, value: string, description?: string): Promise<void> {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  await db.insert(siteSettings).values({ key, value, description }).onDuplicateKeyUpdate({
+  await db.insert(siteSettings).values({ key, value, description }).onConflictDoUpdate({
+    target: siteSettings.key,
     set: { value, description },
   });
 }
@@ -206,10 +210,10 @@ export async function getAllSubscribers(): Promise<Subscriber[]> {
 export async function addSubscriber(email: string): Promise<{ success: boolean; message: string }> {
   const db = await getDb();
   if (!db) return { success: false, message: "Database not available" };
-  
+
   try {
     await db.insert(subscribers).values({ email });
-    
+
     // Send notification to owner about new subscriber
     try {
       const { notifyOwner } = await import('./_core/notification');
@@ -221,11 +225,11 @@ export async function addSubscriber(email: string): Promise<{ success: boolean; 
       // Don't fail the subscription if notification fails
       console.warn('[Newsletter] Failed to notify owner:', notifyError);
     }
-    
+
     return { success: true, message: "Successfully subscribed!" };
   } catch (error: unknown) {
-    // Check for duplicate entry error
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'ER_DUP_ENTRY') {
+    // Check for duplicate entry error (PostgreSQL unique violation)
+    if (error && typeof error === 'object' && 'code' in error && error.code === '23505') {
       return { success: false, message: "This email is already subscribed." };
     }
     throw error;
@@ -328,10 +332,10 @@ export async function getAllSuggestions(): Promise<Suggestion[]> {
 export async function createSuggestion(suggestion: InsertSuggestion): Promise<{ success: boolean; message: string }> {
   const db = await getDb();
   if (!db) return { success: false, message: "Database not available" };
-  
+
   try {
     await db.insert(suggestions).values(suggestion);
-    
+
     // Send notification to owner about new suggestion
     try {
       const { notifyOwner } = await import('./_core/notification');
@@ -342,7 +346,7 @@ export async function createSuggestion(suggestion: InsertSuggestion): Promise<{ 
     } catch (notifyError) {
       console.warn('[Suggestions] Failed to notify owner:', notifyError);
     }
-    
+
     return { success: true, message: "Suggestion submitted successfully!" };
   } catch (error) {
     console.error('[Suggestions] Failed to create suggestion:', error);
@@ -456,7 +460,7 @@ export async function hasEarnedKarmaToday(userId: number, action: string): Promi
       and(
         eq(karmaPoints.userId, userId),
         eq(karmaPoints.action, action as InsertKarmaPoint["action"]),
-        sql`DATE(${karmaPoints.createdAt}) = CURDATE()`
+        sql`DATE(${karmaPoints.createdAt}) = CURRENT_DATE`
       )
     );
 
@@ -573,7 +577,7 @@ export async function deleteRonensPick(id: number): Promise<void> {
 
 import { vaultAccess, vaultMixes, VaultMix } from "../drizzle/schema";
 
-const VAULT_PASSPHRASE = process.env.VAULT_PASSPHRASE || "cosmicunderground2026";
+const VAULT_PASSPHRASE = process.env.VAULT_PASSPHRASE || "UndergroundLounge";
 
 export async function verifyVaultPassphrase(userId: number, passphrase: string): Promise<boolean> {
   if (passphrase.toLowerCase().trim() !== VAULT_PASSPHRASE.toLowerCase().trim()) {
