@@ -1713,16 +1713,28 @@ app.get("/api/health", async (_req, res) => {
   );
   info.relatedEnvVars = envKeys;
   const supaUrl = process.env.SUPABASE_URL || (projectRef ? `https://${projectRef}.supabase.co` : "");
-  const supaKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_KEY;
-  if (supaKey) {
+  const supaKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (supaKey && supaUrl) {
     try {
-      const restRes = await fetch(`${supaUrl}/rest/v1/mixes?select=count`, {
-        headers: { apikey: supaKey, Authorization: `Bearer ${supaKey}` }
+      const restRes = await fetch(`${supaUrl}/rest/v1/mixes?select=id,title&limit=3`, {
+        headers: {
+          apikey: supaKey,
+          Authorization: `Bearer ${supaKey}`
+        }
       });
       info.restApiStatus = restRes.status;
+      info.restKeyType = supaKey === process.env.SUPABASE_SERVICE_ROLE_KEY ? "service_role" : "anon";
       if (restRes.ok) {
-        const data = await restRes.json();
-        info.restData = data;
+        info.restData = await restRes.json();
+        const cntRes = await fetch(`${supaUrl}/rest/v1/mixes?select=id&head=true`, {
+          headers: {
+            apikey: supaKey,
+            Authorization: `Bearer ${supaKey}`,
+            Prefer: "count=exact"
+          },
+          method: "HEAD"
+        });
+        info.restMixesCount = cntRes.headers.get("content-range");
       } else {
         info.restError = await restRes.text();
       }
