@@ -1685,10 +1685,15 @@ app.get("/api/health", async (_req, res) => {
     }
   } catch (e) {
     info.dbError = e.message;
-    info.dbErrorCode = e.code;
-    info.dbErrorDetail = e.detail;
-    info.dbErrorSeverity = e.severity;
-    info.dbErrorHint = e.hint;
+    if (e.code) info.dbErrorCode = e.code;
+    if (e.detail) info.dbErrorDetail = e.detail;
+    if (e.severity) info.dbErrorSeverity = e.severity;
+    if (e.cause) info.dbErrorCause = String(e.cause);
+    const props = {};
+    for (const key of Object.getOwnPropertyNames(e)) {
+      if (key !== "stack" && key !== "message") props[key] = e[key];
+    }
+    if (Object.keys(props).length > 0) info.dbErrorProps = props;
   }
   res.json(info);
 });
