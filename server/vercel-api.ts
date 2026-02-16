@@ -44,32 +44,46 @@ app.get("/api/health", async (_req, res) => {
 
     if (projectRef) {
       const pg = await import("postgres");
-      const password = m[2];
-      const regions = ["us-east-1", "us-west-1", "eu-west-1", "eu-central-1", "ap-southeast-1"];
+      const rawPw = m[2];
+      // Try both raw and URL-decoded password
+      const passwords = [rawPw];
+      try { const decoded = decodeURIComponent(rawPw); if (decoded !== rawPw) passwords.push(decoded); } catch {}
+      info.passwordVariants = passwords.length;
+      info.pwHasPercent = rawPw.includes('%');
+      info.pwHasBrackets = rawPw.includes('[') || rawPw.includes(']');
+      info.pwLen = rawPw.length;
+
+      const regions = ["us-east-1", "us-west-1", "eu-central-1"];
       const poolerErrors: string[] = [];
 
-      for (const region of regions) {
-        try {
-          const raw = pg.default({
-            host: `aws-0-${region}.pooler.supabase.com`,
-            port: 6543,
-            database: "postgres",
-            username: `postgres.${projectRef}`,
-            password,
-            ssl: "require" as any,
-            max: 1,
-            connect_timeout: 3,
-          });
-          const test = await raw`SELECT COUNT(*) as cnt FROM mixes`;
-          info.mixesCount = test[0]?.cnt;
-          info.poolerRegion = region;
-          info.poolerConnected = true;
-          await raw.end();
-          res.json(info);
-          return;
-        } catch (pe: any) {
-          const msg = pe.cause ? String(pe.cause) : pe.message;
-          poolerErrors.push(`${region}: ${msg}`);
+      for (const pw of passwords) {
+        for (const region of regions) {
+          for (const port of [6543, 5432]) {
+            try {
+              const raw = pg.default({
+                host: `aws-0-${region}.pooler.supabase.com`,
+                port,
+                database: "postgres",
+                username: `postgres.${projectRef}`,
+                password: pw,
+                ssl: "require" as any,
+                max: 1,
+                connect_timeout: 3,
+              });
+              const test = await raw`SELECT COUNT(*) as cnt FROM mixes`;
+              info.mixesCount = test[0]?.cnt;
+              info.poolerRegion = region;
+              info.poolerPort = port;
+              info.poolerConnected = true;
+              await raw.end();
+              res.json(info);
+              return;
+            } catch (pe: any) {
+              const msg = pe.cause ? String(pe.cause) : pe.message;
+              poolerErrors.push(`${region}:${port}: ${msg}`);
+              // If we get a different error than "Tenant not found", it's useful
+            }
+          }
         }
       }
       info.poolerErrors = poolerErrors;
