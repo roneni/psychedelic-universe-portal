@@ -33,6 +33,7 @@ function createClient(url: string) {
   const parsed = parseDbUrl(url);
 
   if (parsed) {
+    // If the URL already contains "pooler" in the host, use it directly
     return postgres({
       host: parsed.host,
       port: parsed.port,

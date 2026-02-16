@@ -1635,36 +1635,53 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.get("/api/health", async (_req, res) => {
   const info = { ok: true, timestamp: Date.now() };
+  const url = process.env.DATABASE_URL;
+  info.dbUrlSet = !!url;
+  if (!url) {
+    res.json({ ...info, dbError: "DATABASE_URL not set" });
+    return;
+  }
+  const m = url.match(/^postgresql:\/\/([^:]+):(.+)@([^:]+):(\d+)\/(.+?)(\?.*)?$/);
+  if (m) {
+    info.dbUser = m[1];
+    info.dbHost = m[3];
+    info.dbPort = Number(m[4]);
+  }
   try {
-    info.dbUrlSet = !!process.env.DATABASE_URL;
-    if (process.env.DATABASE_URL) {
-      const m = process.env.DATABASE_URL.match(/@([^:]+):(\d+)/);
-      if (m) {
-        info.dbHost = m[1];
-        info.dbPort = Number(m[2]);
-      }
-    }
     const db = await getDb();
     info.dbConnected = !!db;
     if (db) {
       const { sql: sqlTag } = await import("drizzle-orm");
       const result = await db.execute(sqlTag`SELECT COUNT(*) as cnt FROM mixes`);
       info.mixesCount = result[0]?.cnt ?? result.rows?.[0]?.cnt;
-    } else {
-      info.dbError = process.env.DATABASE_URL ? "Connection failed" : "DATABASE_URL not set";
+      res.json(info);
+      return;
     }
   } catch (e) {
-    info.dbError = e.message;
-    if (e.code) info.dbErrorCode = e.code;
-    if (e.detail) info.dbErrorDetail = e.detail;
-    if (e.severity) info.dbErrorSeverity = e.severity;
-    if (e.cause) info.dbErrorCause = String(e.cause);
-    const props = {};
-    for (const key of Object.getOwnPropertyNames(e)) {
-      if (key !== "stack" && key !== "message") props[key] = e[key];
-    }
-    if (Object.keys(props).length > 0) info.dbErrorProps = props;
+    info.primaryError = e.cause ? String(e.cause) : e.message;
   }
+  try {
+    const pg = await import("postgres");
+    const raw = pg.default({
+      host: m ? m[3] : void 0,
+      port: m ? Number(m[4]) : void 0,
+      database: m ? m[5] : void 0,
+      username: m ? m[1] : void 0,
+      password: m ? m[2] : void 0,
+      ssl: "require",
+      max: 1,
+      connect_timeout: 5
+    });
+    const test = await raw`SELECT COUNT(*) as cnt FROM mixes`;
+    info.mixesCount = test[0]?.cnt;
+    info.rawConnected = true;
+    await raw.end();
+    res.json(info);
+    return;
+  } catch (e2) {
+    info.rawError = e2.cause ? String(e2.cause) : e2.message;
+  }
+  info.guidance = "DATABASE_URL cannot connect. If using Supabase, go to Dashboard > Settings > Database > Connection string > URI (with pooler) and update DATABASE_URL in Vercel.";
   res.json(info);
 });
 registerOAuthRoutes(app);
