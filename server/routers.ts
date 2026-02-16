@@ -345,7 +345,28 @@ export const appRouter = router({
       if (!apiKey) {
         throw new Error("YouTube API key not configured");
       }
-      return getDashboardStats(apiKey);
+      try {
+        return await getDashboardStats(apiKey);
+      } catch (error: any) {
+        console.error("[Stats] getDashboardStats error:", error?.message);
+        // Return partial data instead of crashing - channel stats use API key (not OAuth)
+        try {
+          const { getChannelStats, getTopVideos, isOAuthConfigured } = await import("./youtubeAnalytics");
+          const [channelStats, topVideos, isOAuthConnected] = await Promise.all([
+            getChannelStats(apiKey),
+            getTopVideos(apiKey, 10),
+            isOAuthConfigured(),
+          ]);
+          return {
+            channelStats,
+            topVideos,
+            analytics: null, // OAuth analytics unavailable
+            isOAuthConnected,
+          };
+        } catch (fallbackError) {
+          throw error; // Re-throw original if fallback also fails
+        }
+      }
     }),
 
     // Handle OAuth callback (exchange code for tokens)

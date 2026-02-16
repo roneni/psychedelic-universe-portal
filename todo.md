@@ -330,3 +330,26 @@
 - [x] Remove "since 2013" - tagline: "Promoting & Spreading Psychedelic Trance Worldwide"
 - [x] Fix all generic AI wording ("Flagship" → "Major", rewrote partner quotes, genre descriptions)
 - [x] Blend Goa/India elements (palm trees in hero, Goa Trance desc references beaches of Goa)
+
+
+## Hero Refinement (Feb 7 - Part 2)
+- [x] Fix hero logo - use transparent PNG (remove black square background)
+- [x] Fix subtitle to exact text: "Promote & Spread Psychedelic Trance Worldwide"
+- [x] Enhance star animation - more stars moving slightly
+- [x] Generate ORIGINAL cosmic hero image (not the copyrighted Whendell art) - keep Goa palm tree reference
+- [x] Make planet/ring element rotate slowly like a star
+- [x] Create Goa-themed section below hero (physical world: Anjuna/Vagator beach vibes, palm trees, warm tones)
+- [x] Concept: Universe above (cosmic sci-fi) → Goa below (physical world, beach, nature)
+
+
+## Bug Fix (Feb 16)
+- [x] Fix YouTube OAuth token refresh error on /stats page - graceful fallback when OAuth token is revoked/expired, clears invalid tokens, shows public stats without crashing
+
+
+## Hero Final Refinements (Feb 16 - Part 2)
+- [x] Apply transparent logo to hero (icon-only, no black background)
+- [x] Fix subtitle to exact: "Promote & Spread Psychedelic Trance Worldwide"
+- [x] Enhance floating particles (more particles, shooting stars, varied sizes)
+- [x] Add slow planet ring rotation CSS animation overlay
+- [x] Build Goa transition section below hero (Universe → Goa concept)
+- [x] Generate Goa beach background image for transition section

@@ -6,6 +6,7 @@ import { FeaturedMixes } from "@/components/FeaturedMixes";
 import { Newsletter } from "@/components/Newsletter";
 import { PartnersCarousel } from "@/components/PartnersCarousel";
 import { Footer } from "@/components/Footer";
+import { GoaTransition } from "@/components/GoaTransition";
 
 export default function Home() {
   let { user, loading, error, isAuthenticated, logout } = useAuth();
@@ -20,6 +21,7 @@ export default function Home() {
       <Navigation />
       <main className="flex-1 pt-16 relative z-[1]">
         <Hero />
+        <GoaTransition />
         <div className="cosmic-divider my-0"></div>
         <MixGrid />
         <div className="cosmic-divider my-0"></div>

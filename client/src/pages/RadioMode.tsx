@@ -115,7 +115,7 @@ export default function RadioMode() {
       {/* Background */}
       <div className="fixed inset-0 z-0">
         <img
-          src="/images/hero-bg.jpg"
+          src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/wKqfrQEqoIvheUde.jpg"
           alt="Deep Space Nebula"
           className="w-full h-full object-cover"
         />

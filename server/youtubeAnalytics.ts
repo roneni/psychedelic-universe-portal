@@ -90,38 +90,54 @@ export async function exchangeCodeForTokens(code: string): Promise<{
 /**
  * Refresh the access token using the refresh token
  */
-async function refreshAccessToken(refreshToken: string): Promise<string> {
-  const response = await fetch("https://oauth2.googleapis.com/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      client_id: YOUTUBE_CLIENT_ID,
-      client_secret: YOUTUBE_CLIENT_SECRET,
-      refresh_token: refreshToken,
-      grant_type: "refresh_token",
-    }),
-  });
+async function refreshAccessToken(refreshToken: string): Promise<string | null> {
+  try {
+    const response = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        client_id: YOUTUBE_CLIENT_ID,
+        client_secret: YOUTUBE_CLIENT_SECRET,
+        refresh_token: refreshToken,
+        grant_type: "refresh_token",
+      }),
+    });
 
-  if (!response.ok) {
-    throw new Error("Failed to refresh token");
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("[YouTube OAuth] Token refresh failed:", response.status, errorText);
+      
+      // If token is invalid/revoked, clear it from DB so user can re-authenticate
+      if (response.status === 400 || response.status === 401) {
+        console.error("[YouTube OAuth] Refresh token is invalid or revoked. Clearing stored tokens.");
+        const db = await getDb();
+        if (db) {
+          await db.delete(youtubeOAuthTokens);
+        }
+      }
+      return null;
+    }
+
+    const data = await response.json();
+    const expiresAt = new Date(Date.now() + data.expires_in * 1000);
+
+    // Update tokens in database
+    const db = await getDb();
+    if (db) {
+      await db
+        .update(youtubeOAuthTokens)
+        .set({
+          accessToken: data.access_token,
+          expiresAt,
+        })
+        .where(eq(youtubeOAuthTokens.refreshToken, refreshToken));
+    }
+
+    return data.access_token;
+  } catch (error) {
+    console.error("[YouTube OAuth] Token refresh error:", error);
+    return null;
   }
-
-  const data = await response.json();
-  const expiresAt = new Date(Date.now() + data.expires_in * 1000);
-
-  // Update tokens in database
-  const db = await getDb();
-  if (db) {
-    await db
-      .update(youtubeOAuthTokens)
-      .set({
-        accessToken: data.access_token,
-        expiresAt,
-      })
-      .where(eq(youtubeOAuthTokens.refreshToken, refreshToken));
-  }
-
-  return data.access_token;
 }
 
 /**
@@ -141,7 +157,11 @@ async function getValidAccessToken(): Promise<string | null> {
   
   // Check if token is expired (with 5 minute buffer)
   if (new Date(token.expiresAt) < new Date(Date.now() + 5 * 60 * 1000)) {
-    return await refreshAccessToken(token.refreshToken);
+    const newToken = await refreshAccessToken(token.refreshToken);
+    if (!newToken) {
+      return null; // Token refresh failed, user needs to re-authenticate
+    }
+    return newToken;
   }
 
   return token.accessToken;
