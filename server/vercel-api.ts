@@ -1,5 +1,4 @@
 import express from "express";
-import { sql as sqlTag } from "drizzle-orm";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./_core/oauth";
 import { appRouter } from "./routers";
@@ -16,9 +15,11 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.get("/api/health", async (_req, res) => {
   const info: Record<string, unknown> = { ok: true, timestamp: Date.now() };
   try {
+    info.dbUrlSet = !!process.env.DATABASE_URL;
     const db = await getDb();
     info.dbConnected = !!db;
     if (db) {
+      const { sql: sqlTag } = await import("drizzle-orm");
       const result = await db.execute(sqlTag`SELECT COUNT(*) as cnt FROM mixes`);
       info.mixesCount = (result as any)[0]?.cnt ?? (result as any).rows?.[0]?.cnt;
     } else {

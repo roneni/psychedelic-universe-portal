@@ -26,15 +26,52 @@ function parseDbUrl(url: string) {
   return { user: m[1], password: m[2], host: m[3], port: Number(m[4]), database: m[5] };
 }
 
-/** Build a postgres.js connection using parsed URL parts (avoids URL-parsing issues with special chars). */
-function createClient(url: string) {
+/**
+ * For Supabase direct URLs (db.*.supabase.co), convert to pooler format.
+ * Direct Supabase hosts often don't resolve from serverless environments (Vercel).
+ * The pooler URL uses a different host format and port 6543 for transaction mode.
+ */
+function getConnectionParams(url: string): postgres.Options<{}> {
   const isSupabase = url.includes("supabase");
   const useSSL = process.env.NODE_ENV === "production" || isSupabase;
   const parsed = parseDbUrl(url);
 
-  // If we can parse the URL, use individual params (handles brackets in password)
+  if (parsed && isSupabase) {
+    // Check if this is a direct connection (db.*.supabase.co) and convert to pooler
+    const directMatch = parsed.host.match(/^db\.([^.]+)\.supabase\.co$/);
+    if (directMatch) {
+      const projectRef = directMatch[1];
+      // Use the Supabase connection pooler (Supavisor) — works from serverless environments
+      const poolerRegion = process.env.SUPABASE_REGION || "us-east-1";
+      return {
+        host: `aws-0-${poolerRegion}.pooler.supabase.com`,
+        port: 6543,
+        database: parsed.database,
+        username: `postgres.${projectRef}`,
+        password: parsed.password,
+        ssl: "require" as any,
+        max: 10,
+        idle_timeout: 20,
+        connect_timeout: 10,
+      };
+    }
+
+    // Already a pooler URL or other Supabase format — use parsed params
+    return {
+      host: parsed.host,
+      port: parsed.port,
+      database: parsed.database,
+      username: parsed.user,
+      password: parsed.password,
+      ssl: "require" as any,
+      max: 10,
+      idle_timeout: 20,
+      connect_timeout: 10,
+    };
+  }
+
   if (parsed) {
-    return postgres({
+    return {
       host: parsed.host,
       port: parsed.port,
       database: parsed.database,
@@ -44,10 +81,21 @@ function createClient(url: string) {
       max: 10,
       idle_timeout: 20,
       connect_timeout: 10,
-    });
+    };
   }
 
+  // Can't parse — return empty and let caller use URL string directly
+  return {};
+}
+
+/** Build a postgres.js connection. Auto-converts Supabase direct URLs to pooler format. */
+function createClient(url: string) {
+  const params = getConnectionParams(url);
+  if (params.host) {
+    return postgres(params);
+  }
   // Fallback: pass URL directly
+  const useSSL = process.env.NODE_ENV === "production" || url.includes("supabase");
   return postgres(url, {
     ssl: useSSL ? "require" as any : false,
     max: 10,
