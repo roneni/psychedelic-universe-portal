@@ -11,8 +11,23 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Health check
-app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, timestamp: Date.now() });
+app.get("/api/health", async (_req, res) => {
+  const info: Record<string, unknown> = { ok: true, timestamp: Date.now() };
+  try {
+    const { getDb } = await import("./db");
+    const db = await getDb();
+    info.dbConnected = !!db;
+    if (db) {
+      const { sql: sqlTag } = await import("drizzle-orm");
+      const result = await db.execute(sqlTag`SELECT COUNT(*) as cnt FROM mixes`);
+      info.mixesCount = (result as any)[0]?.cnt ?? (result as any).rows?.[0]?.cnt;
+    } else {
+      info.dbError = process.env.DATABASE_URL ? "Connection failed" : "DATABASE_URL not set";
+    }
+  } catch (e: any) {
+    info.dbError = e.message;
+  }
+  res.json(info);
 });
 
 // OAuth callback under /api/oauth/callback

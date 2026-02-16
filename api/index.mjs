@@ -214,13 +214,99 @@ var init_notification = __esm({
 });
 
 // server/db.ts
+var db_exports = {};
+__export(db_exports, {
+  addFavorite: () => addFavorite,
+  addSubscriber: () => addSubscriber,
+  awardKarma: () => awardKarma,
+  checkVaultAccess: () => checkVaultAccess,
+  createArtist: () => createArtist,
+  createMix: () => createMix,
+  createNotification: () => createNotification,
+  createPartner: () => createPartner,
+  createRonensPick: () => createRonensPick,
+  createSuggestion: () => createSuggestion,
+  createVaultMix: () => createVaultMix,
+  deleteArtist: () => deleteArtist,
+  deleteMix: () => deleteMix,
+  deleteNotification: () => deleteNotification,
+  deletePartner: () => deletePartner,
+  deleteRonensPick: () => deleteRonensPick,
+  deleteSuggestion: () => deleteSuggestion,
+  deleteVaultMix: () => deleteVaultMix,
+  getActivePartners: () => getActivePartners,
+  getAllArtists: () => getAllArtists,
+  getAllMixes: () => getAllMixes,
+  getAllPartners: () => getAllPartners,
+  getAllRonensPicks: () => getAllRonensPicks,
+  getAllSettings: () => getAllSettings,
+  getAllSubscribers: () => getAllSubscribers,
+  getAllSuggestions: () => getAllSuggestions,
+  getArtistBySlug: () => getArtistBySlug,
+  getDb: () => getDb,
+  getFeaturedArtists: () => getFeaturedArtists,
+  getFeaturedMixes: () => getFeaturedMixes,
+  getKarmaLeaderboard: () => getKarmaLeaderboard,
+  getMixesByCategory: () => getMixesByCategory,
+  getRecentNotifications: () => getRecentNotifications,
+  getSetting: () => getSetting,
+  getUnreadNotifications: () => getUnreadNotifications,
+  getUserByOpenId: () => getUserByOpenId,
+  getUserFavoriteIds: () => getUserFavoriteIds,
+  getUserFavorites: () => getUserFavorites,
+  getUserKarmaHistory: () => getUserKarmaHistory,
+  getUserTotalKarma: () => getUserTotalKarma,
+  getVaultMixes: () => getVaultMixes,
+  hasEarnedKarmaToday: () => hasEarnedKarmaToday,
+  isFavorited: () => isFavorited,
+  markAllNotificationsAsRead: () => markAllNotificationsAsRead,
+  markNotificationAsRead: () => markNotificationAsRead,
+  removeFavorite: () => removeFavorite,
+  removeSubscriber: () => removeSubscriber,
+  updateArtist: () => updateArtist,
+  updateMix: () => updateMix,
+  updatePartner: () => updatePartner,
+  updateSuggestionStatus: () => updateSuggestionStatus,
+  upsertSetting: () => upsertSetting,
+  upsertUser: () => upsertUser,
+  verifyVaultPassphrase: () => verifyVaultPassphrase
+});
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { eq, desc, asc, and, sql } from "drizzle-orm";
+function parseDbUrl(url) {
+  const m = url.match(/^postgresql:\/\/([^:]+):(.+)@([^:]+):(\d+)\/(.+?)(\?.*)?$/);
+  if (!m) return null;
+  return { user: m[1], password: m[2], host: m[3], port: Number(m[4]), database: m[5] };
+}
+function createClient(url) {
+  const isSupabase = url.includes("supabase");
+  const useSSL = process.env.NODE_ENV === "production" || isSupabase;
+  const parsed = parseDbUrl(url);
+  if (parsed) {
+    return postgres({
+      host: parsed.host,
+      port: parsed.port,
+      database: parsed.database,
+      username: parsed.user,
+      password: parsed.password,
+      ssl: useSSL ? "require" : false,
+      max: 10,
+      idle_timeout: 20,
+      connect_timeout: 10
+    });
+  }
+  return postgres(url, {
+    ssl: useSSL ? "require" : false,
+    max: 10,
+    idle_timeout: 20,
+    connect_timeout: 10
+  });
+}
 async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      const client = postgres(process.env.DATABASE_URL);
+      const client = createClient(process.env.DATABASE_URL);
       _db = drizzle(client);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
@@ -575,6 +661,12 @@ async function removeFavorite(userId, mixId) {
   await db.delete(favorites).where(and(eq(favorites.userId, userId), eq(favorites.mixId, mixId)));
   await awardKarma(userId, "unfavorite", "Removed a favorite", String(mixId));
   return { success: true };
+}
+async function isFavorited(userId, mixId) {
+  const db = await getDb();
+  if (!db) return false;
+  const result = await db.select({ count: sql`COUNT(*)` }).from(favorites).where(and(eq(favorites.userId, userId), eq(favorites.mixId, mixId)));
+  return (result[0]?.count || 0) > 0;
 }
 async function getUserFavoriteIds(userId) {
   const db = await getDb();
@@ -1010,12 +1102,12 @@ import { parse as parseCookieHeader } from "cookie";
 import { SignJWT, jwtVerify } from "jose";
 
 // server/supabase.ts
-import { createClient } from "@supabase/supabase-js";
+import { createClient as createClient2 } from "@supabase/supabase-js";
 var supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "";
 var supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 var supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "";
-var supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey);
-var supabase = createClient(supabaseUrl, supabaseAnonKey);
+var supabaseAdmin = createClient2(supabaseUrl, supabaseServiceRoleKey);
+var supabase = createClient2(supabaseUrl, supabaseAnonKey);
 
 // server/_core/sdk.ts
 var ONE_YEAR_MS2 = 1e3 * 60 * 60 * 24 * 365;
@@ -1603,8 +1695,23 @@ async function createContext(opts) {
 var app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
-app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, timestamp: Date.now() });
+app.get("/api/health", async (_req, res) => {
+  const info = { ok: true, timestamp: Date.now() };
+  try {
+    const { getDb: getDb2 } = await Promise.resolve().then(() => (init_db(), db_exports));
+    const db = await getDb2();
+    info.dbConnected = !!db;
+    if (db) {
+      const { sql: sqlTag } = await import("drizzle-orm");
+      const result = await db.execute(sqlTag`SELECT COUNT(*) as cnt FROM mixes`);
+      info.mixesCount = result[0]?.cnt ?? result.rows?.[0]?.cnt;
+    } else {
+      info.dbError = process.env.DATABASE_URL ? "Connection failed" : "DATABASE_URL not set";
+    }
+  } catch (e) {
+    info.dbError = e.message;
+  }
+  res.json(info);
 });
 registerOAuthRoutes(app);
 app.get("/api/oauth/youtube/callback", async (req, res) => {

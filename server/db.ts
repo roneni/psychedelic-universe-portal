@@ -19,11 +19,48 @@ import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
+/** Parse a PostgreSQL URL into individual parts. Handles passwords with special chars like brackets. */
+function parseDbUrl(url: string) {
+  const m = url.match(/^postgresql:\/\/([^:]+):(.+)@([^:]+):(\d+)\/(.+?)(\?.*)?$/);
+  if (!m) return null;
+  return { user: m[1], password: m[2], host: m[3], port: Number(m[4]), database: m[5] };
+}
+
+/** Build a postgres.js connection using parsed URL parts (avoids URL-parsing issues with special chars). */
+function createClient(url: string) {
+  const isSupabase = url.includes("supabase");
+  const useSSL = process.env.NODE_ENV === "production" || isSupabase;
+  const parsed = parseDbUrl(url);
+
+  // If we can parse the URL, use individual params (handles brackets in password)
+  if (parsed) {
+    return postgres({
+      host: parsed.host,
+      port: parsed.port,
+      database: parsed.database,
+      username: parsed.user,
+      password: parsed.password,
+      ssl: useSSL ? "require" as any : false,
+      max: 10,
+      idle_timeout: 20,
+      connect_timeout: 10,
+    });
+  }
+
+  // Fallback: pass URL directly
+  return postgres(url, {
+    ssl: useSSL ? "require" as any : false,
+    max: 10,
+    idle_timeout: 20,
+    connect_timeout: 10,
+  });
+}
+
 // Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      const client = postgres(process.env.DATABASE_URL);
+      const client = createClient(process.env.DATABASE_URL);
       _db = drizzle(client);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
