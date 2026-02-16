@@ -16,6 +16,10 @@ app.get("/api/health", async (_req, res) => {
   const info: Record<string, unknown> = { ok: true, timestamp: Date.now() };
   try {
     info.dbUrlSet = !!process.env.DATABASE_URL;
+    if (process.env.DATABASE_URL) {
+      const m = process.env.DATABASE_URL.match(/@([^:]+):(\d+)/);
+      if (m) { info.dbHost = m[1]; info.dbPort = Number(m[2]); }
+    }
     const db = await getDb();
     info.dbConnected = !!db;
     if (db) {

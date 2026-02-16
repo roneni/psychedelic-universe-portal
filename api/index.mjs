@@ -222,41 +222,12 @@ function parseDbUrl(url) {
   if (!m) return null;
   return { user: m[1], password: m[2], host: m[3], port: Number(m[4]), database: m[5] };
 }
-function getConnectionParams(url) {
+function createClient(url) {
   const isSupabase = url.includes("supabase");
   const useSSL = process.env.NODE_ENV === "production" || isSupabase;
   const parsed = parseDbUrl(url);
-  if (parsed && isSupabase) {
-    const directMatch = parsed.host.match(/^db\.([^.]+)\.supabase\.co$/);
-    if (directMatch) {
-      const projectRef = directMatch[1];
-      const poolerRegion = process.env.SUPABASE_REGION || "us-east-1";
-      return {
-        host: `aws-0-${poolerRegion}.pooler.supabase.com`,
-        port: 6543,
-        database: parsed.database,
-        username: `postgres.${projectRef}`,
-        password: parsed.password,
-        ssl: "require",
-        max: 10,
-        idle_timeout: 20,
-        connect_timeout: 10
-      };
-    }
-    return {
-      host: parsed.host,
-      port: parsed.port,
-      database: parsed.database,
-      username: parsed.user,
-      password: parsed.password,
-      ssl: "require",
-      max: 10,
-      idle_timeout: 20,
-      connect_timeout: 10
-    };
-  }
   if (parsed) {
-    return {
+    return postgres({
       host: parsed.host,
       port: parsed.port,
       database: parsed.database,
@@ -266,16 +237,8 @@ function getConnectionParams(url) {
       max: 10,
       idle_timeout: 20,
       connect_timeout: 10
-    };
+    });
   }
-  return {};
-}
-function createClient(url) {
-  const params = getConnectionParams(url);
-  if (params.host) {
-    return postgres(params);
-  }
-  const useSSL = process.env.NODE_ENV === "production" || url.includes("supabase");
   return postgres(url, {
     ssl: useSSL ? "require" : false,
     max: 10,
@@ -1674,6 +1637,13 @@ app.get("/api/health", async (_req, res) => {
   const info = { ok: true, timestamp: Date.now() };
   try {
     info.dbUrlSet = !!process.env.DATABASE_URL;
+    if (process.env.DATABASE_URL) {
+      const m = process.env.DATABASE_URL.match(/@([^:]+):(\d+)/);
+      if (m) {
+        info.dbHost = m[1];
+        info.dbPort = Number(m[2]);
+      }
+    }
     const db = await getDb();
     info.dbConnected = !!db;
     if (db) {
