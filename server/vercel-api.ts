@@ -44,46 +44,44 @@ app.get("/api/health", async (_req, res) => {
 
     if (projectRef) {
       const pg = await import("postgres");
-      const rawPw = m[2];
-      // Try both raw and URL-decoded password
-      const passwords = [rawPw];
-      try { const decoded = decodeURIComponent(rawPw); if (decoded !== rawPw) passwords.push(decoded); } catch {}
-      info.passwordVariants = passwords.length;
-      info.pwHasPercent = rawPw.includes('%');
-      info.pwHasBrackets = rawPw.includes('[') || rawPw.includes(']');
-      info.pwLen = rawPw.length;
-
-      const regions = ["us-east-1", "us-west-1", "eu-central-1"];
+      const pw = m[2];
+      info.pwHasBrackets = pw.includes('[') || pw.includes(']');
+      info.pwLen = pw.length;
+      const attempts: Array<{ host: string; port: number; user: string }> = [
+        // Try the project hostname directly (no db. prefix) — REST API resolves here
+        { host: `${projectRef}.supabase.co`, port: 6543, user: `postgres.${projectRef}` },
+        { host: `${projectRef}.supabase.co`, port: 5432, user: "postgres" },
+        // Try standard Supavisor pooler regions
+        { host: "aws-0-us-east-1.pooler.supabase.com", port: 6543, user: `postgres.${projectRef}` },
+        { host: "aws-0-eu-central-1.pooler.supabase.com", port: 6543, user: `postgres.${projectRef}` },
+        { host: "aws-0-us-west-1.pooler.supabase.com", port: 6543, user: `postgres.${projectRef}` },
+      ];
       const poolerErrors: string[] = [];
 
-      for (const pw of passwords) {
-        for (const region of regions) {
-          for (const port of [6543, 5432]) {
-            try {
-              const raw = pg.default({
-                host: `aws-0-${region}.pooler.supabase.com`,
-                port,
-                database: "postgres",
-                username: `postgres.${projectRef}`,
-                password: pw,
-                ssl: "require" as any,
-                max: 1,
-                connect_timeout: 3,
-              });
-              const test = await raw`SELECT COUNT(*) as cnt FROM mixes`;
-              info.mixesCount = test[0]?.cnt;
-              info.poolerRegion = region;
-              info.poolerPort = port;
-              info.poolerConnected = true;
-              await raw.end();
-              res.json(info);
-              return;
-            } catch (pe: any) {
-              const msg = pe.cause ? String(pe.cause) : pe.message;
-              poolerErrors.push(`${region}:${port}: ${msg}`);
-              // If we get a different error than "Tenant not found", it's useful
-            }
-          }
+      for (const a of attempts) {
+        try {
+          const raw = pg.default({
+            host: a.host,
+            port: a.port,
+            database: "postgres",
+            username: a.user,
+            password: pw,
+            ssl: "require" as any,
+            max: 1,
+            connect_timeout: 3,
+          });
+          const test = await raw`SELECT COUNT(*) as cnt FROM mixes`;
+          info.mixesCount = test[0]?.cnt;
+          info.connHost = a.host;
+          info.connPort = a.port;
+          info.connUser = a.user;
+          info.poolerConnected = true;
+          await raw.end();
+          res.json(info);
+          return;
+        } catch (pe: any) {
+          const msg = pe.cause ? String(pe.cause) : pe.message;
+          poolerErrors.push(`${a.user}@${a.host}:${a.port}: ${msg}`);
         }
       }
       info.poolerErrors = poolerErrors;
