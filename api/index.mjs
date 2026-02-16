@@ -214,63 +214,6 @@ var init_notification = __esm({
 });
 
 // server/db.ts
-var db_exports = {};
-__export(db_exports, {
-  addFavorite: () => addFavorite,
-  addSubscriber: () => addSubscriber,
-  awardKarma: () => awardKarma,
-  checkVaultAccess: () => checkVaultAccess,
-  createArtist: () => createArtist,
-  createMix: () => createMix,
-  createNotification: () => createNotification,
-  createPartner: () => createPartner,
-  createRonensPick: () => createRonensPick,
-  createSuggestion: () => createSuggestion,
-  createVaultMix: () => createVaultMix,
-  deleteArtist: () => deleteArtist,
-  deleteMix: () => deleteMix,
-  deleteNotification: () => deleteNotification,
-  deletePartner: () => deletePartner,
-  deleteRonensPick: () => deleteRonensPick,
-  deleteSuggestion: () => deleteSuggestion,
-  deleteVaultMix: () => deleteVaultMix,
-  getActivePartners: () => getActivePartners,
-  getAllArtists: () => getAllArtists,
-  getAllMixes: () => getAllMixes,
-  getAllPartners: () => getAllPartners,
-  getAllRonensPicks: () => getAllRonensPicks,
-  getAllSettings: () => getAllSettings,
-  getAllSubscribers: () => getAllSubscribers,
-  getAllSuggestions: () => getAllSuggestions,
-  getArtistBySlug: () => getArtistBySlug,
-  getDb: () => getDb,
-  getFeaturedArtists: () => getFeaturedArtists,
-  getFeaturedMixes: () => getFeaturedMixes,
-  getKarmaLeaderboard: () => getKarmaLeaderboard,
-  getMixesByCategory: () => getMixesByCategory,
-  getRecentNotifications: () => getRecentNotifications,
-  getSetting: () => getSetting,
-  getUnreadNotifications: () => getUnreadNotifications,
-  getUserByOpenId: () => getUserByOpenId,
-  getUserFavoriteIds: () => getUserFavoriteIds,
-  getUserFavorites: () => getUserFavorites,
-  getUserKarmaHistory: () => getUserKarmaHistory,
-  getUserTotalKarma: () => getUserTotalKarma,
-  getVaultMixes: () => getVaultMixes,
-  hasEarnedKarmaToday: () => hasEarnedKarmaToday,
-  isFavorited: () => isFavorited,
-  markAllNotificationsAsRead: () => markAllNotificationsAsRead,
-  markNotificationAsRead: () => markNotificationAsRead,
-  removeFavorite: () => removeFavorite,
-  removeSubscriber: () => removeSubscriber,
-  updateArtist: () => updateArtist,
-  updateMix: () => updateMix,
-  updatePartner: () => updatePartner,
-  updateSuggestionStatus: () => updateSuggestionStatus,
-  upsertSetting: () => upsertSetting,
-  upsertUser: () => upsertUser,
-  verifyVaultPassphrase: () => verifyVaultPassphrase
-});
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { eq, desc, asc, and, sql } from "drizzle-orm";
@@ -662,12 +605,6 @@ async function removeFavorite(userId, mixId) {
   await awardKarma(userId, "unfavorite", "Removed a favorite", String(mixId));
   return { success: true };
 }
-async function isFavorited(userId, mixId) {
-  const db = await getDb();
-  if (!db) return false;
-  const result = await db.select({ count: sql`COUNT(*)` }).from(favorites).where(and(eq(favorites.userId, userId), eq(favorites.mixId, mixId)));
-  return (result[0]?.count || 0) > 0;
-}
 async function getUserFavoriteIds(userId) {
   const db = await getDb();
   if (!db) return [];
@@ -1057,6 +994,7 @@ var init_youtubeAnalytics = __esm({
 
 // server/vercel-api.ts
 import express from "express";
+import { sql as sqlTag } from "drizzle-orm";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 
 // shared/const.ts
@@ -1692,17 +1630,16 @@ async function createContext(opts) {
 }
 
 // server/vercel-api.ts
+init_db();
 var app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.get("/api/health", async (_req, res) => {
   const info = { ok: true, timestamp: Date.now() };
   try {
-    const { getDb: getDb2 } = await Promise.resolve().then(() => (init_db(), db_exports));
-    const db = await getDb2();
+    const db = await getDb();
     info.dbConnected = !!db;
     if (db) {
-      const { sql: sqlTag } = await import("drizzle-orm");
       const result = await db.execute(sqlTag`SELECT COUNT(*) as cnt FROM mixes`);
       info.mixesCount = result[0]?.cnt ?? result.rows?.[0]?.cnt;
     } else {
