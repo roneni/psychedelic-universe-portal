@@ -1685,6 +1685,10 @@ app.get("/api/health", async (_req, res) => {
     }
   } catch (e) {
     info.dbError = e.message;
+    info.dbErrorCode = e.code;
+    info.dbErrorDetail = e.detail;
+    info.dbErrorSeverity = e.severity;
+    info.dbErrorHint = e.hint;
   }
   res.json(info);
 });
