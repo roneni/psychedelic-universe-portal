@@ -470,10 +470,16 @@ export async function getDashboardStats(apiKey: string): Promise<{
   } | null;
   isOAuthConnected: boolean;
 }> {
-  // Public-data endpoints run independently of OAuth; analytics is best-effort.
+  // All external API calls are best-effort — return partial data on failure.
   const [channelStats, topVideos, analytics, isOAuthConnected] = await Promise.all([
-    getChannelStats(apiKey),
-    getTopVideos(apiKey, 10),
+    getChannelStats(apiKey).catch((err) => {
+      console.error("[YouTube] Channel stats fetch failed:", err);
+      return { subscriberCount: 0, viewCount: 0, videoCount: 0 };
+    }),
+    getTopVideos(apiKey, 10).catch((err) => {
+      console.error("[YouTube] Top videos fetch failed:", err);
+      return [];
+    }),
     getAnalyticsData().catch((err) => {
       console.error("[YouTube] Analytics fetch failed, falling back to public data only:", err);
       return null;

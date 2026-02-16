@@ -343,7 +343,12 @@ export const appRouter = router({
     getDashboardStats: publicProcedure.query(async () => {
       const apiKey = await getSetting("youtube_api_key");
       if (!apiKey) {
-        throw new Error("YouTube API key not configured");
+        return {
+          channelStats: { subscriberCount: 0, viewCount: 0, videoCount: 0 },
+          topVideos: [],
+          analytics: null,
+          isOAuthConnected: false,
+        };
       }
       return getDashboardStats(apiKey);
     }),
