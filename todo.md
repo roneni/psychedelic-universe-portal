@@ -353,3 +353,9 @@
 - [x] Add slow planet ring rotation CSS animation overlay
 - [x] Build Goa transition section below hero (Universe → Goa concept)
 - [x] Generate Goa beach background image for transition section
+
+
+## Remaining Fixes (Feb 16)
+- [x] Fix stats page yellow flash on refresh (loading state race condition)
+- [x] Compare Community page (Manus vs Vercel clone) and document differences
+- [x] Document YouTube OAuth re-authorization steps for Vercel clone
