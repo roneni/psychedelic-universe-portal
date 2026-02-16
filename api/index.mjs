@@ -247,6 +247,7 @@ function createClient(url) {
   });
 }
 async function getDb() {
+  if (_pgBroken) return null;
   if (!_db && process.env.DATABASE_URL) {
     try {
       const client = createClient(process.env.DATABASE_URL);
@@ -257,6 +258,76 @@ async function getDb() {
     }
   }
   return _db;
+}
+async function restGet(table, params) {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!url || !key) return [];
+  const qs = params ? `?${params}` : "";
+  const res = await fetch(`${url}/rest/v1/${table}${qs}`, {
+    headers: { apikey: key, Authorization: `Bearer ${key}` }
+  });
+  if (!res.ok) {
+    console.warn(`[REST] GET ${table} failed: ${res.status}`);
+    return [];
+  }
+  return res.json();
+}
+async function restPost(table, body, upsertCol) {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!url || !key) throw new Error("Database not available");
+  const headers = {
+    apikey: key,
+    Authorization: `Bearer ${key}`,
+    "Content-Type": "application/json"
+  };
+  if (upsertCol) headers["Prefer"] = `resolution=merge-duplicates`;
+  const res = await fetch(`${url}/rest/v1/${table}${upsertCol ? `?on_conflict=${upsertCol}` : ""}`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`REST POST ${table} failed: ${res.status} ${err}`);
+  }
+}
+async function restPatch(table, filter, body) {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!url || !key) throw new Error("Database not available");
+  const res = await fetch(`${url}/rest/v1/${table}?${filter}`, {
+    method: "PATCH",
+    headers: { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error(`REST PATCH ${table} failed: ${res.status}`);
+}
+async function restDelete(table, filter) {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!url || !key) throw new Error("Database not available");
+  const res = await fetch(`${url}/rest/v1/${table}?${filter}`, {
+    method: "DELETE",
+    headers: { apikey: key, Authorization: `Bearer ${key}` }
+  });
+  if (!res.ok) throw new Error(`REST DELETE ${table} failed: ${res.status}`);
+}
+async function tryPg(fn) {
+  if (_pgBroken) return null;
+  const db = await getDb();
+  if (!db) return null;
+  try {
+    return await fn(db);
+  } catch (e) {
+    const cause = String(e.cause || e.message || "");
+    if (cause.includes("ENOTFOUND") || cause.includes("CONNECT_TIMEOUT") || cause.includes("Tenant or user not found")) {
+      _pgBroken = true;
+      console.warn("[Database] PG connection failed, switching to REST fallback");
+    }
+    return null;
+  }
 }
 async function upsertUser(user) {
   if (!user.openId) {
@@ -308,92 +379,86 @@ async function upsertUser(user) {
   }
 }
 async function getUserByOpenId(openId) {
-  const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot get user: database not available");
-    return void 0;
-  }
-  const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
-  return result.length > 0 ? result[0] : void 0;
+  const pg = await tryPg((db) => db.select().from(users).where(eq(users.openId, openId)).limit(1));
+  if (pg) return pg.length > 0 ? pg[0] : void 0;
+  const rest = await restGet("users", `"openId"=eq.${encodeURIComponent(openId)}&limit=1`);
+  return rest.length > 0 ? rest[0] : void 0;
 }
 async function getAllMixes() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(mixes).orderBy(asc(mixes.sortOrder), desc(mixes.createdAt));
+  const pg = await tryPg((db) => db.select().from(mixes).orderBy(asc(mixes.sortOrder), desc(mixes.createdAt)));
+  if (pg) return pg;
+  return restGet("mixes", 'select=*&order="sortOrder".asc,"createdAt".desc');
 }
 async function getMixesByCategory(category) {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(mixes).where(eq(mixes.category, category)).orderBy(asc(mixes.sortOrder));
+  const pg = await tryPg((db) => db.select().from(mixes).where(eq(mixes.category, category)).orderBy(asc(mixes.sortOrder)));
+  if (pg) return pg;
+  return restGet("mixes", `select=*&category=eq.${encodeURIComponent(category)}&order="sortOrder".asc`);
 }
 async function getFeaturedMixes() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(mixes).where(eq(mixes.featured, true)).orderBy(asc(mixes.sortOrder));
+  const pg = await tryPg((db) => db.select().from(mixes).where(eq(mixes.featured, true)).orderBy(asc(mixes.sortOrder)));
+  if (pg) return pg;
+  return restGet("mixes", 'select=*&featured=is.true&order="sortOrder".asc');
 }
 async function createMix(mix) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.insert(mixes).values(mix);
+  const pg = await tryPg((db) => db.insert(mixes).values(mix));
+  if (pg !== null) return;
+  await restPost("mixes", mix);
 }
 async function updateMix(id, mix) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.update(mixes).set(mix).where(eq(mixes.id, id));
+  const pg = await tryPg((db) => db.update(mixes).set(mix).where(eq(mixes.id, id)));
+  if (pg !== null) return;
+  await restPatch("mixes", `id=eq.${id}`, mix);
 }
 async function deleteMix(id) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.delete(mixes).where(eq(mixes.id, id));
+  const pg = await tryPg((db) => db.delete(mixes).where(eq(mixes.id, id)));
+  if (pg !== null) return;
+  await restDelete("mixes", `id=eq.${id}`);
 }
 async function getAllPartners() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(partners).orderBy(asc(partners.sortOrder));
+  const pg = await tryPg((db) => db.select().from(partners).orderBy(asc(partners.sortOrder)));
+  if (pg) return pg;
+  return restGet("partners", 'select=*&order="sortOrder".asc');
 }
 async function getActivePartners() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(partners).where(eq(partners.active, true)).orderBy(asc(partners.sortOrder));
+  const pg = await tryPg((db) => db.select().from(partners).where(eq(partners.active, true)).orderBy(asc(partners.sortOrder)));
+  if (pg) return pg;
+  return restGet("partners", 'select=*&active=is.true&order="sortOrder".asc');
 }
 async function createPartner(partner) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.insert(partners).values(partner);
+  const pg = await tryPg((db) => db.insert(partners).values(partner));
+  if (pg !== null) return;
+  await restPost("partners", partner);
 }
 async function updatePartner(id, partner) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.update(partners).set(partner).where(eq(partners.id, id));
+  const pg = await tryPg((db) => db.update(partners).set(partner).where(eq(partners.id, id)));
+  if (pg !== null) return;
+  await restPatch("partners", `id=eq.${id}`, partner);
 }
 async function deletePartner(id) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.delete(partners).where(eq(partners.id, id));
+  const pg = await tryPg((db) => db.delete(partners).where(eq(partners.id, id)));
+  if (pg !== null) return;
+  await restDelete("partners", `id=eq.${id}`);
 }
 async function getAllSettings() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(siteSettings);
+  const pg = await tryPg((db) => db.select().from(siteSettings));
+  if (pg) return pg;
+  return restGet("site_settings", "select=*");
 }
 async function getSetting(key) {
-  const db = await getDb();
-  if (!db) return null;
-  const result = await db.select().from(siteSettings).where(eq(siteSettings.key, key)).limit(1);
-  return result.length > 0 ? result[0].value : null;
+  const pg = await tryPg((db) => db.select().from(siteSettings).where(eq(siteSettings.key, key)).limit(1));
+  if (pg) return pg.length > 0 ? pg[0].value : null;
+  const rest = await restGet("site_settings", `select=*&key=eq.${encodeURIComponent(key)}&limit=1`);
+  return rest.length > 0 ? rest[0].value : null;
 }
 async function upsertSetting(key, value, description) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.insert(siteSettings).values({ key, value, description }).onConflictDoUpdate({
-    target: siteSettings.key,
-    set: { value, description }
-  });
+  const pg = await tryPg((db) => db.insert(siteSettings).values({ key, value, description }).onConflictDoUpdate({ target: siteSettings.key, set: { value, description } }));
+  if (pg !== null) return;
+  await restPost("site_settings", { key, value, description }, "key");
 }
 async function getAllSubscribers() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(subscribers).orderBy(desc(subscribers.subscribedAt));
+  const pg = await tryPg((db) => db.select().from(subscribers).orderBy(desc(subscribers.subscribedAt)));
+  if (pg) return pg;
+  return restGet("subscribers", 'select=*&order="subscribedAt".desc');
 }
 async function addSubscriber(email) {
   const db = await getDb();
@@ -423,45 +488,45 @@ async function removeSubscriber(id) {
   await db.delete(subscribers).where(eq(subscribers.id, id));
 }
 async function getAllArtists() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(artists).orderBy(asc(artists.sortOrder), desc(artists.trackCount));
+  const pg = await tryPg((db) => db.select().from(artists).orderBy(asc(artists.sortOrder), desc(artists.trackCount)));
+  if (pg) return pg;
+  return restGet("artists", 'select=*&order="sortOrder".asc,"trackCount".desc');
 }
 async function getFeaturedArtists() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(artists).where(eq(artists.featured, true)).orderBy(asc(artists.sortOrder));
+  const pg = await tryPg((db) => db.select().from(artists).where(eq(artists.featured, true)).orderBy(asc(artists.sortOrder)));
+  if (pg) return pg;
+  return restGet("artists", 'select=*&featured=is.true&order="sortOrder".asc');
 }
 async function getArtistBySlug(slug) {
-  const db = await getDb();
-  if (!db) return void 0;
-  const result = await db.select().from(artists).where(eq(artists.slug, slug)).limit(1);
-  return result.length > 0 ? result[0] : void 0;
+  const pg = await tryPg((db) => db.select().from(artists).where(eq(artists.slug, slug)).limit(1));
+  if (pg) return pg.length > 0 ? pg[0] : void 0;
+  const rest = await restGet("artists", `select=*&slug=eq.${encodeURIComponent(slug)}&limit=1`);
+  return rest.length > 0 ? rest[0] : void 0;
 }
 async function createArtist(artist) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.insert(artists).values(artist);
+  const pg = await tryPg((db) => db.insert(artists).values(artist));
+  if (pg !== null) return;
+  await restPost("artists", artist);
 }
 async function updateArtist(id, artist) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.update(artists).set(artist).where(eq(artists.id, id));
+  const pg = await tryPg((db) => db.update(artists).set(artist).where(eq(artists.id, id)));
+  if (pg !== null) return;
+  await restPatch("artists", `id=eq.${id}`, artist);
 }
 async function deleteArtist(id) {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.delete(artists).where(eq(artists.id, id));
+  const pg = await tryPg((db) => db.delete(artists).where(eq(artists.id, id)));
+  if (pg !== null) return;
+  await restDelete("artists", `id=eq.${id}`);
 }
 async function getRecentNotifications(limit = 20) {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(notifications).orderBy(desc(notifications.createdAt)).limit(limit);
+  const pg = await tryPg((db) => db.select().from(notifications).orderBy(desc(notifications.createdAt)).limit(limit));
+  if (pg) return pg;
+  return restGet("notifications", `select=*&order="createdAt".desc&limit=${limit}`);
 }
 async function getUnreadNotifications() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(notifications).where(eq(notifications.read, false)).orderBy(desc(notifications.createdAt));
+  const pg = await tryPg((db) => db.select().from(notifications).where(eq(notifications.read, false)).orderBy(desc(notifications.createdAt)));
+  if (pg) return pg;
+  return restGet("notifications", 'select=*&read=is.false&order="createdAt".desc');
 }
 async function createNotification(notification) {
   const db = await getDb();
@@ -484,9 +549,9 @@ async function deleteNotification(id) {
   await db.delete(notifications).where(eq(notifications.id, id));
 }
 async function getAllSuggestions() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(suggestions).orderBy(desc(suggestions.createdAt));
+  const pg = await tryPg((db) => db.select().from(suggestions).orderBy(desc(suggestions.createdAt)));
+  if (pg) return pg;
+  return restGet("suggestions", 'select=*&order="createdAt".desc');
 }
 async function createSuggestion(suggestion) {
   const db = await getDb();
@@ -548,18 +613,16 @@ async function getUserKarmaHistory(userId, limit = 20) {
   return db.select().from(karmaPoints).where(eq(karmaPoints.userId, userId)).orderBy(desc(karmaPoints.createdAt)).limit(limit);
 }
 async function getKarmaLeaderboard(limit = 20) {
-  const db = await getDb();
-  if (!db) return [];
-  const result = await db.select({
-    userId: karmaPoints.userId,
-    name: users.name,
-    totalKarma: sql`COALESCE(SUM(${karmaPoints.points}), 0)`
-  }).from(karmaPoints).leftJoin(users, eq(karmaPoints.userId, users.id)).groupBy(karmaPoints.userId, users.name).orderBy(sql`COALESCE(SUM(${karmaPoints.points}), 0) DESC`).limit(limit);
-  return result.map((r) => ({
-    userId: r.userId,
-    name: r.name,
-    totalKarma: Number(r.totalKarma)
-  }));
+  const pg = await tryPg(async (db) => {
+    const result = await db.select({
+      userId: karmaPoints.userId,
+      name: users.name,
+      totalKarma: sql`COALESCE(SUM(${karmaPoints.points}), 0)`
+    }).from(karmaPoints).leftJoin(users, eq(karmaPoints.userId, users.id)).groupBy(karmaPoints.userId, users.name).orderBy(sql`COALESCE(SUM(${karmaPoints.points}), 0) DESC`).limit(limit);
+    return result.map((r) => ({ userId: r.userId, name: r.name, totalKarma: Number(r.totalKarma) }));
+  });
+  if (pg) return pg;
+  return [];
 }
 async function hasEarnedKarmaToday(userId, action) {
   const db = await getDb();
@@ -612,9 +675,9 @@ async function getUserFavoriteIds(userId) {
   return result.map((r) => r.mixId);
 }
 async function getAllRonensPicks() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(ronensPicks).orderBy(asc(ronensPicks.sortOrder), desc(ronensPicks.createdAt));
+  const pg = await tryPg((db) => db.select().from(ronensPicks).orderBy(asc(ronensPicks.sortOrder), desc(ronensPicks.createdAt)));
+  if (pg) return pg;
+  return restGet("ronens_picks", 'select=*&order="sortOrder".asc,"createdAt".desc');
 }
 async function createRonensPick(pick) {
   const db = await getDb();
@@ -645,9 +708,9 @@ async function checkVaultAccess(userId) {
   return result.length > 0;
 }
 async function getVaultMixes() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(vaultMixes).orderBy(asc(vaultMixes.sortOrder), desc(vaultMixes.createdAt));
+  const pg = await tryPg((db) => db.select().from(vaultMixes).orderBy(asc(vaultMixes.sortOrder), desc(vaultMixes.createdAt)));
+  if (pg) return pg;
+  return restGet("vault_mixes", 'select=*&order="sortOrder".asc,"createdAt".desc');
 }
 async function createVaultMix(mix) {
   const db = await getDb();
@@ -659,7 +722,7 @@ async function deleteVaultMix(id) {
   if (!db) throw new Error("Database not available");
   await db.delete(vaultMixes).where(eq(vaultMixes.id, id));
 }
-var _db, KARMA_VALUES, VAULT_PASSPHRASE;
+var _db, _pgBroken, KARMA_VALUES, VAULT_PASSPHRASE;
 var init_db = __esm({
   "server/db.ts"() {
     "use strict";
@@ -667,6 +730,7 @@ var init_db = __esm({
     init_env();
     init_schema();
     _db = null;
+    _pgBroken = false;
     KARMA_VALUES = {
       signup: 50,
       favorite: 5,

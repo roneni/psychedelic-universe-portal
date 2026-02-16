@@ -18,6 +18,7 @@ import {
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
+let _pgBroken = false; // Set to true after first PG query failure — skip to REST fallback
 
 /** Parse a PostgreSQL URL into individual parts. Handles passwords with special chars like brackets. */
 function parseDbUrl(url: string) {
@@ -33,7 +34,6 @@ function createClient(url: string) {
   const parsed = parseDbUrl(url);
 
   if (parsed) {
-    // If the URL already contains "pooler" in the host, use it directly
     return postgres({
       host: parsed.host,
       port: parsed.port,
@@ -47,7 +47,6 @@ function createClient(url: string) {
     });
   }
 
-  // Fallback: pass URL directly
   return postgres(url, {
     ssl: useSSL ? "require" as any : false,
     max: 10,
@@ -58,6 +57,7 @@ function createClient(url: string) {
 
 // Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
+  if (_pgBroken) return null;
   if (!_db && process.env.DATABASE_URL) {
     try {
       const client = createClient(process.env.DATABASE_URL);
@@ -68,6 +68,79 @@ export async function getDb() {
     }
   }
   return _db;
+}
+
+// ============ SUPABASE REST API FALLBACK ============
+// When PostgreSQL doesn't connect (e.g. DNS issues from Vercel), use PostgREST
+
+async function restGet<T>(table: string, params?: string): Promise<T[]> {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!url || !key) return [];
+  const qs = params ? `?${params}` : '';
+  const res = await fetch(`${url}/rest/v1/${table}${qs}`, {
+    headers: { apikey: key, Authorization: `Bearer ${key}` },
+  });
+  if (!res.ok) { console.warn(`[REST] GET ${table} failed: ${res.status}`); return []; }
+  return res.json();
+}
+
+async function restPost(table: string, body: Record<string, unknown>, upsertCol?: string): Promise<void> {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!url || !key) throw new Error("Database not available");
+  const headers: Record<string, string> = {
+    apikey: key, Authorization: `Bearer ${key}`,
+    'Content-Type': 'application/json',
+  };
+  if (upsertCol) headers['Prefer'] = `resolution=merge-duplicates`;
+  const res = await fetch(`${url}/rest/v1/${table}${upsertCol ? `?on_conflict=${upsertCol}` : ''}`, {
+    method: 'POST', headers, body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`REST POST ${table} failed: ${res.status} ${err}`);
+  }
+}
+
+async function restPatch(table: string, filter: string, body: Record<string, unknown>): Promise<void> {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!url || !key) throw new Error("Database not available");
+  const res = await fetch(`${url}/rest/v1/${table}?${filter}`, {
+    method: 'PATCH',
+    headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`REST PATCH ${table} failed: ${res.status}`);
+}
+
+async function restDelete(table: string, filter: string): Promise<void> {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!url || !key) throw new Error("Database not available");
+  const res = await fetch(`${url}/rest/v1/${table}?${filter}`, {
+    method: 'DELETE',
+    headers: { apikey: key, Authorization: `Bearer ${key}` },
+  });
+  if (!res.ok) throw new Error(`REST DELETE ${table} failed: ${res.status}`);
+}
+
+/** Try a Drizzle query; on connection failure, mark PG as broken and return null. */
+async function tryPg<T>(fn: (db: ReturnType<typeof drizzle>) => Promise<T>): Promise<T | null> {
+  if (_pgBroken) return null;
+  const db = await getDb();
+  if (!db) return null;
+  try {
+    return await fn(db);
+  } catch (e: any) {
+    const cause = String(e.cause || e.message || '');
+    if (cause.includes('ENOTFOUND') || cause.includes('CONNECT_TIMEOUT') || cause.includes('Tenant or user not found')) {
+      _pgBroken = true;
+      console.warn('[Database] PG connection failed, switching to REST fallback');
+    }
+    return null;
+  }
 }
 
 export async function upsertUser(user: InsertUser): Promise<void> {
@@ -131,117 +204,109 @@ export async function upsertUser(user: InsertUser): Promise<void> {
 }
 
 export async function getUserByOpenId(openId: string) {
-  const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot get user: database not available");
-    return undefined;
-  }
-
-  const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
-
-  return result.length > 0 ? result[0] : undefined;
+  const pg = await tryPg(db => db.select().from(users).where(eq(users.openId, openId)).limit(1));
+  if (pg) return pg.length > 0 ? pg[0] : undefined;
+  const rest = await restGet<any>('users', `"openId"=eq.${encodeURIComponent(openId)}&limit=1`);
+  return rest.length > 0 ? rest[0] : undefined;
 }
 
 // ============ MIXES ============
 
 export async function getAllMixes(): Promise<Mix[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(mixes).orderBy(asc(mixes.sortOrder), desc(mixes.createdAt));
+  const pg = await tryPg(db => db.select().from(mixes).orderBy(asc(mixes.sortOrder), desc(mixes.createdAt)));
+  if (pg) return pg;
+  return restGet<Mix>('mixes', 'select=*&order="sortOrder".asc,"createdAt".desc');
 }
 
 export async function getMixesByCategory(category: Mix["category"]): Promise<Mix[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(mixes).where(eq(mixes.category, category)).orderBy(asc(mixes.sortOrder));
+  const pg = await tryPg(db => db.select().from(mixes).where(eq(mixes.category, category)).orderBy(asc(mixes.sortOrder)));
+  if (pg) return pg;
+  return restGet<Mix>('mixes', `select=*&category=eq.${encodeURIComponent(category)}&order="sortOrder".asc`);
 }
 
 export async function getFeaturedMixes(): Promise<Mix[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(mixes).where(eq(mixes.featured, true)).orderBy(asc(mixes.sortOrder));
+  const pg = await tryPg(db => db.select().from(mixes).where(eq(mixes.featured, true)).orderBy(asc(mixes.sortOrder)));
+  if (pg) return pg;
+  return restGet<Mix>('mixes', 'select=*&featured=is.true&order="sortOrder".asc');
 }
 
 export async function createMix(mix: InsertMix): Promise<void> {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.insert(mixes).values(mix);
+  const pg = await tryPg(db => db.insert(mixes).values(mix));
+  if (pg !== null) return;
+  await restPost('mixes', mix as any);
 }
 
 export async function updateMix(id: number, mix: Partial<InsertMix>): Promise<void> {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.update(mixes).set(mix).where(eq(mixes.id, id));
+  const pg = await tryPg(db => db.update(mixes).set(mix).where(eq(mixes.id, id)));
+  if (pg !== null) return;
+  await restPatch('mixes', `id=eq.${id}`, mix as any);
 }
 
 export async function deleteMix(id: number): Promise<void> {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.delete(mixes).where(eq(mixes.id, id));
+  const pg = await tryPg(db => db.delete(mixes).where(eq(mixes.id, id)));
+  if (pg !== null) return;
+  await restDelete('mixes', `id=eq.${id}`);
 }
 
 // ============ PARTNERS ============
 
 export async function getAllPartners(): Promise<Partner[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(partners).orderBy(asc(partners.sortOrder));
+  const pg = await tryPg(db => db.select().from(partners).orderBy(asc(partners.sortOrder)));
+  if (pg) return pg;
+  return restGet<Partner>('partners', 'select=*&order="sortOrder".asc');
 }
 
 export async function getActivePartners(): Promise<Partner[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(partners).where(eq(partners.active, true)).orderBy(asc(partners.sortOrder));
+  const pg = await tryPg(db => db.select().from(partners).where(eq(partners.active, true)).orderBy(asc(partners.sortOrder)));
+  if (pg) return pg;
+  return restGet<Partner>('partners', 'select=*&active=is.true&order="sortOrder".asc');
 }
 
 export async function createPartner(partner: InsertPartner): Promise<void> {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.insert(partners).values(partner);
+  const pg = await tryPg(db => db.insert(partners).values(partner));
+  if (pg !== null) return;
+  await restPost('partners', partner as any);
 }
 
 export async function updatePartner(id: number, partner: Partial<InsertPartner>): Promise<void> {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.update(partners).set(partner).where(eq(partners.id, id));
+  const pg = await tryPg(db => db.update(partners).set(partner).where(eq(partners.id, id)));
+  if (pg !== null) return;
+  await restPatch('partners', `id=eq.${id}`, partner as any);
 }
 
 export async function deletePartner(id: number): Promise<void> {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.delete(partners).where(eq(partners.id, id));
+  const pg = await tryPg(db => db.delete(partners).where(eq(partners.id, id)));
+  if (pg !== null) return;
+  await restDelete('partners', `id=eq.${id}`);
 }
 
 // ============ SITE SETTINGS ============
 
 export async function getAllSettings(): Promise<SiteSetting[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(siteSettings);
+  const pg = await tryPg(db => db.select().from(siteSettings));
+  if (pg) return pg;
+  return restGet<SiteSetting>('site_settings', 'select=*');
 }
 
 export async function getSetting(key: string): Promise<string | null> {
-  const db = await getDb();
-  if (!db) return null;
-  const result = await db.select().from(siteSettings).where(eq(siteSettings.key, key)).limit(1);
-  return result.length > 0 ? result[0].value : null;
+  const pg = await tryPg(db => db.select().from(siteSettings).where(eq(siteSettings.key, key)).limit(1));
+  if (pg) return pg.length > 0 ? pg[0].value : null;
+  const rest = await restGet<SiteSetting>('site_settings', `select=*&key=eq.${encodeURIComponent(key)}&limit=1`);
+  return rest.length > 0 ? rest[0].value : null;
 }
 
 export async function upsertSetting(key: string, value: string, description?: string): Promise<void> {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.insert(siteSettings).values({ key, value, description }).onConflictDoUpdate({
-    target: siteSettings.key,
-    set: { value, description },
-  });
+  const pg = await tryPg(db => db.insert(siteSettings).values({ key, value, description }).onConflictDoUpdate({ target: siteSettings.key, set: { value, description } }));
+  if (pg !== null) return;
+  await restPost('site_settings', { key, value, description }, 'key');
 }
 
 // ============ SUBSCRIBERS ============
 
 export async function getAllSubscribers(): Promise<Subscriber[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(subscribers).orderBy(desc(subscribers.subscribedAt));
+  const pg = await tryPg(db => db.select().from(subscribers).orderBy(desc(subscribers.subscribedAt)));
+  if (pg) return pg;
+  return restGet<Subscriber>('subscribers', 'select=*&order="subscribedAt".desc');
 }
 
 export async function addSubscriber(email: string): Promise<{ success: boolean; message: string }> {
@@ -282,55 +347,55 @@ export async function removeSubscriber(id: number): Promise<void> {
 // ============ ARTISTS ============
 
 export async function getAllArtists(): Promise<Artist[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(artists).orderBy(asc(artists.sortOrder), desc(artists.trackCount));
+  const pg = await tryPg(db => db.select().from(artists).orderBy(asc(artists.sortOrder), desc(artists.trackCount)));
+  if (pg) return pg;
+  return restGet<Artist>('artists', 'select=*&order="sortOrder".asc,"trackCount".desc');
 }
 
 export async function getFeaturedArtists(): Promise<Artist[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(artists).where(eq(artists.featured, true)).orderBy(asc(artists.sortOrder));
+  const pg = await tryPg(db => db.select().from(artists).where(eq(artists.featured, true)).orderBy(asc(artists.sortOrder)));
+  if (pg) return pg;
+  return restGet<Artist>('artists', 'select=*&featured=is.true&order="sortOrder".asc');
 }
 
 export async function getArtistBySlug(slug: string): Promise<Artist | undefined> {
-  const db = await getDb();
-  if (!db) return undefined;
-  const result = await db.select().from(artists).where(eq(artists.slug, slug)).limit(1);
-  return result.length > 0 ? result[0] : undefined;
+  const pg = await tryPg(db => db.select().from(artists).where(eq(artists.slug, slug)).limit(1));
+  if (pg) return pg.length > 0 ? pg[0] : undefined;
+  const rest = await restGet<Artist>('artists', `select=*&slug=eq.${encodeURIComponent(slug)}&limit=1`);
+  return rest.length > 0 ? rest[0] : undefined;
 }
 
 export async function createArtist(artist: InsertArtist): Promise<void> {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.insert(artists).values(artist);
+  const pg = await tryPg(db => db.insert(artists).values(artist));
+  if (pg !== null) return;
+  await restPost('artists', artist as any);
 }
 
 export async function updateArtist(id: number, artist: Partial<InsertArtist>): Promise<void> {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.update(artists).set(artist).where(eq(artists.id, id));
+  const pg = await tryPg(db => db.update(artists).set(artist).where(eq(artists.id, id)));
+  if (pg !== null) return;
+  await restPatch('artists', `id=eq.${id}`, artist as any);
 }
 
 export async function deleteArtist(id: number): Promise<void> {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-  await db.delete(artists).where(eq(artists.id, id));
+  const pg = await tryPg(db => db.delete(artists).where(eq(artists.id, id)));
+  if (pg !== null) return;
+  await restDelete('artists', `id=eq.${id}`);
 }
 
 
 // ============ NOTIFICATIONS ============
 
 export async function getRecentNotifications(limit: number = 20): Promise<Notification[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(notifications).orderBy(desc(notifications.createdAt)).limit(limit);
+  const pg = await tryPg(db => db.select().from(notifications).orderBy(desc(notifications.createdAt)).limit(limit));
+  if (pg) return pg;
+  return restGet<Notification>('notifications', `select=*&order="createdAt".desc&limit=${limit}`);
 }
 
 export async function getUnreadNotifications(): Promise<Notification[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(notifications).where(eq(notifications.read, false)).orderBy(desc(notifications.createdAt));
+  const pg = await tryPg(db => db.select().from(notifications).where(eq(notifications.read, false)).orderBy(desc(notifications.createdAt)));
+  if (pg) return pg;
+  return restGet<Notification>('notifications', 'select=*&read=is.false&order="createdAt".desc');
 }
 
 export async function createNotification(notification: InsertNotification): Promise<void> {
@@ -361,9 +426,9 @@ export async function deleteNotification(id: number): Promise<void> {
 // ============ SUGGESTIONS ============
 
 export async function getAllSuggestions(): Promise<Suggestion[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(suggestions).orderBy(desc(suggestions.createdAt));
+  const pg = await tryPg(db => db.select().from(suggestions).orderBy(desc(suggestions.createdAt)));
+  if (pg) return pg;
+  return restGet<Suggestion>('suggestions', 'select=*&order="createdAt".desc');
 }
 
 export async function createSuggestion(suggestion: InsertSuggestion): Promise<{ success: boolean; message: string }> {
@@ -464,26 +529,23 @@ export async function getUserKarmaHistory(userId: number, limit: number = 20): P
 }
 
 export async function getKarmaLeaderboard(limit: number = 20): Promise<Array<{ userId: number; name: string | null; totalKarma: number }>> {
-  const db = await getDb();
-  if (!db) return [];
-
-  const result = await db
-    .select({
-      userId: karmaPoints.userId,
-      name: users.name,
-      totalKarma: sql<number>`COALESCE(SUM(${karmaPoints.points}), 0)`,
-    })
-    .from(karmaPoints)
-    .leftJoin(users, eq(karmaPoints.userId, users.id))
-    .groupBy(karmaPoints.userId, users.name)
-    .orderBy(sql`COALESCE(SUM(${karmaPoints.points}), 0) DESC`)
-    .limit(limit);
-
-  return result.map(r => ({
-    userId: r.userId,
-    name: r.name,
-    totalKarma: Number(r.totalKarma),
-  }));
+  const pg = await tryPg(async db => {
+    const result = await db
+      .select({
+        userId: karmaPoints.userId,
+        name: users.name,
+        totalKarma: sql<number>`COALESCE(SUM(${karmaPoints.points}), 0)`,
+      })
+      .from(karmaPoints)
+      .leftJoin(users, eq(karmaPoints.userId, users.id))
+      .groupBy(karmaPoints.userId, users.name)
+      .orderBy(sql`COALESCE(SUM(${karmaPoints.points}), 0) DESC`)
+      .limit(limit);
+    return result.map(r => ({ userId: r.userId, name: r.name, totalKarma: Number(r.totalKarma) }));
+  });
+  if (pg) return pg;
+  // REST fallback — PostgREST can't do aggregates easily, return empty
+  return [];
 }
 
 export async function hasEarnedKarmaToday(userId: number, action: string): Promise<boolean> {
@@ -592,9 +654,9 @@ export async function getUserFavoriteIds(userId: number): Promise<number[]> {
 // ============ RONEN'S PICKS ============
 
 export async function getAllRonensPicks(): Promise<RonensPick[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(ronensPicks).orderBy(asc(ronensPicks.sortOrder), desc(ronensPicks.createdAt));
+  const pg = await tryPg(db => db.select().from(ronensPicks).orderBy(asc(ronensPicks.sortOrder), desc(ronensPicks.createdAt)));
+  if (pg) return pg;
+  return restGet<RonensPick>('ronens_picks', 'select=*&order="sortOrder".asc,"createdAt".desc');
 }
 
 export async function createRonensPick(pick: InsertRonensPick): Promise<void> {
@@ -652,9 +714,9 @@ export async function checkVaultAccess(userId: number): Promise<boolean> {
 }
 
 export async function getVaultMixes(): Promise<VaultMix[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(vaultMixes).orderBy(asc(vaultMixes.sortOrder), desc(vaultMixes.createdAt));
+  const pg = await tryPg(db => db.select().from(vaultMixes).orderBy(asc(vaultMixes.sortOrder), desc(vaultMixes.createdAt)));
+  if (pg) return pg;
+  return restGet<VaultMix>('vault_mixes', 'select=*&order="sortOrder".asc,"createdAt".desc');
 }
 
 export async function createVaultMix(mix: { title: string; youtubeId: string; description?: string; duration?: string; sortOrder?: number }): Promise<void> {
