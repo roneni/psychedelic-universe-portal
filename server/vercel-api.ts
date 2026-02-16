@@ -37,10 +37,11 @@ app.get("/api/health", async (_req, res) => {
     info.primaryError = e.cause ? String(e.cause) : e.message;
   }
 
-  // If standard connection failed, try Supabase pooler for multiple regions
+  // Extract project ref for Supabase connections
+  let projectRef: string | null = null;
   if (m) {
     const directMatch = m[3].match(/^db\.([^.]+)\.supabase\.co$/);
-    const projectRef = directMatch ? directMatch[1] : null;
+    projectRef = directMatch ? directMatch[1] : null;
 
     if (projectRef) {
       const pg = await import("postgres");
@@ -85,6 +86,32 @@ app.get("/api/health", async (_req, res) => {
         }
       }
       info.poolerErrors = poolerErrors;
+    }
+  }
+
+  // Show available env var names (no values!) for debugging
+  const envKeys = Object.keys(process.env).filter(k =>
+    k.includes('SUPA') || k.includes('DB') || k.includes('DATA') || k.includes('PG') || k.includes('POSTGRES')
+  );
+  info.relatedEnvVars = envKeys;
+
+  // Try Supabase REST API as last resort
+  const supaUrl = process.env.SUPABASE_URL || (projectRef ? `https://${projectRef}.supabase.co` : "");
+  const supaKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_KEY;
+  if (supaKey) {
+    try {
+      const restRes = await fetch(`${supaUrl}/rest/v1/mixes?select=count`, {
+        headers: { apikey: supaKey, Authorization: `Bearer ${supaKey}` },
+      });
+      info.restApiStatus = restRes.status;
+      if (restRes.ok) {
+        const data = await restRes.json();
+        info.restData = data;
+      } else {
+        info.restError = await restRes.text();
+      }
+    } catch (re: any) {
+      info.restError = re.message;
     }
   }
 
