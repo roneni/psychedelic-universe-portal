@@ -88,40 +88,64 @@ export async function exchangeCodeForTokens(code: string): Promise<{
 }
 
 /**
- * Refresh the access token using the refresh token
+ * Clear all stored OAuth tokens so the "Connect" button reappears.
  */
-async function refreshAccessToken(refreshToken: string): Promise<string> {
-  const response = await fetch("https://oauth2.googleapis.com/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      client_id: YOUTUBE_CLIENT_ID,
-      client_secret: YOUTUBE_CLIENT_SECRET,
-      refresh_token: refreshToken,
-      grant_type: "refresh_token",
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to refresh token");
-  }
-
-  const data = await response.json();
-  const expiresAt = new Date(Date.now() + data.expires_in * 1000);
-
-  // Update tokens in database
+async function clearOAuthTokens(): Promise<void> {
   const db = await getDb();
   if (db) {
-    await db
-      .update(youtubeOAuthTokens)
-      .set({
-        accessToken: data.access_token,
-        expiresAt,
-      })
-      .where(eq(youtubeOAuthTokens.refreshToken, refreshToken));
+    await db.delete(youtubeOAuthTokens);
+    console.log("[YouTube] Cleared revoked/invalid OAuth tokens");
   }
+}
 
-  return data.access_token;
+/**
+ * Refresh the access token using the refresh token.
+ * Returns null (and clears stored tokens) when the grant is revoked or invalid.
+ */
+async function refreshAccessToken(refreshToken: string): Promise<string | null> {
+  try {
+    const response = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        client_id: YOUTUBE_CLIENT_ID,
+        client_secret: YOUTUBE_CLIENT_SECRET,
+        refresh_token: refreshToken,
+        grant_type: "refresh_token",
+      }),
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.text().catch(() => "");
+      console.error(`[YouTube] Token refresh failed (${response.status}):`, errorBody);
+
+      // 400 (invalid_grant) or 401 means the token is revoked/invalid — clear it
+      if (response.status === 400 || response.status === 401) {
+        await clearOAuthTokens();
+      }
+      return null;
+    }
+
+    const data = await response.json();
+    const expiresAt = new Date(Date.now() + data.expires_in * 1000);
+
+    // Update tokens in database
+    const db = await getDb();
+    if (db) {
+      await db
+        .update(youtubeOAuthTokens)
+        .set({
+          accessToken: data.access_token,
+          expiresAt,
+        })
+        .where(eq(youtubeOAuthTokens.refreshToken, refreshToken));
+    }
+
+    return data.access_token;
+  } catch (error) {
+    console.error("[YouTube] Token refresh error:", error);
+    return null;
+  }
 }
 
 /**
@@ -446,10 +470,14 @@ export async function getDashboardStats(apiKey: string): Promise<{
   } | null;
   isOAuthConnected: boolean;
 }> {
+  // Public-data endpoints run independently of OAuth; analytics is best-effort.
   const [channelStats, topVideos, analytics, isOAuthConnected] = await Promise.all([
     getChannelStats(apiKey),
     getTopVideos(apiKey, 10),
-    getAnalyticsData(),
+    getAnalyticsData().catch((err) => {
+      console.error("[YouTube] Analytics fetch failed, falling back to public data only:", err);
+      return null;
+    }),
     isOAuthConfigured(),
   ]);
 
