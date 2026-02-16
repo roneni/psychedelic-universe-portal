@@ -1660,28 +1660,42 @@ app.get("/api/health", async (_req, res) => {
   } catch (e) {
     info.primaryError = e.cause ? String(e.cause) : e.message;
   }
-  try {
-    const pg = await import("postgres");
-    const raw = pg.default({
-      host: m ? m[3] : void 0,
-      port: m ? Number(m[4]) : void 0,
-      database: m ? m[5] : void 0,
-      username: m ? m[1] : void 0,
-      password: m ? m[2] : void 0,
-      ssl: "require",
-      max: 1,
-      connect_timeout: 5
-    });
-    const test = await raw`SELECT COUNT(*) as cnt FROM mixes`;
-    info.mixesCount = test[0]?.cnt;
-    info.rawConnected = true;
-    await raw.end();
-    res.json(info);
-    return;
-  } catch (e2) {
-    info.rawError = e2.cause ? String(e2.cause) : e2.message;
+  if (m) {
+    const directMatch = m[3].match(/^db\.([^.]+)\.supabase\.co$/);
+    const projectRef = directMatch ? directMatch[1] : null;
+    if (projectRef) {
+      const pg = await import("postgres");
+      const password = m[2];
+      const regions = ["us-east-1", "us-west-1", "eu-west-1", "eu-central-1", "ap-southeast-1"];
+      const poolerErrors = [];
+      for (const region of regions) {
+        try {
+          const raw = pg.default({
+            host: `aws-0-${region}.pooler.supabase.com`,
+            port: 6543,
+            database: "postgres",
+            username: `postgres.${projectRef}`,
+            password,
+            ssl: "require",
+            max: 1,
+            connect_timeout: 3
+          });
+          const test = await raw`SELECT COUNT(*) as cnt FROM mixes`;
+          info.mixesCount = test[0]?.cnt;
+          info.poolerRegion = region;
+          info.poolerConnected = true;
+          await raw.end();
+          res.json(info);
+          return;
+        } catch (pe) {
+          const msg = pe.cause ? String(pe.cause) : pe.message;
+          poolerErrors.push(`${region}: ${msg}`);
+        }
+      }
+      info.poolerErrors = poolerErrors;
+    }
   }
-  info.guidance = "DATABASE_URL cannot connect. If using Supabase, go to Dashboard > Settings > Database > Connection string > URI (with pooler) and update DATABASE_URL in Vercel.";
+  info.guidance = "DATABASE_URL cannot connect. Update DATABASE_URL in Vercel to use the Supabase pooler connection string from Dashboard > Settings > Database > Connection string (with pooler).";
   res.json(info);
 });
 registerOAuthRoutes(app);
