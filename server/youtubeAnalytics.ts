@@ -10,7 +10,9 @@ import { eq } from "drizzle-orm";
 // YouTube OAuth configuration - loaded from environment variables
 const YOUTUBE_CLIENT_ID = process.env.YOUTUBE_CLIENT_ID ?? "";
 const YOUTUBE_CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET ?? "";
-const YOUTUBE_REDIRECT_URI = "https://psychedelic-universe.com/api/oauth/youtube/callback";
+const YOUTUBE_REDIRECT_URI = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL}/api/oauth/youtube/callback`
+  : "https://psychedelic-universe.vercel.app/api/oauth/youtube/callback";
 
 // Scopes needed for analytics
 const SCOPES = [
