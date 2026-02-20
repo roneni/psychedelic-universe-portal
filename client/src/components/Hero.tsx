@@ -2,10 +2,40 @@ import { Button } from "@/components/ui/button";
 import { SearchBar } from "@/components/SearchBar";
 import { Play } from "lucide-react";
 import { Link } from "wouter";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
+
+// Pre-generate particle configs so they don't change on re-render
+function generateParticles(count: number) {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    width: Math.random() * 3 + 1.5,
+    left: Math.random() * 100,
+    top: Math.random() * 100,
+    colorType: i % 4,
+    duration: 4 + Math.random() * 6,
+    delay: Math.random() * 5,
+  }));
+}
+
+function generateShootingStars(count: number) {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    top: Math.random() * 60,
+    left: Math.random() * 80,
+    duration: 1.5 + Math.random() * 2,
+    delay: Math.random() * 12 + i * 4,
+    angle: -15 + Math.random() * 30,
+    length: 60 + Math.random() * 100,
+  }));
+}
+
+const PARTICLE_COUNT = 30;
+const SHOOTING_STAR_COUNT = 5;
 
 export function Hero() {
   const bgRef = useRef<HTMLDivElement>(null);
+  const particles = useMemo(() => generateParticles(PARTICLE_COUNT), []);
+  const shootingStars = useMemo(() => generateShootingStars(SHOOTING_STAR_COUNT), []);
 
   // Subtle parallax on scroll
   useEffect(() => {
@@ -25,11 +55,13 @@ export function Hero() {
       <div className="absolute inset-0 z-0">
         <div ref={bgRef} className="absolute inset-[-10%] transition-transform duration-100 ease-out">
           <img 
-            src="/images/hero-cosmic-bg.jpg" 
+            src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/IWXNNUxJgZREdluX.jpg" 
             alt="Cosmic Planetary Landscape" 
             className="w-full h-full object-cover"
           />
         </div>
+        {/* Planet ring rotation overlay */}
+        <div className="absolute inset-0 pointer-events-none planet-ring-glow"></div>
         {/* Multi-layer gradient overlay for depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-transparent to-background/40"></div>
@@ -37,27 +69,46 @@ export function Hero() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent"></div>
       </div>
 
-      {/* Floating particles overlay */}
+      {/* Enhanced floating particles overlay */}
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
-        {[...Array(12)].map((_, i) => (
+        {particles.map((p) => {
+          const colors = [
+            { bg: 'rgba(34, 211, 238, 0.7)', shadow: '0 0 8px rgba(34, 211, 238, 0.5)' },
+            { bg: 'rgba(168, 85, 247, 0.6)', shadow: '0 0 6px rgba(168, 85, 247, 0.4)' },
+            { bg: 'rgba(255, 255, 255, 0.5)', shadow: '0 0 4px rgba(255, 255, 255, 0.3)' },
+            { bg: 'rgba(217, 170, 80, 0.5)', shadow: '0 0 6px rgba(217, 170, 80, 0.3)' },
+          ];
+          const color = colors[p.colorType];
+          return (
+            <div
+              key={p.id}
+              className="absolute rounded-full hero-particle"
+              style={{
+                width: `${p.width}px`,
+                height: `${p.width}px`,
+                left: `${p.left}%`,
+                top: `${p.top}%`,
+                background: color.bg,
+                boxShadow: color.shadow,
+                animationDuration: `${p.duration}s`,
+                animationDelay: `${p.delay}s`,
+              }}
+            />
+          );
+        })}
+
+        {/* Shooting stars */}
+        {shootingStars.map((s) => (
           <div
-            key={i}
-            className="absolute rounded-full"
+            key={`star-${s.id}`}
+            className="absolute shooting-star"
             style={{
-              width: `${Math.random() * 3 + 1}px`,
-              height: `${Math.random() * 3 + 1}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              background: i % 3 === 0 
-                ? 'rgba(34, 211, 238, 0.6)' 
-                : i % 3 === 1 
-                  ? 'rgba(168, 85, 247, 0.5)' 
-                  : 'rgba(255, 255, 255, 0.4)',
-              animation: `float ${6 + Math.random() * 8}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`,
-              boxShadow: i % 3 === 0 
-                ? '0 0 6px rgba(34, 211, 238, 0.4)' 
-                : 'none',
+              top: `${s.top}%`,
+              left: `${s.left}%`,
+              width: `${s.length}px`,
+              animationDuration: `${s.duration}s`,
+              animationDelay: `${s.delay}s`,
+              transform: `rotate(${s.angle}deg)`,
             }}
           />
         ))}
@@ -66,16 +117,16 @@ export function Hero() {
       {/* Content Container */}
       <div className="relative z-10 container flex flex-col items-center text-center space-y-8 animate-in fade-in zoom-in duration-1000">
         
-        {/* Logo with cosmic glow */}
-        <div className="w-40 h-40 md:w-56 md:h-56 relative mb-2 animate-float">
+        {/* Logo with cosmic glow - transparent icon only */}
+        <div className="w-36 h-36 md:w-48 md:h-48 relative mb-2 animate-float">
           {/* Outer glow ring */}
-          <div className="absolute inset-[-20%] bg-gradient-to-r from-cyan-500/20 via-purple-500/15 to-cyan-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
+          <div className="absolute inset-[-25%] bg-gradient-to-r from-cyan-500/20 via-purple-500/15 to-cyan-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
           {/* Inner glow */}
-          <div className="absolute inset-0 bg-primary/15 rounded-full blur-2xl"></div>
+          <div className="absolute inset-[-5%] bg-primary/10 rounded-full blur-2xl"></div>
           <img 
-            src="/images/logo.png" 
+            src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/AprgJvHmVKivYuzs.png" 
             alt="Psychedelic Universe Logo" 
-            className="w-full h-full object-contain logo-cosmic-glow relative z-10"
+            className="w-full h-full object-contain logo-cosmic-glow relative z-10 drop-shadow-[0_0_25px_rgba(34,211,238,0.4)]"
           />
         </div>
 
@@ -91,7 +142,7 @@ export function Hero() {
             </span>
           </h1>
           <p className="text-lg md:text-xl text-gray-300/90 font-light tracking-[0.2em] uppercase">
-            Promoting & Spreading Psychedelic Trance Worldwide
+            Promote & Spread Psychedelic Trance Worldwide
           </p>
         </div>
 

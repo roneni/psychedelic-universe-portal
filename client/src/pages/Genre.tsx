@@ -9,22 +9,22 @@ const genreInfo: Record<string, { title: string; description: string; image: str
   "progressive-psy": {
     title: "Progressive Psytrance",
     description: "Deep, rolling basslines and hypnotic atmospheres for the modern dancefloor.",
-    image: "/images/progressive-psy.jpg"
+    image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/BgRhmMWVCYtOlaEA.jpg"
   },
   "psychedelic-trance": {
     title: "Psychedelic Trance",
     description: "Driving basslines, FM synthesis, and futuristic sounds from the UK psy scene.",
-    image: "/images/psychedelic-trance.jpg"
+    image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/WJSgWEwjOavDAFXF.jpg"
   },
   "goa-trance": {
     title: "Goa Trance",
     description: "The roots of the movement. Melodic, spiritual, and organic sounds from the golden era.",
-    image: "/images/goa-trance.jpg"
+    image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/AKbdiOIXkkfdBaUp.jpg"
   },
   "full-on": {
     title: "Full-On",
     description: "High energy, driving beats, and dynamic melodies designed to blast the night away.",
-    image: "/images/full-on.jpg"
+    image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/hBtFcRhegmWlMbPh.jpg"
   }
 };
 
