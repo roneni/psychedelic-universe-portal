@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { ArrowLeft, Shuffle, SkipForward, ExternalLink, Youtube, Play } from "lucide-react";
 import { Link } from "wouter";
 
@@ -15,6 +16,12 @@ declare global {
 const MIXES_PLAYLIST_ID = "PLIVLAENoBSJcudnp-NfZUcJbPYj7SWrws";
 
 export default function RadioMode() {
+  usePageMeta({
+    title: "24/7 Psytrance Radio",
+    description: "Listen to non-stop psychedelic trance music. Curated mixes from top psytrance artists playing 24/7. Goa Trance, Progressive Psy, Full-On, and more.",
+    canonicalPath: "/radio",
+  });
+
   const [player, setPlayer] = useState<any>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { trpc } from "@/lib/trpc";
 import { ArrowLeft, Globe, Youtube, Music2, Headphones, Instagram, Facebook, ExternalLink, Search, Users, Sparkles, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,12 @@ const getCountryFlag = (country: string): string => {
 };
 
 export default function Artists() {
+  usePageMeta({
+    title: "Artist Directory - Top Psytrance Artists",
+    description: "Discover 20+ top psychedelic trance artists with bios, social links, and music. Featuring Astrix, Infected Mushroom, Vini Vici, Ace Ventura, and more legends of the scene.",
+    canonicalPath: "/artists",
+  });
+
   const { data: artists, isLoading } = trpc.artists.list.useQuery();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);

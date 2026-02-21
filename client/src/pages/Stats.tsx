@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useSearch } from "wouter";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { trpc } from "@/lib/trpc";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
@@ -94,6 +95,12 @@ function formatWatchTime(minutes: number): string {
 }
 
 export default function Stats() {
+  usePageMeta({
+    title: "Channel Statistics - 633K+ Subscribers",
+    description: "Psychedelic Universe YouTube channel statistics: 633K+ subscribers, 155M+ views, 5,500+ published tracks. Top performing videos and real-time analytics.",
+    canonicalPath: "/stats",
+  });
+
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const searchParams = useSearch();
   const params = new URLSearchParams(searchParams);
