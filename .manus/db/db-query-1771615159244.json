@@ -1,0 +1,20 @@
+{
+  "query": "SELECT `key`, `value`, `description` FROM site_settings WHERE `key` LIKE '%youtube%' OR `key` LIKE '%api%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2yfGtcjrWZjLtC9.root --database juiXTJyFerhciE5fv2h2Ms --execute SELECT `key`, `value`, `description` FROM site_settings WHERE `key` LIKE '%youtube%' OR `key` LIKE '%api%';",
+  "rows": [
+    {
+      "key": "youtube_api_key",
+      "value": "AIzaSyCFATE0YafGusrQMysWeJZ_eYR2auO3Vls",
+      "description": "YouTube Data API key for channel search"
+    },
+    {
+      "key": "youtube_last_checked_video_id",
+      "value": "hG7W6pCaXm0",
+      "description": "Last checked YouTube video ID for polling"
+    }
+  ],
+  "messages": [],
+  "stdout": "key\tvalue\tdescription\nyoutube_api_key\tAIzaSyCFATE0YafGusrQMysWeJZ_eYR2auO3Vls\tYouTube Data API key for channel search\nyoutube_last_checked_video_id\thG7W6pCaXm0\tLast checked YouTube video ID for polling\n",
+  "stderr": "",
+  "execution_time_ms": 2401
+}

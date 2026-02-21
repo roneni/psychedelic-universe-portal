@@ -1,4 +1,5 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
 import { MixGrid } from "@/components/MixGrid";
@@ -10,6 +11,12 @@ import { GoaTransition } from "@/components/GoaTransition";
 
 export default function Home() {
   let { user, loading, error, isAuthenticated, logout } = useAuth();
+
+  usePageMeta({
+    title: "The Global Hub for Psytrance Culture",
+    description: "Explore 5,000+ psychedelic trance mixes across Goa Trance, Progressive Psy, Full-On, and more. 24/7 radio, artist directory, festival calendar, and a global community of 633K+ fans.",
+    canonicalPath: "/",
+  });
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden selection:bg-primary selection:text-primary-foreground cosmic-bg">

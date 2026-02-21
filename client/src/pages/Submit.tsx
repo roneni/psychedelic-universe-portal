@@ -1,9 +1,16 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { Music, Clock, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Submit() {
+  usePageMeta({
+    title: "Submit Your Track",
+    description: "Submit your psytrance track or mix to Psychedelic Universe. We feature music from artists worldwide across Goa Trance, Progressive Psy, Full-On, and more genres.",
+    canonicalPath: "/submit",
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Navigation />

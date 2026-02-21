@@ -1,5 +1,6 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { Lightbulb, Send, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +10,12 @@ import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
 export default function Suggestions() {
+  usePageMeta({
+    title: "Site Suggestions & Feedback",
+    description: "Share your ideas to improve Psychedelic Universe. Submit feature requests, content suggestions, and improvement ideas for the psytrance community.",
+    canonicalPath: "/suggestions",
+  });
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [suggestion, setSuggestion] = useState("");

@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { Link } from "wouter";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
@@ -143,6 +144,12 @@ const months = [
 const continents = ["All", "Europe", "Asia", "South America", "Central America", "North America", "Africa", "Oceania", "Middle East"];
 
 export default function Festivals() {
+  usePageMeta({
+    title: "Psytrance Festival Calendar 2026",
+    description: "Browse 56+ psytrance festivals worldwide for 2026. Boom Festival, Ozora, Universo Paralello, and more. Filter by region, month, and country.",
+    canonicalPath: "/festivals",
+  });
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedContinent, setSelectedContinent] = useState("All");
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);

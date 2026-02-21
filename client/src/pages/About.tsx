@@ -1,10 +1,17 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { Youtube, Calendar, MapPin, Heart, Radio, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 
 export default function About() {
+  usePageMeta({
+    title: "About Us - Our Story",
+    description: "Founded in 2013 from a love for trance music. From the raves to Goa and beyond, Psychedelic Universe connects 633K+ fans with the best psytrance from around the globe.",
+    canonicalPath: "/about",
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Navigation />

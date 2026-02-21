@@ -1,5 +1,6 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { Mail, Youtube, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -14,6 +15,12 @@ function SoundCloudIcon({ className }: { className?: string }) {
 }
 
 export default function Contact() {
+  usePageMeta({
+    title: "Contact Us",
+    description: "Get in touch with Psychedelic Universe. Business inquiries, artist submissions, and community support. Email: psyuniverse9@gmail.com.",
+    canonicalPath: "/contact",
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Navigation />

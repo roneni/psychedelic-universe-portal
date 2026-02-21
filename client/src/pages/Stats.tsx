@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 import {
   Users,
@@ -94,6 +95,12 @@ function formatWatchTime(minutes: number): string {
 }
 
 export default function Stats() {
+  usePageMeta({
+    title: "Channel Statistics - 633K+ Subscribers",
+    description: "Psychedelic Universe YouTube channel statistics: 633K+ subscribers, 155M+ views, 5,500+ published tracks. Top performing videos and real-time analytics.",
+    canonicalPath: "/stats",
+  });
+
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const searchParams = useSearch();
   const params = new URLSearchParams(searchParams);

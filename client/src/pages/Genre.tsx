@@ -2,6 +2,7 @@ import { useParams, Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Play, Loader2, Shuffle } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { useState, useEffect, useRef } from "react";
 
 const genreInfo: Record<string, { title: string; description: string; image: string }> = {
@@ -31,6 +32,12 @@ export default function Genre() {
   const { id } = useParams<{ id: string }>();
   const genre = genreInfo[id || ""] || genreInfo["progressive-psy"];
   const { data: mixes, isLoading } = trpc.mixes.byCategory.useQuery({ category: id as any });
+
+  usePageMeta({
+    title: `${genre.title} Mixes`,
+    description: `${genre.description} Browse and play curated ${genre.title} mixes from Psychedelic Universe's collection of 5,000+ tracks.`,
+    canonicalPath: `/genre/${id}`,
+  });
   
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);

@@ -1,7 +1,14 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function Privacy() {
+  usePageMeta({
+    title: "Privacy Policy",
+    description: "Psychedelic Universe privacy policy. How we collect, use, and protect your data. Google API Services and YouTube API compliance.",
+    canonicalPath: "/privacy",
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Navigation />

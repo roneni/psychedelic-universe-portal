@@ -359,3 +359,16 @@
 - [x] Fix stats page yellow flash on refresh (loading state race condition)
 - [x] Compare Community page (Manus vs Vercel clone) and document differences
 - [x] Document YouTube OAuth re-authorization steps for Vercel clone
+
+
+## Bug Fixes (Feb 20)
+- [ ] Fix Vercel clone: Connect Analytics button showing as plain text instead of clickable
+- [ ] Fix Manus: Stats page yellow flash still visible on published site
+
+
+## SEO Fixes (Feb 21) - Fix 13 non-indexed pages in Google Search Console
+- [x] Add robots.txt allowing all crawlers with sitemap reference
+- [x] Add sitemap.xml listing all public pages
+- [x] Add canonical URL tag to index.html
+- [x] Add per-page document.title and meta descriptions for all pages (Home, Radio, Artists, Genre, Stats, Festivals, Community, Suggestions, About, Contact, Submit, Privacy, Underground)
+- [ ] Push SEO changes to Vercel clone as well

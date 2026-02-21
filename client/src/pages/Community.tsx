@@ -1,4 +1,5 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -55,6 +56,12 @@ function getKarmaLevel(karma: number): { level: string; min: number; max: number
 }
 
 export default function Community() {
+  usePageMeta({
+    title: "Community - Karma Leaderboard & Levels",
+    description: "Join the Psychedelic Universe community. Earn Karma points, climb the leaderboard, unlock levels from Space Cadet to Cosmic Overlord. Connect with 633K+ psytrance fans.",
+    canonicalPath: "/community",
+  });
+
   const { user, isAuthenticated } = useAuth();
   
   const { data: leaderboard = [] } = trpc.karma.leaderboard.useQuery({ limit: 20 });

@@ -1,4 +1,5 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -42,6 +43,12 @@ Access is limited to trusted members of the Psychedelic Universe community.
 The passphrase is shared through our newsletter and community channels.`;
 
 export default function Underground() {
+  usePageMeta({
+    title: "The Underground Vault",
+    description: "Exclusive private listening room for Psychedelic Universe community members. Access rare and unreleased psytrance mixes with a passphrase.",
+    canonicalPath: "/underground",
+  });
+
   const { user, isAuthenticated } = useAuth();
   const [passphrase, setPassphrase] = useState("");
   const [showPassphrase, setShowPassphrase] = useState(false);
