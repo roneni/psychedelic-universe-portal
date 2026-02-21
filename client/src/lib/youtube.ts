@@ -1,4 +1,4 @@
-const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY || "AIzaSyATfNbtD_0hwWt49smGHA9ki4Kb_GGaXJU";
+const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY || "AIzaSyDk6d4wxBIW2jp4I3hZ6r5LwOK0wkNlbIE";
 const CHANNEL_ID = import.meta.env.VITE_YOUTUBE_CHANNEL_ID || "UCyRw5ZEQ2mVwNKq9GnSTHRA";
 
 export async function getChannelStats() {
