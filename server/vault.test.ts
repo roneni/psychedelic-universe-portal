@@ -31,9 +31,9 @@ describe("Underground Vault", () => {
   describe("verifyVaultPassphrase", () => {
     it("should return true for correct passphrase", async () => {
       mockVerify.mockResolvedValue(true);
-      const result = await verifyVaultPassphrase(1, "cosmicunderground2026");
+      const result = await verifyVaultPassphrase(1, "UndergroundLounge");
       expect(result).toBe(true);
-      expect(mockVerify).toHaveBeenCalledWith(1, "cosmicunderground2026");
+      expect(mockVerify).toHaveBeenCalledWith(1, "UndergroundLounge");
     });
 
     it("should return false for incorrect passphrase", async () => {

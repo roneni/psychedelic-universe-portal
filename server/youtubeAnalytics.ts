@@ -7,10 +7,12 @@ import { getDb } from "./db";
 import { youtubeOAuthTokens, youtubeAnalyticsCache } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 
-// YouTube OAuth configuration
-const YOUTUBE_CLIENT_ID = "13355284875-aavdku6eggv53abiq43b520nf81cdobn.apps.googleusercontent.com";
-const YOUTUBE_CLIENT_SECRET = "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";
-const YOUTUBE_REDIRECT_URI = "https://psychedelic-universe.com/api/oauth/youtube/callback";
+// YouTube OAuth configuration - loaded from environment variables
+const YOUTUBE_CLIENT_ID = process.env.YOUTUBE_CLIENT_ID ?? "";
+const YOUTUBE_CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET ?? "";
+const YOUTUBE_REDIRECT_URI = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL}/api/oauth/youtube/callback`
+  : "https://psychedelic-universe.vercel.app/api/oauth/youtube/callback";
 
 // Scopes needed for analytics
 const SCOPES = [
@@ -88,7 +90,19 @@ export async function exchangeCodeForTokens(code: string): Promise<{
 }
 
 /**
- * Refresh the access token using the refresh token
+ * Clear all stored OAuth tokens so the "Connect" button reappears.
+ */
+async function clearOAuthTokens(): Promise<void> {
+  const db = await getDb();
+  if (db) {
+    await db.delete(youtubeOAuthTokens);
+    console.log("[YouTube] Cleared revoked/invalid OAuth tokens");
+  }
+}
+
+/**
+ * Refresh the access token using the refresh token.
+ * Returns null (and clears stored tokens) when the grant is revoked or invalid.
  */
 async function refreshAccessToken(refreshToken: string): Promise<string | null> {
   try {
@@ -104,16 +118,12 @@ async function refreshAccessToken(refreshToken: string): Promise<string | null> 
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("[YouTube OAuth] Token refresh failed:", response.status, errorText);
-      
-      // If token is invalid/revoked, clear it from DB so user can re-authenticate
+      const errorBody = await response.text().catch(() => "");
+      console.error(`[YouTube] Token refresh failed (${response.status}):`, errorBody);
+
+      // 400 (invalid_grant) or 401 means the token is revoked/invalid — clear it
       if (response.status === 400 || response.status === 401) {
-        console.error("[YouTube OAuth] Refresh token is invalid or revoked. Clearing stored tokens.");
-        const db = await getDb();
-        if (db) {
-          await db.delete(youtubeOAuthTokens);
-        }
+        await clearOAuthTokens();
       }
       return null;
     }
@@ -135,7 +145,7 @@ async function refreshAccessToken(refreshToken: string): Promise<string | null> 
 
     return data.access_token;
   } catch (error) {
-    console.error("[YouTube OAuth] Token refresh error:", error);
+    console.error("[YouTube] Token refresh error:", error);
     return null;
   }
 }
@@ -157,11 +167,7 @@ async function getValidAccessToken(): Promise<string | null> {
   
   // Check if token is expired (with 5 minute buffer)
   if (new Date(token.expiresAt) < new Date(Date.now() + 5 * 60 * 1000)) {
-    const newToken = await refreshAccessToken(token.refreshToken);
-    if (!newToken) {
-      return null; // Token refresh failed, user needs to re-authenticate
-    }
-    return newToken;
+    return await refreshAccessToken(token.refreshToken);
   }
 
   return token.accessToken;
@@ -218,7 +224,8 @@ async function setCachedData(key: string, value: string): Promise<void> {
       metricValue: value,
       cachedAt: new Date(),
     })
-    .onDuplicateKeyUpdate({
+    .onConflictDoUpdate({
+      target: youtubeAnalyticsCache.metricKey,
       set: {
         metricValue: value,
         cachedAt: new Date(),
@@ -465,10 +472,20 @@ export async function getDashboardStats(apiKey: string): Promise<{
   } | null;
   isOAuthConnected: boolean;
 }> {
+  // All external API calls are best-effort — return partial data on failure.
   const [channelStats, topVideos, analytics, isOAuthConnected] = await Promise.all([
-    getChannelStats(apiKey),
-    getTopVideos(apiKey, 10),
-    getAnalyticsData(),
+    getChannelStats(apiKey).catch((err) => {
+      console.error("[YouTube] Channel stats fetch failed:", err);
+      return { subscriberCount: 0, viewCount: 0, videoCount: 0 };
+    }),
+    getTopVideos(apiKey, 10).catch((err) => {
+      console.error("[YouTube] Top videos fetch failed:", err);
+      return [];
+    }),
+    getAnalyticsData().catch((err) => {
+      console.error("[YouTube] Analytics fetch failed, falling back to public data only:", err);
+      return null;
+    }),
     isOAuthConfigured(),
   ]);
 

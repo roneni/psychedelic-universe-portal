@@ -91,7 +91,7 @@ async function checkForNewUploads(): Promise<void> {
         referenceId: video.id,
       });
 
-      // Also notify the owner via Manus notification service
+      // Also notify the owner via notification service
       try {
         await notifyOwner({
           title: `New YouTube Upload Detected`,

@@ -50,7 +50,7 @@ export function usePageMeta(options: {
     if (canonical && options.canonicalPath) {
       canonical.setAttribute(
         "href",
-        `https://psychedelic-universe.manus.space${options.canonicalPath}`
+        `https://psychedelic-universe.com${options.canonicalPath}`
       );
     }
 

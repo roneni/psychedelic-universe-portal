@@ -18,6 +18,7 @@ import Suggestions from "./pages/Suggestions";
 import Festivals from "./pages/Festivals";
 import Community from "./pages/Community";
 import Underground from "./pages/Underground";
+import AuthCallback from "./pages/AuthCallback";
 import { PersistentPlayer } from "./components/PersistentPlayer";
 
 function Router() {
@@ -38,6 +39,7 @@ function Router() {
       <Route path={"/festivals"} component={Festivals} />
       <Route path={"/community"} component={Community} />
       <Route path={"/underground"} component={Underground} />
+      <Route path={"/auth/callback"} component={AuthCallback} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

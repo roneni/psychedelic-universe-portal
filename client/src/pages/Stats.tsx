@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useSearch } from "wouter";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { trpc } from "@/lib/trpc";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";

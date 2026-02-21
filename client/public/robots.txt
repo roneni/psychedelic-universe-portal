@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://psychedelic-universe.manus.space/sitemap.xml
+Sitemap: https://psychedelic-universe.com/sitemap.xml
 
 # Disallow admin and API routes
 Disallow: /admin

@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { Link } from "wouter";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";

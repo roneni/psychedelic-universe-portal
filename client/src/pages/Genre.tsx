@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Play, Loader2, Shuffle } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useState, useEffect, useRef } from "react";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 const genreInfo: Record<string, { title: string; description: string; image: string }> = {
   "progressive-psy": {
@@ -206,6 +207,7 @@ export default function Genre() {
                       <p className="text-sm text-gray-400 truncate">{mix.artist}</p>
                     )}
                   </div>
+                  <FavoriteButton mixId={mix.id} size="sm" />
                   <Button
                     variant="ghost"
                     size="sm"

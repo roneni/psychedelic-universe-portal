@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { trpc } from "@/lib/trpc";
 import { ArrowLeft, Globe, Youtube, Music2, Headphones, Instagram, Facebook, ExternalLink, Search, Users, Sparkles, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";

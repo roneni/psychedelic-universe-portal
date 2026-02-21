@@ -105,6 +105,28 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Sitemap */}
+        <div className="border-t border-white/5 pt-8 mb-8">
+          <h4 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-4 text-center">Sitemap</h4>
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+            <Link href="/artists" className="hover:text-primary transition-colors">Artists</Link>
+            <Link href="/radio" className="hover:text-primary transition-colors">Radio</Link>
+            <Link href="/stats" className="hover:text-primary transition-colors">Stats</Link>
+            <Link href="/festivals" className="hover:text-primary transition-colors">Festivals</Link>
+            <Link href="/community" className="hover:text-primary transition-colors">Community</Link>
+            <Link href="/genre/progressive-psy" className="hover:text-primary transition-colors">Progressive Psytrance</Link>
+            <Link href="/genre/psychedelic-trance" className="hover:text-primary transition-colors">Psychedelic Trance</Link>
+            <Link href="/genre/goa-trance" className="hover:text-primary transition-colors">Goa Trance</Link>
+            <Link href="/genre/full-on" className="hover:text-primary transition-colors">Full-On</Link>
+            <Link href="/about" className="hover:text-primary transition-colors">About Us</Link>
+            <Link href="/submit" className="hover:text-primary transition-colors">Submit Music</Link>
+            <Link href="/contact" className="hover:text-primary transition-colors">Contact</Link>
+            <Link href="/suggestions" className="hover:text-primary transition-colors">Suggestions</Link>
+            <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+          </div>
+        </div>
+
         <div className="border-t border-white/5 pt-8 text-center text-xs text-muted-foreground">
           <p>&copy; 2026 Psychedelic Universe. All rights reserved. Made with cosmic energy.</p>
         </div>
