@@ -55,7 +55,7 @@ export function Hero() {
       <div className="absolute inset-0 z-0">
         <div ref={bgRef} className="absolute inset-[-10%] transition-transform duration-100 ease-out">
           <img 
-            src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/IWXNNUxJgZREdluX.jpg" 
+            src="/images/hero-bg.jpg" 
             alt="Cosmic Planetary Landscape" 
             className="w-full h-full object-cover"
           />
@@ -124,7 +124,7 @@ export function Hero() {
           {/* Inner glow */}
           <div className="absolute inset-[-5%] bg-primary/10 rounded-full blur-2xl"></div>
           <img 
-            src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/AprgJvHmVKivYuzs.png" 
+            src="/images/hero-logo.png" 
             alt="Psychedelic Universe Logo" 
             className="w-full h-full object-contain logo-cosmic-glow relative z-10 drop-shadow-[0_0_25px_rgba(34,211,238,0.4)]"
           />

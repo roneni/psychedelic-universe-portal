@@ -392,7 +392,7 @@ function VideoCard({
 }
 
 function ConnectAnalyticsCard() {
-  const { data: oauthUrl } = trpc.youtubeAnalytics.getOAuthUrl.useQuery();
+  const { data: oauthUrl, isLoading, isError } = trpc.youtubeAnalytics.getOAuthUrl.useQuery();
 
   return (
     <Card className="bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border-cyan-500/30">
@@ -403,6 +403,14 @@ function ConnectAnalyticsCard() {
           Connect your YouTube account to see detailed analytics including watch time,
           subscriber growth, and geographic distribution.
         </p>
+        {isLoading && (
+          <Button disabled className="bg-cyan-500/50 text-black font-semibold">
+            Loading...
+          </Button>
+        )}
+        {isError && (
+          <p className="text-sm text-red-400">Unable to load connection link. Check server configuration.</p>
+        )}
         {oauthUrl && (
           <Button
             asChild

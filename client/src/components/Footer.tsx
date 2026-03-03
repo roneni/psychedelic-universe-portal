@@ -23,7 +23,7 @@ export function Footer() {
           {/* Brand Column */}
           <div className="space-y-6">
             <div className="flex items-center gap-3">
-              <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/QFkOUfcxwupSkoaG.png" alt="Logo" className="w-10 h-10" />
+              <img src="/images/logo.png" alt="Logo" className="w-10 h-10" />
               <span className="text-xl font-bold tracking-wider">PSYCHEDELIC UNIVERSE</span>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">

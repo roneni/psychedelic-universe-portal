@@ -179,7 +179,7 @@ export function PersistentPlayer() {
               )}
             >
               <img
-                src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/QFkOUfcxwupSkoaG.png"
+                src="/images/logo.png"
                 alt="Cover"
                 className="w-full h-full object-contain bg-black"
               />

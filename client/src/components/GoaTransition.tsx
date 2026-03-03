@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { Music, Users, Globe, Radio } from "lucide-react";
 
-const GOA_BG_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/cCNxBDRWiclmdYHz.jpg";
+const GOA_BG_URL = "/images/goa-transition.jpg";
 
 const stats = [
   { icon: Music, label: "Tracks", value: "5,000+", href: "/radio" },

@@ -44,6 +44,7 @@ function createClient(url: string) {
       max: 10,
       idle_timeout: 20,
       connect_timeout: 10,
+      prepare: false,
     });
   }
 
@@ -52,6 +53,7 @@ function createClient(url: string) {
     max: 10,
     idle_timeout: 20,
     connect_timeout: 10,
+    prepare: false,
   });
 }
 
@@ -135,7 +137,7 @@ async function tryPg<T>(fn: (db: ReturnType<typeof drizzle>) => Promise<T>): Pro
     return await fn(db);
   } catch (e: any) {
     const cause = String(e.cause || e.message || '');
-    if (cause.includes('ENOTFOUND') || cause.includes('CONNECT_TIMEOUT') || cause.includes('Tenant or user not found')) {
+    if (cause.includes('ENOTFOUND') || cause.includes('CONNECT_TIMEOUT') || cause.includes('ECONNRESET') || cause.includes('Tenant or user not found')) {
       _pgBroken = true;
       console.warn('[Database] PG connection failed, switching to REST fallback');
     }

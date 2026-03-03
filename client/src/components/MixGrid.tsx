@@ -3,25 +3,25 @@ import { CategoryCard } from "./CategoryCard";
 const categories = [
   {
     title: "PROGRESSIVE PSYTRANCE",
-    image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/BgRhmMWVCYtOlaEA.jpg",
+    image: "/images/genre-progressive.jpg",
     description: "Deep rolling basslines, hypnotic layers, and evolving atmospheres that take you on a journey.",
     id: "progressive-psy"
   },
   {
     title: "PSYCHEDELIC TRANCE",
-    image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/WJSgWEwjOavDAFXF.jpg",
+    image: "/images/genre-psychedelic.jpg",
     description: "Driving rhythms, twisted acid lines, and mind-bending soundscapes from the heart of the scene.",
     id: "psychedelic-trance"
   },
   {
     title: "GOA TRANCE",
-    image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/AKbdiOIXkkfdBaUp.jpg",
+    image: "/images/genre-goa.jpg",
     description: "Where it all began. Melodic, spiritual, and timeless sounds born on the beaches of Goa.",
     id: "goa-trance"
   },
   {
     title: "FULL-ON",
-    image: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663076706091/hBtFcRhegmWlMbPh.jpg",
+    image: "/images/genre-fullon.jpg",
     description: "Peak-time energy. Powerful beats and uplifting melodies built for the dancefloor.",
     id: "full-on"
   }
