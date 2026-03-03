@@ -629,7 +629,7 @@ export default function Admin() {
                     placeholder="https://stream.example.com/listen"
                     description="The URL of your Icecast/Shoutcast stream"
                     settings={settingsQuery.data}
-                    onSave={(key, value) => upsertSetting.mutate({ key, value })}
+                    onSave={(key, value) => new Promise<void>((resolve, reject) => upsertSetting.mutate({ key, value }, { onSuccess: () => resolve(), onError: (e) => reject(e) }))}
                   />
                   <SettingRow
                     label="YouTube Channel ID"
@@ -637,7 +637,7 @@ export default function Admin() {
                     placeholder="UCyRw5ZEQ2mVwNKq9GnSTHRA"
                     description="Your YouTube channel ID for the subscriber counter"
                     settings={settingsQuery.data}
-                    onSave={(key, value) => upsertSetting.mutate({ key, value })}
+                    onSave={(key, value) => new Promise<void>((resolve, reject) => upsertSetting.mutate({ key, value }, { onSuccess: () => resolve(), onError: (e) => reject(e) }))}
                   />
                   <SettingRow
                     label="YouTube API Key"
@@ -645,7 +645,7 @@ export default function Admin() {
                     placeholder="AIzaSy..."
                     description="Your YouTube Data API key"
                     settings={settingsQuery.data}
-                    onSave={(key, value) => upsertSetting.mutate({ key, value })}
+                    onSave={(key, value) => new Promise<void>((resolve, reject) => upsertSetting.mutate({ key, value }, { onSuccess: () => resolve(), onError: (e) => reject(e) }))}
                   />
                 </div>
               </CardContent>
@@ -663,7 +663,7 @@ interface SettingRowProps {
   placeholder: string;
   description: string;
   settings: { key: string; value: string | null }[] | undefined;
-  onSave: (key: string, value: string) => void;
+  onSave: (key: string, value: string) => Promise<void>;
 }
 
 function SettingRow({ label, settingKey, placeholder, description, settings, onSave }: SettingRowProps) {
@@ -683,9 +683,16 @@ function SettingRow({ label, settingKey, placeholder, description, settings, onS
     setIsDirty(newValue !== currentValue);
   };
 
-  const handleSave = () => {
-    onSave(settingKey, value);
-    setIsDirty(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await onSave(settingKey, value);
+      setIsDirty(false);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -698,13 +705,13 @@ function SettingRow({ label, settingKey, placeholder, description, settings, onS
           placeholder={placeholder}
           className="flex-1 bg-slate-900 border-slate-700 text-slate-100"
         />
-        <Button 
-          onClick={handleSave} 
-          disabled={!isDirty} 
+        <Button
+          onClick={handleSave}
+          disabled={!isDirty || isSaving}
           variant={isDirty ? "default" : "outline"}
           className={isDirty ? "bg-cyan-500 hover:bg-cyan-600 text-slate-950" : "border-slate-700 text-slate-400"}
         >
-          <Save className="w-4 h-4" />
+          {isSaving ? <span className="w-4 h-4 animate-spin border-2 border-current border-t-transparent rounded-full inline-block" /> : <Save className="w-4 h-4" />}
         </Button>
       </div>
       <p className="text-sm text-slate-500">{description}</p>
