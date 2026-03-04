@@ -233,18 +233,17 @@ export default function Festivals() {
         </section>
 
         {/* Labs Attribution */}
-        <div className="container mx-auto px-4 pb-2">
+        <div className="container mx-auto px-4 py-4">
           <div className="flex justify-center">
             <a
               href="https://www.youtube.com/@PsychedelicUniverse"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 transition-all group"
+              className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/20 hover:border-cyan-500/70 transition-all group shadow-[0_0_20px_-5px_rgba(34,211,238,0.3)] hover:shadow-[0_0_30px_-5px_rgba(34,211,238,0.5)]"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 group-hover:animate-pulse" />
-              <span className="font-orbitron text-xs tracking-widest text-cyan-400/80 group-hover:text-cyan-400 transition-colors">
-                Created in Psychedelic Universe{" "}
-                <span className="text-cyan-400 font-bold">Labs</span>
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="font-orbitron text-xs tracking-widest text-cyan-300 group-hover:text-cyan-200 transition-colors uppercase">
+                Created in Psychedelic Universe <span className="text-cyan-400 font-bold">Labs</span>
               </span>
             </a>
           </div>
