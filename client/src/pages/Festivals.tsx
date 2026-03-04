@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { Link } from "wouter";
-import { usePageMeta } from "@/hooks/usePageMeta";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -146,8 +145,8 @@ const continents = ["All", "Europe", "Asia", "South America", "Central America",
 
 export default function Festivals() {
   usePageMeta({
-    title: "Psytrance Festival Calendar 2026",
-    description: "Browse 56+ psytrance festivals worldwide for 2026. Boom Festival, Ozora, Universo Paralello, and more. Filter by region, month, and country.",
+    title: "Psytrance Festival Calendar 2026 | Psychedelic Universe",
+    description: "Browse the complete psytrance festival calendar for 2026. Find upcoming psychedelic trance, Goa trance and full-on festivals worldwide.",
     canonicalPath: "/festivals",
   });
 
@@ -219,12 +218,12 @@ export default function Festivals() {
               </div>
               <h1 className="font-orbitron text-4xl md:text-5xl font-bold mb-4">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                  Festival Calendar
+                  Psytrance Festival Calendar 2026
                 </span>
               </h1>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                Your guide to psytrance festivals worldwide. From intimate gatherings to legendary events,
-                find your next dance floor under the stars.
+                Your Psycalendar — the complete guide to psychedelic trance festivals worldwide.
+                From intimate gatherings to legendary events, find your next dance floor under the stars.
               </p>
               <p className="text-muted-foreground/60 text-sm mt-3">
                 Data sourced from goabase.net, psymedia.co.za, psycalendar.com &amp; psytranceportal.com
@@ -232,6 +231,24 @@ export default function Festivals() {
             </div>
           </div>
         </section>
+
+        {/* Labs Attribution */}
+        <div className="container mx-auto px-4 pb-2">
+          <div className="flex justify-center">
+            <a
+              href="https://www.youtube.com/@PsychedelicUniverse"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-cyan-500/20 bg-cyan-500/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 transition-all group"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 group-hover:animate-pulse" />
+              <span className="font-orbitron text-xs tracking-widest text-cyan-400/80 group-hover:text-cyan-400 transition-colors">
+                Created in Psychedelic Universe{" "}
+                <span className="text-cyan-400 font-bold">Labs</span>
+              </span>
+            </a>
+          </div>
+        </div>
 
         {/* Featured Festivals */}
         <section className="py-8">
@@ -433,7 +450,7 @@ export default function Festivals() {
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-muted-foreground mt-1 flex items-center gap-2">
+                            <p className="text-xs text-muted-foreground mt-1 flex items-center gap-2 flex-wrap">
                               <span className="flex items-center gap-1">
                                 <MapPin className="w-3 h-3" />
                                 {f.location}
@@ -441,6 +458,9 @@ export default function Festivals() {
                               <span className="flex items-center gap-1">
                                 {getCountryFlag(f.country)} {f.country}
                               </span>
+                              {f.genre && (
+                                <span className="text-muted-foreground/60">{f.genre}</span>
+                              )}
                             </p>
                           </div>
 
@@ -450,7 +470,7 @@ export default function Festivals() {
                               <Clock className="w-3 h-3" />
                               {f.duration}
                             </span>
-                            {f.website && (
+                            {f.website ? (
                               <a
                                 href={f.website}
                                 target="_blank"
@@ -460,6 +480,11 @@ export default function Festivals() {
                                 <Globe className="w-3 h-3" />
                                 Website
                               </a>
+                            ) : (
+                              <span className="text-xs text-muted-foreground/40 flex items-center gap-1">
+                                <Globe className="w-3 h-3" />
+                                TBA
+                              </span>
                             )}
                           </div>
                         </motion.div>
