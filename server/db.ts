@@ -488,44 +488,61 @@ export async function awardKarma(
   description?: string,
   referenceId?: string
 ): Promise<{ points: number; totalKarma: number }> {
-  const db = await getDb();
-  if (!db) throw new Error("Database not available");
-
   const points = KARMA_VALUES[action] || 0;
 
-  await db.insert(karmaPoints).values({
-    userId,
-    action,
-    points,
-    description,
-    referenceId,
+  const pg = await tryPg(async db => {
+    await db.insert(karmaPoints).values({
+      userId,
+      action,
+      points,
+      description,
+      referenceId,
+    });
+    return true;
   });
+
+  if (!pg) {
+    await restPost('karma_points', {
+      userId,
+      action,
+      points,
+      description: description || null,
+      referenceId: referenceId || null,
+    });
+  }
 
   const totalKarma = await getUserTotalKarma(userId);
   return { points, totalKarma };
 }
 
 export async function getUserTotalKarma(userId: number): Promise<number> {
-  const db = await getDb();
-  if (!db) return 0;
+  const pg = await tryPg(async db => {
+    const result = await db
+      .select({ total: sql<number>`COALESCE(SUM(${karmaPoints.points}), 0)` })
+      .from(karmaPoints)
+      .where(eq(karmaPoints.userId, userId));
+    return result[0]?.total || 0;
+  });
+  if (pg !== null) return pg;
 
-  const result = await db
-    .select({ total: sql<number>`COALESCE(SUM(${karmaPoints.points}), 0)` })
-    .from(karmaPoints)
-    .where(eq(karmaPoints.userId, userId));
-
-  return result[0]?.total || 0;
+  // REST fallback: fetch rows and sum in JS
+  const rows = await restGet<{ points: number }>('karma_points', `select=points&userId=eq.${userId}`);
+  return rows.reduce((sum, r) => sum + (Number(r.points) || 0), 0);
 }
 
 export async function getUserKarmaHistory(userId: number, limit: number = 20): Promise<KarmaPoint[]> {
-  const db = await getDb();
-  if (!db) return [];
-  return db
-    .select()
-    .from(karmaPoints)
-    .where(eq(karmaPoints.userId, userId))
-    .orderBy(desc(karmaPoints.createdAt))
-    .limit(limit);
+  const pg = await tryPg(async db => {
+    return db
+      .select()
+      .from(karmaPoints)
+      .where(eq(karmaPoints.userId, userId))
+      .orderBy(desc(karmaPoints.createdAt))
+      .limit(limit);
+  });
+  if (pg) return pg;
+
+  // REST fallback
+  return restGet<KarmaPoint>('karma_points', `select=*&userId=eq.${userId}&order=createdAt.desc&limit=${limit}`);
 }
 
 export async function getKarmaLeaderboard(limit: number = 20): Promise<Array<{ userId: number; name: string | null; totalKarma: number }>> {
@@ -544,26 +561,45 @@ export async function getKarmaLeaderboard(limit: number = 20): Promise<Array<{ u
     return result.map(r => ({ userId: r.userId, name: r.name, totalKarma: Number(r.totalKarma) }));
   });
   if (pg) return pg;
-  // REST fallback — PostgREST can't do aggregates easily, return empty
-  return [];
+
+  // REST fallback: fetch karma_points and users, aggregate in JS
+  const [karmaRows, userRows] = await Promise.all([
+    restGet<{ userId: number; points: number }>('karma_points', 'select=userId,points'),
+    restGet<{ id: number; name: string | null }>('users', 'select=id,name'),
+  ]);
+
+  const userMap = new Map(userRows.map(u => [u.id, u.name]));
+  const totals = new Map<number, number>();
+  for (const row of karmaRows) {
+    totals.set(row.userId, (totals.get(row.userId) || 0) + (Number(row.points) || 0));
+  }
+
+  return Array.from(totals.entries())
+    .map(([userId, totalKarma]) => ({ userId, name: userMap.get(userId) ?? null, totalKarma }))
+    .sort((a, b) => b.totalKarma - a.totalKarma)
+    .slice(0, limit);
 }
 
 export async function hasEarnedKarmaToday(userId: number, action: string): Promise<boolean> {
-  const db = await getDb();
-  if (!db) return false;
+  const pg = await tryPg(async db => {
+    const result = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(karmaPoints)
+      .where(
+        and(
+          eq(karmaPoints.userId, userId),
+          eq(karmaPoints.action, action as InsertKarmaPoint["action"]),
+          sql`DATE(${karmaPoints.createdAt}) = CURRENT_DATE`
+        )
+      );
+    return (result[0]?.count || 0) > 0;
+  });
+  if (pg !== null) return pg;
 
-  const result = await db
-    .select({ count: sql<number>`COUNT(*)` })
-    .from(karmaPoints)
-    .where(
-      and(
-        eq(karmaPoints.userId, userId),
-        eq(karmaPoints.action, action as InsertKarmaPoint["action"]),
-        sql`DATE(${karmaPoints.createdAt}) = CURRENT_DATE`
-      )
-    );
-
-  return (result[0]?.count || 0) > 0;
+  // REST fallback: filter by userId, action, and today's date
+  const today = new Date().toISOString().slice(0, 10);
+  const rows = await restGet<{ id: number }>('karma_points', `select=id&userId=eq.${userId}&action=eq.${encodeURIComponent(action)}&createdAt=gte.${today}T00:00:00&createdAt=lt.${today}T23:59:59.999Z&limit=1`);
+  return rows.length > 0;
 }
 
 // ============ FAVORITES ============
