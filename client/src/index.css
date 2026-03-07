@@ -277,6 +277,19 @@
   animation-delay: -5s;
 }
 
+/* Festival zone background animation */
+@keyframes mars-drift {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+.mars-bg-drift {
+  animation-name: mars-drift;
+  animation-duration: 20s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
 /* Neon glow text effect */
 .neon-glow {
   text-shadow: 
