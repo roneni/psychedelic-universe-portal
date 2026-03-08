@@ -592,7 +592,7 @@ export default function Festivals() {
         </BackgroundZone>
 
         {/* ═══ ZONE 2: Mars / Stars counter ═══ */}
-        <div ref={marsRef} className="relative w-full" style={{ minHeight: "70vh" }}>
+        <div ref={marsRef} className="relative w-full overflow-hidden" style={{ minHeight: "70vh" }}>
           <div
             className="absolute inset-0 mars-bg-drift overflow-hidden"
             style={{
