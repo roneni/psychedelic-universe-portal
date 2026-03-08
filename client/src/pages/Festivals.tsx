@@ -505,13 +505,97 @@ export default function Festivals() {
                     Festival Calendar
                   </span>
                 </h1>
-                <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+                <p className="text-gray-200 text-lg max-w-2xl mx-auto">
                   Your guide to psytrance festivals worldwide. From intimate gatherings to legendary events,
                   find your next dance floor under the stars.
                 </p>
-                <p className="text-gray-500 text-sm mt-3">
+                <p className="text-gray-300 text-sm mt-3">
                   Data sourced from goabase.net, psymedia.co.za, psycalendar.com &amp; psytranceportal.com
                 </p>
+
+                {/* Search Bar */}
+                <div className="mt-8 max-w-xl mx-auto rounded-2xl px-5 py-4" style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <div className="flex flex-col sm:flex-row gap-3 items-center">
+                    <div className="relative flex-1 w-full">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+                      <Input
+                        placeholder="Search festivals, countries, locations..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                      />
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowFilters(!showFilters)}
+                      className="flex items-center gap-2 shrink-0 border-white/20 text-gray-200 hover:text-white hover:bg-white/10"
+                    >
+                      <Filter className="w-4 h-4" />
+                      Filters
+                      {showFilters ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                    </Button>
+                  </div>
+                </div>
+
+                {showFilters && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-3 max-w-xl mx-auto rounded-2xl px-5 py-4 space-y-4"
+                    style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.08)" }}
+                  >
+                    <div>
+                      <p className="text-xs text-gray-300 mb-2 font-medium">Region</p>
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {continents.map((c) => (
+                          <button
+                            key={c}
+                            onClick={() => setSelectedContinent(c)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                              selectedContinent === c
+                                ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30"
+                                : "bg-white/10 text-gray-300 border border-white/15 hover:border-white/25"
+                            }`}
+                          >
+                            {c}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-300 mb-2 font-medium">Month</p>
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        <button
+                          onClick={() => setSelectedMonth(null)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                            !selectedMonth
+                              ? "bg-purple-500/20 text-purple-400 border border-purple-500/30"
+                              : "bg-white/10 text-gray-300 border border-white/15 hover:border-white/25"
+                          }`}
+                        >
+                          All
+                        </button>
+                        {allMonths.map((m) => (
+                          <button
+                            key={m}
+                            onClick={() => setSelectedMonth(m)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                              selectedMonth === m
+                                ? "bg-purple-500/20 text-purple-400 border border-purple-500/30"
+                                : "bg-white/10 text-gray-300 border border-white/15 hover:border-white/25"
+                            }`}
+                          >
+                            {m.slice(0, 3)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                <p className="text-sm text-gray-300 mt-4">{filteredFestivals.length} festivals</p>
               </div>
             </div>
           </section>
@@ -652,92 +736,6 @@ export default function Festivals() {
             </motion.p>
           </div>
         </div>
-
-        {/* ═══ Sticky Search & Filters ═══ */}
-        <section className="py-6 sticky top-16 z-40 border-b border-white/5" style={{ background: "rgba(10,10,20,0.9)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}>
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-              <div className="relative flex-1 w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                <Input
-                  placeholder="Search festivals, countries, locations..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-surface/50 border-border/50"
-                />
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center gap-2"
-              >
-                <Filter className="w-4 h-4" />
-                Filters
-                {showFilters ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-              </Button>
-              <span className="text-sm text-gray-400 whitespace-nowrap">
-                {filteredFestivals.length} festivals
-              </span>
-            </div>
-
-            {showFilters && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-4 space-y-4"
-              >
-                <div>
-                  <p className="text-xs text-gray-500 mb-2 font-medium">Region</p>
-                  <div className="flex flex-wrap gap-2">
-                    {continents.map((c) => (
-                      <button
-                        key={c}
-                        onClick={() => setSelectedContinent(c)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                          selectedContinent === c
-                            ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30"
-                            : "bg-surface/50 text-gray-400 border border-white/10 hover:border-white/20"
-                        }`}
-                      >
-                        {c}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 mb-2 font-medium">Month</p>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      onClick={() => setSelectedMonth(null)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                        !selectedMonth
-                          ? "bg-purple-500/20 text-purple-400 border border-purple-500/30"
-                          : "bg-surface/50 text-gray-400 border border-white/10 hover:border-white/20"
-                      }`}
-                    >
-                      All
-                    </button>
-                    {allMonths.map((m) => (
-                      <button
-                        key={m}
-                        onClick={() => setSelectedMonth(m)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                          selectedMonth === m
-                            ? "bg-purple-500/20 text-purple-400 border border-purple-500/30"
-                            : "bg-surface/50 text-gray-400 border border-white/10 hover:border-white/20"
-                        }`}
-                      >
-                        {m.slice(0, 3)}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </div>
-        </section>
 
         {/* ═══ Festival Timeline Zones ═══ */}
         {!hasResults ? (
