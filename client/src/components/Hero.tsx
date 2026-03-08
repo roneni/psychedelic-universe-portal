@@ -156,7 +156,7 @@ export function Hero() {
           <Link href="/radio">
             <Button 
               size="lg" 
-              className="group relative px-8 py-8 text-xl rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/40 hover:border-primary transition-all duration-500 shadow-[0_0_30px_-5px_rgba(34,211,238,0.3)] hover:shadow-[0_0_50px_-10px_rgba(34,211,238,0.6)] overflow-hidden"
+              className="group relative px-8 py-8 text-xl rounded-full bg-primary/20 hover:bg-primary/30 border border-primary/60 hover:border-primary text-cyan-300 hover:text-cyan-100 transition-all duration-500 shadow-[0_0_30px_-5px_rgba(34,211,238,0.4)] hover:shadow-[0_0_50px_-10px_rgba(34,211,238,0.6)] overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
               <span className="flex items-center gap-3 relative z-10">

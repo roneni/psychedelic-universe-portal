@@ -261,11 +261,12 @@ function MonthGroup({
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.03 }}
-              className={`group flex flex-col md:flex-row md:items-center gap-4 p-4 rounded-xl border transition-all hover:bg-surface/60 ${
+              className={`group flex flex-col md:flex-row md:items-center gap-4 p-4 rounded-xl border transition-all ${
                 f.featured
-                  ? "bg-surface/40 border-amber-500/20 hover:border-amber-500/40"
-                  : "bg-surface/20 border-border/20 hover:border-border/40"
+                  ? "bg-black/40 border-amber-500/15 hover:border-amber-500/30 hover:bg-black/50"
+                  : "bg-black/30 border-white/5 hover:border-white/15 hover:bg-black/40"
               } ${isPast(f.endDate) ? "opacity-50" : ""}`}
+              style={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
             >
               <div className="flex items-center gap-3 md:w-44 shrink-0">
                 {f.imageUrl ? (
