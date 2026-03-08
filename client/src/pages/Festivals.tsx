@@ -36,73 +36,74 @@ interface Festival {
   website?: string;
   featured?: boolean;
   genre?: string;
+  imageUrl?: string;
 }
 
 const festivals: Festival[] = [
   // February 2026
-  { name: "HillTop Festival 2026", location: "Vagator, Goa", country: "India", continent: "Asia", startDate: "2026-02-05", endDate: "2026-02-08", duration: "3 days", size: "large", website: "https://hilltopgoa.com", genre: "Psychedelic Trance" },
+  { name: "HillTop Festival 2026", location: "Vagator, Goa", country: "India", continent: "Asia", startDate: "2026-02-05", endDate: "2026-02-08", duration: "3 days", size: "large", website: "https://hilltopgoa.com", imageUrl: "/images/festivals/hilltop-festival.jpg", genre: "Psychedelic Trance" },
   { name: "The Alternative Festival 2026", location: "Koh Ta Kiev", country: "Cambodia", continent: "Asia", startDate: "2026-02-19", endDate: "2026-02-24", duration: "5 days", size: "medium", website: "https://www.instagram.com/alternative_festival/", genre: "Multi-genre" },
-  { name: "Envision Festival", location: "Uvita", country: "Costa Rica", continent: "Central America", startDate: "2026-02-23", endDate: "2026-03-02", duration: "7 days", size: "large", website: "https://envisionfestival.com", genre: "Multi-genre" },
-  { name: "YATRA Festival '26 × MO:DEM", location: "Takaka, Golden Bay", country: "New Zealand", continent: "Oceania", startDate: "2026-02-27", endDate: "2026-03-02", duration: "3 days", size: "medium", website: "https://psymedia.co.za/festival/yatra-festival/", genre: "Psychedelic Trance" },
-  { name: "Tribal Gathering", location: "Hippie Beach", country: "Panama", continent: "Central America", startDate: "2026-02-27", endDate: "2026-03-16", duration: "17 days", size: "large", website: "https://tribalgathering.com", genre: "Multi-genre" },
-  { name: "Chilca Ovni Festival", location: "Lima", country: "Peru", continent: "South America", startDate: "2026-02-27", endDate: "2026-03-01", duration: "2 days", size: "medium", website: "https://www.goabase.net/festival/chilca-ovni-festival-2026/115349", genre: "Psychedelic Trance" },
-  { name: "PuriMoksha 2026", location: "Israel", country: "Israel", continent: "Middle East", startDate: "2026-02-27", endDate: "2026-02-27", duration: "1 day", size: "large", website: "https://psymedia.co.za/festival/purimoksha/", genre: "Multi-genre" },
+  { name: "Envision Festival", location: "Uvita", country: "Costa Rica", continent: "Central America", startDate: "2026-02-23", endDate: "2026-03-02", duration: "7 days", size: "large", website: "https://envisionfestival.com", imageUrl: "/images/festivals/envision-festival.avif", genre: "Multi-genre" },
+  { name: "YATRA Festival '26 × MO:DEM", location: "Takaka, Golden Bay", country: "New Zealand", continent: "Oceania", startDate: "2026-02-27", endDate: "2026-03-02", duration: "3 days", size: "medium", website: "https://psymedia.co.za/festival/yatra-festival/", imageUrl: "/images/festivals/yatra-festival.avif", genre: "Psychedelic Trance" },
+  { name: "Tribal Gathering", location: "Hippie Beach", country: "Panama", continent: "Central America", startDate: "2026-02-27", endDate: "2026-03-16", duration: "17 days", size: "large", website: "https://tribalgathering.com", imageUrl: "/images/festivals/tribal-gathering.jpg", genre: "Multi-genre" },
+  { name: "Chilca Ovni Festival", location: "Lima", country: "Peru", continent: "South America", startDate: "2026-02-27", endDate: "2026-03-01", duration: "2 days", size: "medium", website: "https://www.goabase.net/festival/chilca-ovni-festival-2026/115349", imageUrl: "/images/festivals/chilca-ovni-festival.webp", genre: "Psychedelic Trance" },
+  { name: "PuriMoksha 2026", location: "Israel", country: "Israel", continent: "Middle East", startDate: "2026-02-27", endDate: "2026-02-27", duration: "1 day", size: "large", website: "https://psymedia.co.za/festival/purimoksha/", imageUrl: "/images/festivals/purimoksha.jpg", genre: "Multi-genre" },
   // March 2026
   { name: "Fractal Festival 2026", location: "Usakos", country: "Namibia", continent: "Africa", startDate: "2026-03-12", endDate: "2026-03-15", duration: "3 days", size: "medium", website: "https://centropy4u.com/fractalfestival", genre: "Psychedelic Trance" },
   { name: "Miracle Festival", location: "Taiwan", country: "Taiwan", continent: "Asia", startDate: "2026-03-13", endDate: "2026-03-15", duration: "2 days", size: "medium", website: "https://www.facebook.com/moonfairy.project/", genre: "Psychedelic Trance" },
-  { name: "Nahual Can Music + Arts Gathering", location: "Palenque", country: "Mexico", continent: "Central America", startDate: "2026-03-27", endDate: "2026-03-29", duration: "2 days", size: "medium", website: "https://www.goabase.net/festival/nahual-can-music-arts-gathering-2026/116739", genre: "Multi-genre" },
+  { name: "Nahual Can Music + Arts Gathering", location: "Palenque", country: "Mexico", continent: "Central America", startDate: "2026-03-27", endDate: "2026-03-29", duration: "2 days", size: "medium", website: "https://www.goabase.net/festival/nahual-can-music-arts-gathering-2026/116739", imageUrl: "/images/festivals/nahual-can.webp", genre: "Multi-genre" },
   // April 2026
   { name: "Psycristance", location: "Chiapas", country: "Mexico", continent: "Central America", startDate: "2026-04-02", endDate: "2026-04-05", duration: "3 days", size: "medium", website: "https://www.facebook.com/PsyCrisTrancers/", genre: "Psychedelic Trance" },
-  { name: "High Mountain Gathering VII", location: "Pokhara", country: "Nepal", continent: "Asia", startDate: "2026-04-13", endDate: "2026-04-15", duration: "2 days", size: "small", website: "https://www.goabase.net/festival/high-mountain-gathering-vii-2026/116341", genre: "Psychedelic Trance" },
-  { name: "AfrikaBurn", location: "Western South Africa", country: "South Africa", continent: "Africa", startDate: "2026-04-27", endDate: "2026-05-03", duration: "6 days", size: "large", website: "https://afrikaburn.com", genre: "Multi-genre" },
-  { name: "Sati Festival", location: "Pokhara", country: "Nepal", continent: "Asia", startDate: "2026-04-30", endDate: "2026-05-03", duration: "3 days", size: "medium", website: "https://www.goabase.net/festival/sati-festival/115927", genre: "Psychedelic Trance" },
-  { name: "Hai in den Mai Festival", location: "Stemwede", country: "Germany", continent: "Europe", startDate: "2026-04-30", endDate: "2026-05-03", duration: "3 days", size: "large", website: "https://waldfrieden.de", genre: "Psychedelic Trance" },
+  { name: "High Mountain Gathering VII", location: "Pokhara", country: "Nepal", continent: "Asia", startDate: "2026-04-13", endDate: "2026-04-15", duration: "2 days", size: "small", website: "https://www.goabase.net/festival/high-mountain-gathering-vii-2026/116341", imageUrl: "/images/festivals/high-mountain-gathering.webp", genre: "Psychedelic Trance" },
+  { name: "AfrikaBurn", location: "Western South Africa", country: "South Africa", continent: "Africa", startDate: "2026-04-27", endDate: "2026-05-03", duration: "6 days", size: "large", website: "https://afrikaburn.com", imageUrl: "/images/festivals/afrikaburn.png", genre: "Multi-genre" },
+  { name: "Sati Festival", location: "Pokhara", country: "Nepal", continent: "Asia", startDate: "2026-04-30", endDate: "2026-05-03", duration: "3 days", size: "medium", website: "https://www.goabase.net/festival/sati-festival/115927", imageUrl: "/images/festivals/sati-festival.webp", genre: "Psychedelic Trance" },
+  { name: "Hai in den Mai Festival", location: "Stemwede", country: "Germany", continent: "Europe", startDate: "2026-04-30", endDate: "2026-05-03", duration: "3 days", size: "large", website: "https://waldfrieden.de", imageUrl: "/images/festivals/hai-in-den-mai.jpg", genre: "Psychedelic Trance" },
   // May 2026
   { name: "Arkana Festival 2026", location: "Cusco", country: "Peru", continent: "South America", startDate: "2026-05-01", endDate: "2026-05-03", duration: "2 days", size: "medium", website: "https://arkanafestival.com/", genre: "Psychedelic Trance" },
-  { name: "Burning Nest", location: "nr Exeter, Devon", country: "United Kingdom", continent: "Europe", startDate: "2026-05-18", endDate: "2026-05-25", duration: "7 days", size: "medium", website: "https://burningnest.co.uk/", genre: "Multi-genre" },
-  { name: "Ikarus Festival", location: "Southern Germany", country: "Germany", continent: "Europe", startDate: "2026-05-22", endDate: "2026-05-25", duration: "3 days", size: "large", website: "https://www.ikarus-festival.de/", genre: "Psychedelic Trance" },
-  { name: "Quantum Awakening Festival 3.0", location: "Hammonton, New Jersey", country: "USA", continent: "North America", startDate: "2026-05-22", endDate: "2026-05-25", duration: "3 days", size: "medium", website: "https://quantumawakeningfestival.com/", genre: "Psychedelic Trance" },
-  { name: "Psychedelic Experience Open Air", location: "Gallin-Kuppentin", country: "Germany", continent: "Europe", startDate: "2026-05-29", endDate: "2026-06-01", duration: "3 days", size: "large", website: "https://www.psyexperience-festival.com/", genre: "Psychedelic Trance" },
+  { name: "Burning Nest", location: "nr Exeter, Devon", country: "United Kingdom", continent: "Europe", startDate: "2026-05-18", endDate: "2026-05-25", duration: "7 days", size: "medium", website: "https://burningnest.co.uk/", imageUrl: "/images/festivals/burning-nest.jpg", genre: "Multi-genre" },
+  { name: "Ikarus Festival", location: "Southern Germany", country: "Germany", continent: "Europe", startDate: "2026-05-22", endDate: "2026-05-25", duration: "3 days", size: "large", website: "https://www.ikarus-festival.de/", imageUrl: "/images/festivals/ikarus-festival.svg", genre: "Psychedelic Trance" },
+  { name: "Quantum Awakening Festival 3.0", location: "Hammonton, New Jersey", country: "USA", continent: "North America", startDate: "2026-05-22", endDate: "2026-05-25", duration: "3 days", size: "medium", website: "https://quantumawakeningfestival.com/", imageUrl: "/images/festivals/quantum-awakening.png", genre: "Psychedelic Trance" },
+  { name: "Psychedelic Experience Open Air", location: "Gallin-Kuppentin", country: "Germany", continent: "Europe", startDate: "2026-05-29", endDate: "2026-06-01", duration: "3 days", size: "large", website: "https://www.psyexperience-festival.com/", imageUrl: "/images/festivals/psychedelic-experience.png", genre: "Psychedelic Trance" },
   { name: "Aura Festival", location: "Barcelona", country: "Spain", continent: "Europe", startDate: "2026-05-29", endDate: "2026-05-31", duration: "2 days", size: "medium", website: "https://www.instagram.com/aura_open_air_festival/", genre: "Psychedelic Trance" },
   { name: "Refractor 2026", location: "Valdeverdeja", country: "Spain", continent: "Europe", startDate: "2026-05-29", endDate: "2026-05-31", duration: "2 days", size: "medium", website: "https://www.instagram.com/refractor.festival/", genre: "Psychedelic Trance" },
   // June 2026
   { name: "Pulsar Festival 2026", location: "Cachoeira Alta", country: "Brazil", continent: "South America", startDate: "2026-06-03", endDate: "2026-06-08", duration: "5 days", size: "large", website: "https://pulsarfestival.art.br/", genre: "Psychedelic Trance" },
-  { name: "Okami Festival", location: "Haute-Garonne", country: "France", continent: "Europe", startDate: "2026-06-03", endDate: "2026-06-07", duration: "4 days", size: "medium", website: "https://www.okamifestival.com/en", genre: "Psychedelic Trance" },
+  { name: "Okami Festival", location: "Haute-Garonne", country: "France", continent: "Europe", startDate: "2026-06-03", endDate: "2026-06-07", duration: "4 days", size: "medium", website: "https://www.okamifestival.com/en", imageUrl: "/images/festivals/okami-festival.jpg", genre: "Psychedelic Trance" },
   { name: "Zauberlippen Festival", location: "Schramberg", country: "Germany", continent: "Europe", startDate: "2026-06-04", endDate: "2026-06-08", duration: "4 days", size: "medium", website: "https://www.lippen.events/", genre: "Psychedelic Trance" },
   { name: "Amazon Festival 2026", location: "Rurrenabaque", country: "Bolivia", continent: "South America", startDate: "2026-06-05", endDate: "2026-06-07", duration: "2 days", size: "small", website: "https://www.facebook.com/amazonfestival/", genre: "Psychedelic Trance" },
-  { name: "KUMBHALA Festival", location: "Madrid", country: "Spain", continent: "Europe", startDate: "2026-06-05", endDate: "2026-06-07", duration: "2 days", size: "large", website: "https://www.kumbhalafestival.org/", genre: "Psychedelic Trance" },
+  { name: "KUMBHALA Festival", location: "Madrid", country: "Spain", continent: "Europe", startDate: "2026-06-05", endDate: "2026-06-07", duration: "2 days", size: "large", website: "https://www.kumbhalafestival.org/", imageUrl: "/images/festivals/kumbhala-festival.png", genre: "Psychedelic Trance" },
   { name: "Spirit Base Festival", location: "Vyrovice", country: "Czechia", continent: "Europe", startDate: "2026-06-11", endDate: "2026-06-14", duration: "3 days", size: "large", website: "https://www.facebook.com/SpiritBaseFestival/", genre: "Psychedelic Trance" },
-  { name: "Existance Festival", location: "Charlton Park, Wiltshire", country: "United Kingdom", continent: "Europe", startDate: "2026-06-11", endDate: "2026-06-14", duration: "3 days", size: "medium", website: "https://existancefestival.com/", genre: "Psychedelic Trance" },
-  { name: "Outdoor Selection Festival", location: "Effingen", country: "Switzerland", continent: "Europe", startDate: "2026-06-12", endDate: "2026-06-14", duration: "2 days", size: "medium", website: "https://outdoorselection.ch/", genre: "Psychedelic Trance" },
-  { name: "Waking Life Festival", location: "Crato", country: "Portugal", continent: "Europe", startDate: "2026-06-16", endDate: "2026-06-22", duration: "6 days", size: "large", website: "https://www.wakinglife.pt", genre: "Multi-genre" },
+  { name: "Existance Festival", location: "Charlton Park, Wiltshire", country: "United Kingdom", continent: "Europe", startDate: "2026-06-11", endDate: "2026-06-14", duration: "3 days", size: "medium", website: "https://existancefestival.com/", imageUrl: "/images/festivals/existance-festival.jpg", genre: "Psychedelic Trance" },
+  { name: "Outdoor Selection Festival", location: "Effingen", country: "Switzerland", continent: "Europe", startDate: "2026-06-12", endDate: "2026-06-14", duration: "2 days", size: "medium", website: "https://outdoorselection.ch/", imageUrl: "/images/festivals/outdoor-selection.png", genre: "Psychedelic Trance" },
+  { name: "Waking Life Festival", location: "Crato", country: "Portugal", continent: "Europe", startDate: "2026-06-16", endDate: "2026-06-22", duration: "6 days", size: "large", website: "https://www.wakinglife.pt", imageUrl: "/images/festivals/waking-life.jpg", genre: "Multi-genre" },
   { name: "Forest Star Festival", location: "Västra Götaland", country: "Sweden", continent: "Europe", startDate: "2026-06-18", endDate: "2026-06-22", duration: "4 days", size: "medium", website: "https://www.foreststar.se/", genre: "Psychedelic Trance" },
-  { name: "Fantàsia Festival", location: "Tuscany", country: "Italy", continent: "Europe", startDate: "2026-06-18", endDate: "2026-06-22", duration: "4 days", size: "medium", website: "https://www.fantasiafestival.org/en", genre: "Psychedelic Trance" },
-  { name: "Solomonari Festival", location: "nr Sibiu", country: "Romania", continent: "Europe", startDate: "2026-06-18", endDate: "2026-06-21", duration: "3 days", size: "medium", website: "https://psymedia.co.za/festival/solomonari-festival/", genre: "Psychedelic Trance" },
+  { name: "Fantàsia Festival", location: "Tuscany", country: "Italy", continent: "Europe", startDate: "2026-06-18", endDate: "2026-06-22", duration: "4 days", size: "medium", website: "https://www.fantasiafestival.org/en", imageUrl: "/images/festivals/fantasia-festival.svg", genre: "Psychedelic Trance" },
+  { name: "Solomonari Festival", location: "nr Sibiu", country: "Romania", continent: "Europe", startDate: "2026-06-18", endDate: "2026-06-21", duration: "3 days", size: "medium", website: "https://psymedia.co.za/festival/solomonari-festival/", imageUrl: "/images/festivals/solomonari-festival.jpg", genre: "Psychedelic Trance" },
   { name: "Solar Light Festival", location: "Ancona", country: "Italy", continent: "Europe", startDate: "2026-06-19", endDate: "2026-06-21", duration: "2 days", size: "medium", website: "https://www.facebook.com/SolarLightParty/", genre: "Psychedelic Trance" },
-  { name: "ForRest Explosion Festival", location: "Parchim", country: "Germany", continent: "Europe", startDate: "2026-06-19", endDate: "2026-06-21", duration: "2 days", size: "medium", website: "https://www.forrest-explosion.de/", genre: "Psychedelic Trance" },
-  { name: "UFO BUFO Festival", location: "Hadinka", country: "Czechia", continent: "Europe", startDate: "2026-06-24", endDate: "2026-06-28", duration: "4 days", size: "large", website: "https://ufobufo.eu/", genre: "Psychedelic Trance" },
+  { name: "ForRest Explosion Festival", location: "Parchim", country: "Germany", continent: "Europe", startDate: "2026-06-19", endDate: "2026-06-21", duration: "2 days", size: "medium", website: "https://www.forrest-explosion.de/", imageUrl: "/images/festivals/forrest-explosion.jpg", genre: "Psychedelic Trance" },
+  { name: "UFO BUFO Festival", location: "Hadinka", country: "Czechia", continent: "Europe", startDate: "2026-06-24", endDate: "2026-06-28", duration: "4 days", size: "large", website: "https://ufobufo.eu/", imageUrl: "/images/festivals/ufo-bufo.svg", genre: "Psychedelic Trance" },
   { name: "Burning Mountain Festival", location: "Zernez", country: "Switzerland", continent: "Europe", startDate: "2026-06-25", endDate: "2026-06-28", duration: "3 days", size: "medium", website: "https://www.burning-mountain.ch", genre: "Psychedelic Trance" },
-  { name: "Back To Nature Festival", location: "Datça/Muğla", country: "Turkey", continent: "Europe", startDate: "2026-06-25", endDate: "2026-06-29", duration: "4 days", size: "medium", website: "https://mindmanifest.pro/events/back-to-nature-festival-2026/", genre: "Psychedelic Trance" },
+  { name: "Back To Nature Festival", location: "Datça/Muğla", country: "Turkey", continent: "Europe", startDate: "2026-06-25", endDate: "2026-06-29", duration: "4 days", size: "medium", website: "https://mindmanifest.pro/events/back-to-nature-festival-2026/", imageUrl: "/images/festivals/back-to-nature.webp", genre: "Psychedelic Trance" },
   { name: "Colibri Spirit Festival", location: "Corfu", country: "Greece", continent: "Europe", startDate: "2026-06-28", endDate: "2026-07-03", duration: "5 days", size: "medium", website: "https://www.colibrispiritfestival.com/", genre: "Psychedelic Trance" },
   // July 2026
-  { name: "Being Gathering", location: "BoomLand", country: "Portugal", continent: "Europe", startDate: "2026-07-01", endDate: "2026-07-05", duration: "4 days", size: "large", website: "https://www.being-gathering.org/", genre: "Multi-genre" },
-  { name: "Ethereal Decibel Festival", location: "Saint Symphorien des Monts", country: "France", continent: "Europe", startDate: "2026-07-02", endDate: "2026-07-05", duration: "3 days", size: "medium", website: "https://etherealdecibel.com/", genre: "Psychedelic Trance" },
+  { name: "Being Gathering", location: "BoomLand", country: "Portugal", continent: "Europe", startDate: "2026-07-01", endDate: "2026-07-05", duration: "4 days", size: "large", website: "https://www.being-gathering.org/", imageUrl: "/images/festivals/being-gathering.png", genre: "Multi-genre" },
+  { name: "Ethereal Decibel Festival", location: "Saint Symphorien des Monts", country: "France", continent: "Europe", startDate: "2026-07-02", endDate: "2026-07-05", duration: "3 days", size: "medium", website: "https://etherealdecibel.com/", imageUrl: "/images/festivals/ethereal-decibel.png", genre: "Psychedelic Trance" },
   { name: "Surya Spirits Festival", location: "Gent", country: "Belgium", continent: "Europe", startDate: "2026-07-03", endDate: "2026-07-06", duration: "3 days", size: "medium", website: "https://surya-spirits.be/", genre: "Psychedelic Trance" },
-  { name: "Masters of Puppets", location: "Vysočina Region", country: "Czechia", continent: "Europe", startDate: "2026-07-06", endDate: "2026-07-13", duration: "7 days", size: "large", website: "https://mastersofpuppets.cz", genre: "Psychedelic Trance", featured: true },
-  { name: "Manas Festival", location: "Somogy County", country: "Hungary", continent: "Europe", startDate: "2026-07-08", endDate: "2026-07-13", duration: "5 days", size: "medium", website: "https://manasfestival.eu/en/", genre: "Psychedelic Trance" },
-  { name: "Origin UK", location: "Cambridgeshire", country: "United Kingdom", continent: "Europe", startDate: "2026-07-10", endDate: "2026-07-12", duration: "2 days", size: "large", website: "https://originfestival.co.uk/", genre: "Psychedelic Trance" },
-  { name: "Antaris Project 2026", location: "Gollenberg", country: "Germany", continent: "Europe", startDate: "2026-07-12", endDate: "2026-07-15", duration: "3 days", size: "large", website: "https://antaris-project.de", genre: "Psychedelic Trance", featured: true },
-  { name: "S.U.N. Festival", location: "Csobánkapuszta", country: "Hungary", continent: "Europe", startDate: "2026-07-13", endDate: "2026-07-19", duration: "6 days", size: "large", website: "https://psymedia.co.za/festival/sun-festival/", genre: "Psychedelic Trance", featured: true },
-  { name: "7 Chakras Festival", location: "Lazio Region", country: "Italy", continent: "Europe", startDate: "2026-07-14", endDate: "2026-07-20", duration: "6 days", size: "medium", website: "https://www.7chakrasfestival.org/", genre: "Psychedelic Trance" },
-  { name: "ZNA Gathering", location: "Montargil Lake", country: "Portugal", continent: "Europe", startDate: "2026-07-15", endDate: "2026-07-22", duration: "7 days", size: "large", website: "https://znagathering.com/", genre: "Psychedelic Trance", featured: true },
-  { name: "Noisily Festival", location: "Coney Woods, Leicestershire", country: "United Kingdom", continent: "Europe", startDate: "2026-07-16", endDate: "2026-07-19", duration: "3 days", size: "large", website: "https://noisilyfestival.com", genre: "Multi-genre", featured: true },
-  { name: "O.Z.O.R.A. Festival 2026", location: "Dádpuszta", country: "Hungary", continent: "Europe", startDate: "2026-07-24", endDate: "2026-08-04", duration: "11 days", size: "major", website: "https://ozorafestival.eu", genre: "Psychedelic Trance", featured: true },
+  { name: "Masters of Puppets", location: "Vysočina Region", country: "Czechia", continent: "Europe", startDate: "2026-07-06", endDate: "2026-07-13", duration: "7 days", size: "large", website: "https://mastersofpuppets.cz", imageUrl: "/images/festivals/masters-of-puppets.jpg", genre: "Psychedelic Trance", featured: true },
+  { name: "Manas Festival", location: "Somogy County", country: "Hungary", continent: "Europe", startDate: "2026-07-08", endDate: "2026-07-13", duration: "5 days", size: "medium", website: "https://manasfestival.eu/en/", imageUrl: "/images/festivals/manas-festival.png", genre: "Psychedelic Trance" },
+  { name: "Origin UK", location: "Cambridgeshire", country: "United Kingdom", continent: "Europe", startDate: "2026-07-10", endDate: "2026-07-12", duration: "2 days", size: "large", website: "https://originfestival.co.uk/", imageUrl: "/images/festivals/origin-uk.svg", genre: "Psychedelic Trance" },
+  { name: "Antaris Project 2026", location: "Gollenberg", country: "Germany", continent: "Europe", startDate: "2026-07-12", endDate: "2026-07-15", duration: "3 days", size: "large", website: "https://antaris-project.de", imageUrl: "/images/festivals/antaris-project.png", genre: "Psychedelic Trance", featured: true },
+  { name: "S.U.N. Festival", location: "Csobánkapuszta", country: "Hungary", continent: "Europe", startDate: "2026-07-13", endDate: "2026-07-19", duration: "6 days", size: "large", website: "https://psymedia.co.za/festival/sun-festival/", imageUrl: "/images/festivals/sun-festival.png", genre: "Psychedelic Trance", featured: true },
+  { name: "7 Chakras Festival", location: "Lazio Region", country: "Italy", continent: "Europe", startDate: "2026-07-14", endDate: "2026-07-20", duration: "6 days", size: "medium", website: "https://www.7chakrasfestival.org/", imageUrl: "/images/festivals/7-chakras-festival.jpg", genre: "Psychedelic Trance" },
+  { name: "ZNA Gathering", location: "Montargil Lake", country: "Portugal", continent: "Europe", startDate: "2026-07-15", endDate: "2026-07-22", duration: "7 days", size: "large", website: "https://znagathering.com/", imageUrl: "/images/festivals/zna-gathering.jpg", genre: "Psychedelic Trance", featured: true },
+  { name: "Noisily Festival", location: "Coney Woods, Leicestershire", country: "United Kingdom", continent: "Europe", startDate: "2026-07-16", endDate: "2026-07-19", duration: "3 days", size: "large", website: "https://noisilyfestival.com", imageUrl: "/images/festivals/noisily-festival.jpg", genre: "Multi-genre", featured: true },
+  { name: "O.Z.O.R.A. Festival 2026", location: "Dádpuszta", country: "Hungary", continent: "Europe", startDate: "2026-07-24", endDate: "2026-08-04", duration: "11 days", size: "major", website: "https://ozorafestival.eu", imageUrl: "/images/festivals/ozora-festival.jpg", genre: "Psychedelic Trance", featured: true },
   // August 2026
-  { name: "MO:DEM Festival 2026", location: "Primislje", country: "Croatia", continent: "Europe", startDate: "2026-08-03", endDate: "2026-08-09", duration: "6 days", size: "major", website: "https://modemfestival.com", genre: "Psychedelic Trance", featured: true },
-  { name: "Hadra Trance Festival 2026", location: "Vieure", country: "France", continent: "Europe", startDate: "2026-08-26", endDate: "2026-09-03", duration: "8 days", size: "major", website: "https://hadratrancefestival.net", genre: "Psychedelic Trance", featured: true },
-  { name: "Indian Spirit Festival 2026", location: "Eldena", country: "Germany", continent: "Europe", startDate: "2026-08-26", endDate: "2026-08-31", duration: "5 days", size: "major", website: "https://indian-spirit.de", genre: "Psychedelic Trance", featured: true },
+  { name: "MO:DEM Festival 2026", location: "Primislje", country: "Croatia", continent: "Europe", startDate: "2026-08-03", endDate: "2026-08-09", duration: "6 days", size: "major", website: "https://modemfestival.com", imageUrl: "/images/festivals/modem-festival.png", genre: "Psychedelic Trance", featured: true },
+  { name: "Hadra Trance Festival 2026", location: "Vieure", country: "France", continent: "Europe", startDate: "2026-08-26", endDate: "2026-09-03", duration: "8 days", size: "major", website: "https://hadratrancefestival.net", imageUrl: "/images/festivals/hadra-festival.jpg", genre: "Psychedelic Trance", featured: true },
+  { name: "Indian Spirit Festival 2026", location: "Eldena", country: "Germany", continent: "Europe", startDate: "2026-08-26", endDate: "2026-08-31", duration: "5 days", size: "major", website: "https://indian-spirit.de", imageUrl: "/images/festivals/indian-spirit.png", genre: "Psychedelic Trance", featured: true },
   // December 2026
-  { name: "Universo Paralello", location: "Pratigi, Bahia", country: "Brazil", continent: "South America", startDate: "2026-12-27", endDate: "2027-01-03", duration: "7 days", size: "major", website: "https://universoparalello.org", genre: "Psychedelic Trance", featured: true },
+  { name: "Universo Paralello", location: "Pratigi, Bahia", country: "Brazil", continent: "South America", startDate: "2026-12-27", endDate: "2027-01-03", duration: "7 days", size: "major", website: "https://universoparalello.org", imageUrl: "/images/festivals/universo-paralello.jpg", genre: "Psychedelic Trance", featured: true },
 ];
 
 // ── Helpers (unchanged) ────────────────────────────────────────────────────
@@ -267,14 +268,24 @@ function MonthGroup({
               } ${isPast(f.endDate) ? "opacity-50" : ""}`}
             >
               <div className="flex items-center gap-3 md:w-44 shrink-0">
-                <div className="text-center min-w-[60px]">
-                  <p className="text-xs text-muted-foreground">
-                    {new Date(f.startDate).toLocaleString("en", { month: "short" })}
-                  </p>
-                  <p className="font-orbitron font-bold text-lg text-foreground">
-                    {new Date(f.startDate).getDate()}
-                  </p>
-                </div>
+                {f.imageUrl ? (
+                  <img
+                    src={f.imageUrl}
+                    alt={`${f.name} ${new Date(f.startDate).getFullYear()} ${f.genre || "psytrance"} festival ${f.location} ${f.country}`}
+                    title={`${f.name} — ${f.duration} in ${f.location}, ${f.country}`}
+                    className="w-[60px] h-[60px] rounded-lg object-cover shrink-0"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="text-center min-w-[60px]">
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(f.startDate).toLocaleString("en", { month: "short" })}
+                    </p>
+                    <p className="font-orbitron font-bold text-lg text-foreground">
+                      {new Date(f.startDate).getDate()}
+                    </p>
+                  </div>
+                )}
                 <div className="text-xs text-muted-foreground">
                   <p>{formatDate(f.startDate)} –</p>
                   <p>{formatDate(f.endDate)}</p>
@@ -526,21 +537,32 @@ export default function Festivals() {
                       WebkitBackdropFilter: "blur(16px)",
                     }}
                   >
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="font-orbitron font-bold text-white group-hover:text-amber-400 transition-colors text-sm">
-                          {f.name}
-                        </h3>
+                    <div className="flex items-start gap-3 mb-3">
+                      {f.imageUrl && (
+                        <img
+                          src={f.imageUrl}
+                          alt={`${f.name} ${new Date(f.startDate).getFullYear()} ${f.genre || "psytrance"} festival ${f.location} ${f.country}`}
+                          title={`${f.name} — ${f.duration} in ${f.location}, ${f.country}`}
+                          className="w-12 h-12 rounded-lg object-cover shrink-0"
+                          loading="lazy"
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between">
+                          <h3 className="font-orbitron font-bold text-white group-hover:text-amber-400 transition-colors text-sm">
+                            {f.name}
+                          </h3>
+                          {f.website && (
+                            <a href={f.website} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-amber-400 transition-colors shrink-0 ml-2">
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
+                          )}
+                        </div>
                         <p className="text-gray-400 text-xs mt-1 flex items-center gap-1">
                           <span>{getCountryFlag(f.country)}</span>
                           {f.location}, {f.country}
                         </p>
                       </div>
-                      {f.website && (
-                        <a href={f.website} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-amber-400 transition-colors">
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      )}
                     </div>
                     <div className="flex items-center gap-3 text-xs">
                       <span className="flex items-center gap-1 text-amber-400">

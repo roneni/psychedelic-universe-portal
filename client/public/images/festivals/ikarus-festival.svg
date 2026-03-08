@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="de-DE" class="html_stretched responsive av-preloader-disabled  html_header_top html_logo_left html_main_nav_header html_menu_right html_slim html_header_sticky html_header_shrinking_disabled html_mobile_menu_tablet html_header_searchicon_disabled html_content_align_center html_header_unstick_top_disabled html_header_stretch html_burger_menu html_av-overlay-full html_av-submenu-noclone av-cookies-consent-show-message-bar av-cookies-cookie-consent-enabled av-cookies-can-opt-out av-cookies-user-silent-accept avia-cookie-check-browser-settings av-no-preview av-default-lightbox html_burger_menu_active">
+<head>
+<meta charset="UTF-8" />
+
+
+<!-- mobile setting -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Scripts/CSS and wp_head hook -->
+<meta name='robots' content='noindex, follow' />
+
+				<script type='text/javascript'>
+
+				function avia_cookie_check_sessionStorage()
+				{
+					//	FF throws error when all cookies blocked !!
+					var sessionBlocked = false;
+					try
+					{
+						var test = sessionStorage.getItem( 'aviaCookieRefused' ) != null;
+					}
+					catch(e)
+					{
+						sessionBlocked = true;
+					}
+
+					var aviaCookieRefused = ! sessionBlocked ? sessionStorage.getItem( 'aviaCookieRefused' ) : null;
+
+					var html = document.getElementsByTagName('html')[0];
+
+					/**
+					 * Set a class to avoid calls to sessionStorage
+					 */
+					if( sessionBlocked || aviaCookieRefused )
+					{
+						if( html.className.indexOf('av-cookies-session-refused') < 0 )
+						{
+							html.className += ' av-cookies-session-refused';
+						}
+					}
+
+					if( sessionBlocked || aviaCookieRefused || document.cookie.match(/aviaCookieConsent/) )
+					{
+						if( html.className.indexOf('av-cookies-user-silent-accept') >= 0 )
+						{
+							 html.className = html.className.replace(/\bav-cookies-user-silent-accept\b/g, '');
+						}
+					}
+				}
+
+				avia_cookie_check_sessionStorage();
+
+			</script>
+			
+	<!-- This site is optimized with the Yoast SEO plugin v27.1.1 - https://yoast.com/product/yoast-seo-wordpress/ -->
+	<title>Seite wurde nicht gefunden. | Ikarus Festival 2026</title>
+	<meta property="og:locale" content="de_DE" />
+	<meta property="og:title" content="Seite wurde nicht gefunden. | Ikarus Festival 2026" />
+	<meta property="og:site_name" content="Ikarus Festival 2026" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.ikarus-festival.de/#website","url":"https://www.ikarus-festival.de/","name":"Ikarus Festival 2026","description":"","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://www.ikarus-festival.de/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"de"}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel="alternate" type="application/rss+xml" title="Ikarus Festival 2026 &raquo; Feed" href="https://www.ikarus-festival.de/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Ikarus Festival 2026 &raquo; Kommentar-Feed" href="https://www.ikarus-festival.de/comments/feed/" />
+<style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<link rel='stylesheet' id='sbi_styles-css' href='https://www.ikarus-festival.de/wp-content/plugins/instagram-feed/css/sbi-styles.min.css?ver=6.10.0' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-block-library-css' href='https://www.ikarus-festival.de/wp-includes/css/dist/block-library/style.min.css?ver=6.9.1' type='text/css' media='all' />
+
+<style id='global-styles-inline-css' type='text/css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--color--metallic-red: #b02b2c;--wp--preset--color--maximum-yellow-red: #edae44;--wp--preset--color--yellow-sun: #eeee22;--wp--preset--color--palm-leaf: #83a846;--wp--preset--color--aero: #7bb0e7;--wp--preset--color--old-lavender: #745f7e;--wp--preset--color--steel-teal: #5f8789;--wp--preset--color--raspberry-pink: #d65799;--wp--preset--color--medium-turquoise: #4ecac2;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 1rem;--wp--preset--font-size--medium: 1.125rem;--wp--preset--font-size--large: 1.75rem;--wp--preset--font-size--x-large: clamp(1.75rem, 3vw, 2.25rem);--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:root { --wp--style--global--content-size: 800px;--wp--style--global--wide-size: 1130px; }:where(body) { margin: 0; }.wp-site-blocks > .alignleft { float: left; margin-right: 2em; }.wp-site-blocks > .alignright { float: right; margin-left: 2em; }.wp-site-blocks > .aligncenter { justify-content: center; margin-left: auto; margin-right: auto; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}.is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}a:where(:not(.wp-element-button)){text-decoration: underline;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-metallic-red-color{color: var(--wp--preset--color--metallic-red) !important;}.has-maximum-yellow-red-color{color: var(--wp--preset--color--maximum-yellow-red) !important;}.has-yellow-sun-color{color: var(--wp--preset--color--yellow-sun) !important;}.has-palm-leaf-color{color: var(--wp--preset--color--palm-leaf) !important;}.has-aero-color{color: var(--wp--preset--color--aero) !important;}.has-old-lavender-color{color: var(--wp--preset--color--old-lavender) !important;}.has-steel-teal-color{color: var(--wp--preset--color--steel-teal) !important;}.has-raspberry-pink-color{color: var(--wp--preset--color--raspberry-pink) !important;}.has-medium-turquoise-color{color: var(--wp--preset--color--medium-turquoise) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-metallic-red-background-color{background-color: var(--wp--preset--color--metallic-red) !important;}.has-maximum-yellow-red-background-color{background-color: var(--wp--preset--color--maximum-yellow-red) !important;}.has-yellow-sun-background-color{background-color: var(--wp--preset--color--yellow-sun) !important;}.has-palm-leaf-background-color{background-color: var(--wp--preset--color--palm-leaf) !important;}.has-aero-background-color{background-color: var(--wp--preset--color--aero) !important;}.has-old-lavender-background-color{background-color: var(--wp--preset--color--old-lavender) !important;}.has-steel-teal-background-color{background-color: var(--wp--preset--color--steel-teal) !important;}.has-raspberry-pink-background-color{background-color: var(--wp--preset--color--raspberry-pink) !important;}.has-medium-turquoise-background-color{background-color: var(--wp--preset--color--medium-turquoise) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-metallic-red-border-color{border-color: var(--wp--preset--color--metallic-red) !important;}.has-maximum-yellow-red-border-color{border-color: var(--wp--preset--color--maximum-yellow-red) !important;}.has-yellow-sun-border-color{border-color: var(--wp--preset--color--yellow-sun) !important;}.has-palm-leaf-border-color{border-color: var(--wp--preset--color--palm-leaf) !important;}.has-aero-border-color{border-color: var(--wp--preset--color--aero) !important;}.has-old-lavender-border-color{border-color: var(--wp--preset--color--old-lavender) !important;}.has-steel-teal-border-color{border-color: var(--wp--preset--color--steel-teal) !important;}.has-raspberry-pink-border-color{border-color: var(--wp--preset--color--raspberry-pink) !important;}.has-medium-turquoise-border-color{border-color: var(--wp--preset--color--medium-turquoise) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link rel='stylesheet' id='contact-form-7-css' href='https://www.ikarus-festival.de/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.1.5' type='text/css' media='all' />
+<link rel='stylesheet' id='wpml-legacy-dropdown-0-css' href='https://www.ikarus-festival.de/wp-content/plugins/sitepress-multilingual-cms/templates/language-switchers/legacy-dropdown/style.min.css?ver=1' type='text/css' media='all' />
+<style id='wpml-legacy-dropdown-0-inline-css' type='text/css'>
+.wpml-ls-statics-shortcode_actions, .wpml-ls-statics-shortcode_actions .wpml-ls-sub-menu, .wpml-ls-statics-shortcode_actions a {border-color:#EEEEEE;}.wpml-ls-statics-shortcode_actions a, .wpml-ls-statics-shortcode_actions .wpml-ls-sub-menu a, .wpml-ls-statics-shortcode_actions .wpml-ls-sub-menu a:link, .wpml-ls-statics-shortcode_actions li:not(.wpml-ls-current-language) .wpml-ls-link, .wpml-ls-statics-shortcode_actions li:not(.wpml-ls-current-language) .wpml-ls-link:link {color:#444444;background-color:#ffffff;}.wpml-ls-statics-shortcode_actions .wpml-ls-sub-menu a:hover,.wpml-ls-statics-shortcode_actions .wpml-ls-sub-menu a:focus, .wpml-ls-statics-shortcode_actions .wpml-ls-sub-menu a:link:hover, .wpml-ls-statics-shortcode_actions .wpml-ls-sub-menu a:link:focus {color:#000000;background-color:#eeeeee;}.wpml-ls-statics-shortcode_actions .wpml-ls-current-language > a {color:#444444;background-color:#ffffff;}.wpml-ls-statics-shortcode_actions .wpml-ls-current-language:hover>a, .wpml-ls-statics-shortcode_actions .wpml-ls-current-language>a:focus {color:#000000;background-color:#eeeeee;}
+#lang_sel img, #lang_sel_list img, #lang_sel_footer img { display: inline; }
+/*# sourceURL=wpml-legacy-dropdown-0-inline-css */
+</style>
+<link rel='stylesheet' id='avia-merged-styles-css' href='https://www.ikarus-festival.de/wp-content/uploads/dynamic_avia/avia-merged-styles-24ddd7448c689d68711baef95b77937f.css' type='text/css' media='all' />
+<script type="text/javascript" src="https://www.ikarus-festival.de/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script type="text/javascript" src="https://www.ikarus-festival.de/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<script type="text/javascript" src="https://www.ikarus-festival.de/wp-content/plugins/sitepress-multilingual-cms/templates/language-switchers/legacy-dropdown/script.min.js?ver=1" id="wpml-legacy-dropdown-0-js"></script>
+<script type="text/javascript" src="https://www.ikarus-festival.de/wp-content/uploads/dynamic_avia/avia-head-scripts-7ffc5454f79ce004d88692cd00543400.js" id="avia-head-scripts-js"></script>
+<link rel="https://api.w.org/" href="https://www.ikarus-festival.de/wp-json/" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.ikarus-festival.de/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.9.1" />
+<meta name="generator" content="WPML ver:4.8.6 stt:3;" />
+    
+<meta name="facebook-domain-verification" content="4n84x2ggdahzc5elpa6auoq7blzjtq" />
+      
+<script language="JavaScript" type="text/javascript">
+    var tp_rtrgt_gdpr = '-1';
+    var tp_rtrgt_gdpr_consent = '';
+    var tp_rtrgt_random = Math.random() * 10000000000000000;
+    var tp_rtrgt_url = 'http'+(('https:'==document.location.protocol)?'s':'')+'://ad.ad-srv.net/retarget?a=48170&version=1';
+    tp_rtrgt_url += '&gdpr=' + tp_rtrgt_gdpr;
+    tp_rtrgt_url += '&gdpr_consent=' + tp_rtrgt_gdpr_consent;
+    document.write('<div id="tp_rtrgt_div_' + tp_rtrgt_random + '" style="position:absolute; visibility:hidden; left:0px; top:0px; width:1px; height:1px; border:0"><iframe id="tp_rtrgt_iframe_' + tp_rtrgt_random + '" name="tp_rtrgt_iframe_' + tp_rtrgt_random + '" src="' + tp_rtrgt_url + '" scrolling="no" width="1" height="1"></iframe></div>');
+</script>
+	
+  <!--  Hotjar Tracking Code for https://www.ikarus-festival.de/ -->
+<script>
+    (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:3721399,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+</script>
+
+      
+<script>
+        !function (w, d, t) {
+          w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++
+)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=i+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+        
+          ttq.load('C85411VQ6F4IGJFVKC30');
+          ttq.page();
+        }(window, document, 'ttq');
+    </script>    
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11154961487"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-11154961487');
+</script>
+
+      
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TK4VLJZM');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TK4VLJZM" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+  <script type="text/javascript" src=https://vivenu.com/web/deliver/js/v1/embed.js></script>
+  
+<link rel="icon" href="/wp-content/uploads/favicon.png" type="image/png">
+<!--[if lt IE 9]><script src="https://www.ikarus-festival.de/wp-content/themes/enfold/js/html5shiv.js"></script><![endif]--><link rel="profile" href="https://gmpg.org/xfn/11" />
+<link rel="alternate" type="application/rss+xml" title="Ikarus Festival 2026 RSS2 Feed" href="https://www.ikarus-festival.de/feed/" />
+<link rel="pingback" href="https://www.ikarus-festival.de/xmlrpc.php" />
+
+<!-- Meta Pixel Code -->
+<script type='text/javascript'>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+</script>
+<!-- End Meta Pixel Code -->
+<script type='text/javascript'>var url = window.location.origin + '?ob=open-bridge';
+            fbq('set', 'openbridge', '590566274430555', url);
+fbq('init', '590566274430555', {}, {
+    "agent": "wordpress-6.9.1-4.1.5"
+})</script><script type='text/javascript'>
+    fbq('track', 'PageView', []);
+  </script>
+<!-- To speed up the rendering and to display the site as fast as possible to the user we include some styles and scripts for above the fold content inline -->
+<script type="text/javascript">'use strict';var avia_is_mobile=!1;if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)&&'ontouchstart' in document.documentElement){avia_is_mobile=!0;document.documentElement.className+=' avia_mobile '}
+else{document.documentElement.className+=' avia_desktop '};document.documentElement.className+=' js_active ';(function(){var e=['-webkit-','-moz-','-ms-',''],n='',o=!1,a=!1;for(var t in e){if(e[t]+'transform' in document.documentElement.style){o=!0;n=e[t]+'transform'};if(e[t]+'perspective' in document.documentElement.style){a=!0}};if(o){document.documentElement.className+=' avia_transform '};if(a){document.documentElement.className+=' avia_transform3d '};if(typeof document.getElementsByClassName=='function'&&typeof document.documentElement.getBoundingClientRect=='function'&&avia_is_mobile==!1){if(n&&window.innerHeight>0){setTimeout(function(){var e=0,o={},a=0,t=document.getElementsByClassName('av-parallax'),i=window.pageYOffset||document.documentElement.scrollTop;for(e=0;e<t.length;e++){t[e].style.top='0px';o=t[e].getBoundingClientRect();a=Math.ceil((window.innerHeight+i-o.top)*0.3);t[e].style[n]='translate(0px, '+a+'px)';t[e].style.top='auto';t[e].className+=' enabled-parallax '}},50)}}})();</script><style type="text/css">
+		@font-face {font-family: 'entypo-fontello-enfold'; font-weight: normal; font-style: normal; font-display: auto;
+		src: url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello-enfold/entypo-fontello-enfold.woff2') format('woff2'),
+		url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello-enfold/entypo-fontello-enfold.woff') format('woff'),
+		url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello-enfold/entypo-fontello-enfold.ttf') format('truetype'),
+		url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello-enfold/entypo-fontello-enfold.svg#entypo-fontello-enfold') format('svg'),
+		url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello-enfold/entypo-fontello-enfold.eot'),
+		url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello-enfold/entypo-fontello-enfold.eot?#iefix') format('embedded-opentype');
+		}
+
+		#top .avia-font-entypo-fontello-enfold, body .avia-font-entypo-fontello-enfold, html body [data-av_iconfont='entypo-fontello-enfold']:before{ font-family: 'entypo-fontello-enfold'; }
+		
+		@font-face {font-family: 'entypo-fontello'; font-weight: normal; font-style: normal; font-display: auto;
+		src: url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello/entypo-fontello.woff2') format('woff2'),
+		url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello/entypo-fontello.woff') format('woff'),
+		url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello/entypo-fontello.ttf') format('truetype'),
+		url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello/entypo-fontello.svg#entypo-fontello') format('svg'),
+		url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello/entypo-fontello.eot'),
+		url('https://www.ikarus-festival.de/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/assets/fonts/entypo-fontello/entypo-fontello.eot?#iefix') format('embedded-opentype');
+		}
+
+		#top .avia-font-entypo-fontello, body .avia-font-entypo-fontello, html body [data-av_iconfont='entypo-fontello']:before{ font-family: 'entypo-fontello'; }
+		
+		@font-face {font-family: 'fontello'; font-weight: normal; font-style: normal; font-display: auto;
+		src: url('https://www.ikarus-festival.de/wp-content/uploads/avia_fonts/fontello/fontello.woff2') format('woff2'),
+		url('https://www.ikarus-festival.de/wp-content/uploads/avia_fonts/fontello/fontello.woff') format('woff'),
+		url('https://www.ikarus-festival.de/wp-content/uploads/avia_fonts/fontello/fontello.ttf') format('truetype'),
+		url('https://www.ikarus-festival.de/wp-content/uploads/avia_fonts/fontello/fontello.svg#fontello') format('svg'),
+		url('https://www.ikarus-festival.de/wp-content/uploads/avia_fonts/fontello/fontello.eot'),
+		url('https://www.ikarus-festival.de/wp-content/uploads/avia_fonts/fontello/fontello.eot?#iefix') format('embedded-opentype');
+		}
+
+		#top .avia-font-fontello, body .avia-font-fontello, html body [data-av_iconfont='fontello']:before{ font-family: 'fontello'; }
+		</style>
+<link rel='stylesheet' id='wpml-legacy-horizontal-list-0-css' href='https://www.ikarus-festival.de/wp-content/plugins/sitepress-multilingual-cms/templates/language-switchers/legacy-list-horizontal/style.min.css?ver=1' type='text/css' media='all' />
+
+</head>
+
+<body id="top" class="error404 wp-theme-enfold wp-child-theme-enfold-child stretched rtl_columns av-curtain-numeric ikarus-headline-custom ikarus-headline  avia-responsive-images-support" itemscope="itemscope" itemtype="https://schema.org/WebPage" >
+
+	
+<!-- Meta Pixel Code -->
+<noscript>
+<img height="1" width="1" style="display:none" alt="fbpx"
+src="https://www.facebook.com/tr?id=590566274430555&ev=PageView&noscript=1" />
+</noscript>
+<!-- End Meta Pixel Code -->
+
+	<div id='wrap_all'>
+
+	
+<header id='header' class='all_colors header_color light_bg_color  av_header_top av_logo_left av_main_nav_header av_menu_right av_slim av_header_sticky av_header_shrinking_disabled av_header_stretch av_mobile_menu_tablet av_header_searchicon_disabled av_header_unstick_top_disabled av_bottom_nav_disabled  av_alternate_logo_active av_header_border_disabled'  role="banner" itemscope="itemscope" itemtype="https://schema.org/WPHeader" >
+
+		<div  id='header_main' class='container_wrap container_wrap_logo'>
+
+        <div class='container av-logo-container'><div class='inner-container'><span class='logo avia-svg-logo'><a href='https://www.ikarus-festival.de/' class='av-contains-svg' aria-label='Ikarus Festival 2026' ><svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="450.336px" height="261.996px" viewBox="0 0 450.336 261.996" enable-background="new 0 0 450.336 261.996"
+	 xml:space="preserve">
+<g preserveAspectRatio="xMinYMid meet">
+	<path fill="#292927" d="M0,239.078h7.476V143.99H0V239.078z M14.588,239.078h7.476V143.99h-7.476V239.078z"/>
+	<path fill="#292927" d="M66.5,168.335c-1.456,0-2.66-0.463-3.598-1.399c-0.938-0.924-1.414-2.114-1.414-3.558
+		c0-1.44,0.476-2.616,1.414-3.556c0.938-0.924,2.142-1.399,3.598-1.399s2.646,0.463,3.598,1.399
+		c0.938,0.925,1.414,2.114,1.414,3.556c0,1.442-0.476,2.619-1.414,3.558C69.16,167.873,67.956,168.335,66.5,168.335 M46.536,207.128
+		l18.046-16.478c-3.556-0.168-6.846-0.952-9.898-2.338c-3.052-1.399-5.712-3.276-7.994-5.644L46.536,207.128z M81.774,184.813
+		l43.988,54.39h-9.884l-39.55-49.447l-29.792,27.511v21.812H39.06v-95.213h7.476v20.482c0,2.548,0.49,4.955,1.456,7.251
+		c0.966,2.296,2.296,4.298,3.99,6.032c1.694,1.736,3.682,3.096,5.964,4.074c2.282,0.98,4.732,1.457,7.35,1.457
+		c4.48,0,8.498-1.441,12.04-4.326l37.786-34.972h11.158l-43.61,40.054L81.774,184.813z"/>
+	<path fill="#292927" d="M167.72,192.555l-20.034-40.068l-19.908,40.068H167.72z M177.478,211.945l-5.964-11.914H123.97
+		l-5.964,11.914H177.478z M96.096,239.078l47.418-95.088h8.372l47.67,95.088h-8.372l-9.884-19.656h-66.934l-9.884,19.656H96.096z"/>
+	<path fill="#292927" d="M214.634,151.48v60.982h36.583h1.398c0.842,0,1.862-0.125,3.053-0.377
+		c3.725-0.504,7.194-1.651,10.416-3.416c3.221-1.777,6.006-3.989,8.387-6.649c2.365-2.66,4.242-5.698,5.586-9.128
+		c1.357-3.432,2.029-7.084,2.029-10.962c0-4.146-0.813-8.064-2.422-11.788c-1.609-3.725-3.81-6.944-6.607-9.702
+		c-2.801-2.744-6.063-4.928-9.787-6.524c-3.723-1.608-7.699-2.406-11.941-2.406h-36.694L214.634,151.48L214.634,151.48z
+		 M281.051,239.078l-16.506-21.421c-2.801,1.106-5.418,1.778-7.869,2.03c-0.854,0.084-1.721,0.154-2.604,0.195
+		c-0.896,0.043-1.807,0.057-2.729,0.057h-36.694v19.139h-7.476V143.99h44.241c5.319,0,10.291,0.994,14.896,2.982
+		c4.604,1.986,8.637,4.689,12.108,8.119c3.474,3.416,6.188,7.435,8.176,12.041c1.988,4.604,2.982,9.533,2.982,14.769
+		c0,6.847-1.652,13.118-4.955,18.83c-3.305,5.712-7.701,10.248-13.203,13.636l19.308,24.725h-9.675v-0.014H281.051z"/>
+	<path fill="#292927" d="M339.891,202.817c1.441,0,2.617,0.49,3.557,1.456c0.926,0.979,1.398,2.143,1.398,3.486
+		c0,1.441-0.461,2.658-1.398,3.682c-0.924,1.008-2.113,1.526-3.557,1.526c-1.441,0-2.645-0.505-3.611-1.526
+		c-0.98-1.021-1.455-2.24-1.455-3.682c0-1.346,0.49-2.521,1.455-3.486C337.247,203.307,338.45,202.817,339.891,202.817
+		 M339.823,232.609c3.641,0,7.057-0.699,10.232-2.1c3.18-1.4,5.949-3.276,8.316-5.656c2.379-2.366,4.256-5.152,5.654-8.33
+		c1.4-3.178,2.102-6.538,2.102-10.107v-25.019h-52.486v25.032c0,3.556,0.674,6.93,2.029,10.107c1.357,3.178,3.221,5.949,5.586,8.329
+		c2.381,2.38,5.152,4.257,8.33,5.656C332.764,231.91,336.18,232.609,339.823,232.609 M373.602,143.99v62.37
+		c0,4.647-0.881,9.017-2.658,13.118s-4.188,7.672-7.225,10.71c-3.039,3.038-6.607,5.446-10.711,7.224
+		c-4.102,1.778-8.469,2.66-13.117,2.66c-4.646,0-9.016-0.882-13.117-2.66c-4.104-1.776-7.674-4.186-10.709-7.224
+		c-3.039-3.038-5.445-6.608-7.227-10.71c-1.777-4.104-2.66-8.471-2.66-13.118v-62.37h7.479v29.917h52.484V143.99H373.602
+		L373.602,143.99z"/>
+	<path fill="#292927" d="M422.168,239.707c-2.197,0-4.313-0.125-6.342-0.377c-4.732-0.504-8.75-1.793-12.039-3.863
+		c-3.291-2.072-5.979-4.229-8.051-6.469c-2.072-2.24-3.598-4.285-4.564-6.146c-0.979-1.862-1.498-2.87-1.582-3.038l6.975-3.038
+		c0.084,0.168,0.504,0.979,1.271,2.408c0.756,1.441,1.947,3.038,3.557,4.814c1.609,1.778,3.654,3.444,6.146,5.014
+		c2.49,1.566,5.516,2.562,9.07,2.98c3.039,0.336,6.133,0.252,9.256-0.252c3.121-0.504,5.936-1.441,8.428-2.785
+		c2.492-1.345,4.535-3.149,6.146-5.391c1.609-2.24,2.406-4.928,2.406-8.05c0-3.726-0.881-6.734-2.66-9.06
+		c-1.775-2.324-4.018-4.242-6.719-5.768c-2.703-1.525-5.6-2.814-8.68-3.864s-5.895-2.17-8.43-3.36
+		c-5.234-2.196-9.506-4.366-12.809-6.522c-3.291-2.155-5.838-4.368-7.602-6.649c-1.779-2.282-2.955-4.621-3.559-7.043
+		c-0.588-2.408-0.799-4.955-0.631-7.67c0.084-2.871,0.785-5.685,2.102-8.429c1.314-2.744,3.191-5.194,5.654-7.351
+		c2.451-2.155,5.531-3.863,9.215-5.139c3.682-1.272,7.979-1.861,12.895-1.777c4.143,0.168,7.84,0.994,11.059,2.479
+		c3.221,1.484,5.922,3.248,8.121,5.32c2.197,2.07,3.961,4.24,5.264,6.523c1.316,2.281,2.211,4.271,2.73,5.963l-7.098,2.156
+		l3.482-1.134l-3.555,1.134c-0.084-0.168-0.477-1.008-1.146-2.533c-0.674-1.525-1.777-3.191-3.307-5.013
+		c-1.523-1.819-3.584-3.458-6.174-4.942c-2.59-1.482-5.838-2.295-9.729-2.478c-4.158-0.084-7.631,0.406-10.432,1.456
+		c-2.799,1.05-5.053,2.408-6.748,4.061c-1.691,1.651-2.896,3.373-3.625,5.193c-0.715,1.82-1.121,3.444-1.205,4.887
+		c-0.084,1.357-0.068,2.785,0.059,4.312c0.125,1.524,0.826,3.122,2.1,4.815s3.291,3.515,6.049,5.445
+		c2.758,1.946,6.734,3.977,11.914,6.09c3.654,1.526,7.322,2.996,11.018,4.438c3.695,1.44,7.027,3.164,9.996,5.192
+		c2.969,2.03,5.375,4.564,7.195,7.604s2.744,6.972,2.744,11.788c0,3.892-0.84,7.308-2.52,10.274
+		c-1.682,2.955-3.852,5.446-6.523,7.478c-2.674,2.028-5.686,3.569-9.018,4.62C428.905,239.063,425.543,239.623,422.168,239.707"/>
+	<path fill="#292927" d="M47.628,255.807v-0.028c0-3.374-1.498-5.04-3.752-5.04s-3.752,1.666-3.752,5.04v0.028
+		c0,3.346,1.498,5.04,3.752,5.04S47.628,259.153,47.628,255.807 M38.696,255.807v-0.028c0-3.794,1.918-6.174,5.194-6.174
+		c3.276,0,5.194,2.38,5.194,6.174v0.028c0,3.794-1.918,6.174-5.194,6.174C40.614,261.981,38.696,259.615,38.696,255.807"/>
+	<path fill="#292927" d="M65.772,255.849h2.884c2.058,0,2.898-1.008,2.898-2.422s-0.854-2.424-2.898-2.424h-2.884V255.849z
+		 M65.772,256.983v4.746h-1.414v-11.872H68.6c3.052,0,4.424,1.441,4.424,3.557c0,2.113-1.372,3.557-4.424,3.557h-2.828V256.983z"/>
+	<polygon fill="#292927" points="88.074,249.857 88.074,261.729 95.83,261.729 95.83,260.553 89.488,260.553 89.488,256.212 
+		95.06,256.212 95.06,255.065 89.488,255.065 89.488,251.033 95.83,251.033 95.83,249.857 	"/>
+	<polygon fill="#292927" points="119.098,249.857 119.098,259.741 113.036,249.857 111.412,249.857 111.412,261.729 
+		112.728,261.729 112.728,251.789 118.804,261.729 120.4,261.729 120.4,249.857 	"/>
+	<path fill="#292927" d="M157.122,251.285l2.002,5.67h-4.018L157.122,251.285z M156.366,249.857l-4.382,11.872h1.414l1.288-3.599
+		h4.872l1.288,3.599h1.484l-4.396-11.872H156.366z"/>
+	<rect x="177.114" y="249.857" fill="#292927" width="1.414" height="11.872"/>
+	<path fill="#292927" d="M195.706,255.443h3.052c1.708,0,2.492-0.867,2.492-2.227c0-1.357-0.784-2.227-2.492-2.227h-3.052V255.443z
+		 M198.492,256.578h-2.786v5.151h-1.414v-11.872h4.41c2.786,0,4.018,1.471,4.018,3.43c0,1.766-1.106,2.772-2.786,3.123l3.234,5.319
+		h-1.596L198.492,256.578z"/>
+	<polygon fill="#292927" points="235.102,249.857 235.102,261.729 236.516,261.729 236.516,256.494 241.766,256.494 
+		241.766,255.332 236.516,255.332 236.516,251.033 242.605,251.033 242.605,249.857 	"/>
+	<polygon fill="#292927" points="257.754,249.857 257.754,261.729 265.497,261.729 265.497,260.553 259.154,260.553 
+		259.154,256.212 264.741,256.212 264.741,255.065 259.154,255.065 259.154,251.033 265.497,251.033 265.497,249.857 	"/>
+	<path fill="#292927" d="M280.07,258.257l1.304-0.309c0.391,2.086,1.68,2.87,3.483,2.87c1.556,0,2.813-0.784,2.813-2.071
+		c0-1.135-0.614-1.777-2.491-2.269l-1.316-0.351c-2.184-0.588-3.135-1.625-3.135-3.317c0-1.75,1.455-3.192,4.172-3.192
+		c2.228,0,3.61,1.135,4.074,3.234l-1.274,0.294c-0.351-1.554-1.302-2.396-2.8-2.396c-1.834,0-2.743,0.785-2.743,1.934
+		c0,1.063,0.489,1.68,2.059,2.086l1.344,0.35c2.631,0.7,3.625,1.904,3.625,3.516c0,2.058-1.932,3.359-4.311,3.359
+		C282.157,261.981,280.477,260.75,280.07,258.257"/>
+	<polygon fill="#292927" points="303.098,249.857 303.098,251.033 306.85,251.033 306.85,261.729 308.25,261.729 308.25,251.033 
+		312.002,251.033 312.002,249.857 	"/>
+	<rect x="326.817" y="249.857" fill="#292927" width="1.398" height="11.872"/>
+	<polygon fill="#292927" points="351.342,249.857 347.926,260.246 344.499,249.857 343,249.857 347.045,261.729 348.682,261.729 
+		352.715,249.857 	"/>
+	<path fill="#292927" d="M370.581,251.285l2.002,5.67h-4.018L370.581,251.285z M369.825,249.857l-4.367,11.872h1.414l1.287-3.599
+		h4.871l1.289,3.599h1.498l-4.396-11.872H369.825z"/>
+	<polygon fill="#292927" points="390.514,249.857 390.514,261.729 398.018,261.729 398.018,260.553 391.917,260.553 
+		391.917,249.857 	"/>
+	<path fill="#292927" d="M151.858,125.356c-0.938,0.924-2.142,1.399-3.598,1.399c-1.456,0-2.66-0.462-3.598-1.399
+		c-0.938-0.925-1.414-2.114-1.414-3.542c0-1.442,0.476-2.618,1.414-3.557c0.938-0.924,2.142-1.399,3.598-1.399
+		c1.456,0,2.66,0.462,3.598,1.399c0.938,0.924,1.414,2.114,1.414,3.557C153.272,123.241,152.796,124.431,151.858,125.356
+		 M148.176,109.354c-6.832,0-12.376,5.544-12.376,12.376s5.544,12.376,12.376,12.376s12.376-5.544,12.376-12.376
+		S155.008,109.354,148.176,109.354"/>
+	<path fill="#292927" d="M108.192,16.646l5.838-5.11c0,0,54.67,13.481,106.792,15.302l-0.238,1.582
+		C220.57,28.433,142.814,22.847,108.192,16.646"/>
+	<polygon fill="#292927" points="124.768,30.688 219.534,30.688 219.17,32.143 128.24,35.784 	"/>
+	<polygon fill="#292927" points="218.988,35.42 141.176,45.807 145.362,49.994 219.17,36.33 	"/>
+	<polygon fill="#292927" points="156.478,58.925 160.132,61.851 218.442,40.88 219.898,39.242 	"/>
+	<polygon fill="#292927" points="218.624,42.896 168.14,69.314 170.52,71.862 218.624,43.805 	"/>
+	<polygon fill="#292927" points="211.456,47.866 197.358,117.852 204.904,108.612 212.912,46.9 	"/>
+	<polygon fill="#292927" points="210.49,101.807 215.096,96.711 223.37,0 	"/>
+	<polygon fill="#292927" points="222.026,53.466 219.478,92.343 223.3,87.906 222.642,60.997 	"/>
+	<path fill="#292927" d="M340.969,16.646l-5.838-5.11c0,0-54.668,13.481-106.791,15.302l0.238,1.582
+		C228.592,28.433,306.346,22.847,340.969,16.646"/>
+	<polygon fill="#292927" points="324.379,30.688 229.613,30.688 229.993,32.143 320.92,35.784 	"/>
+	<polygon fill="#292927" points="230.174,35.42 307.987,45.807 303.788,49.994 229.979,36.33 	"/>
+	<polygon fill="#292927" points="292.67,58.925 289.029,61.851 230.721,40.88 229.25,39.242 	"/>
+	<polygon fill="#292927" points="230.54,42.896 281.008,69.314 278.643,71.862 230.54,43.805 	"/>
+	<polygon fill="#292927" points="237.708,47.866 251.792,117.852 244.258,108.612 236.236,46.9 	"/>
+	<polygon fill="#292927" points="234.053,96.711 238.672,101.822 225.793,0 	"/>
+	<polygon fill="#292927" points="227.137,53.466 229.684,92.343 225.848,87.906 226.52,60.997 	"/>
+</g>
+</svg></a></span><nav class='main_menu' data-selectname='Wähle eine Seite'  role="navigation" itemscope="itemscope" itemtype="https://schema.org/SiteNavigationElement" ><div class="avia-menu av-main-nav-wrap av_menu_icon_beside"><ul id="avia-menu" class="menu av-main-nav"><li role="menuitem" id="menu-item-5673" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-top-level menu-item-top-level-1"><a href="https://www.ikarus-festival.de/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Home</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li role="menuitem" id="menu-item-433" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-top-level menu-item-top-level-2"><a href="https://www.ikarus-festival.de/tickets/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Tickets</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a>
+
+
+<ul class="sub-menu">
+	<li role="menuitem" id="menu-item-9165" class="menu-item menu-item-type-custom menu-item-object-custom"><a href="https://www.travelcircus.de/ikarus-festival-int?partner-referral=90856ff2a09b5728&amp;utm_campaign=ikarus-festival-int&amp;utm_source=Ikarus%20Festival&amp;utm_medium=travelcircus-affiliate" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Hotel+Ticket</span></a></li>
+	<li role="menuitem" id="menu-item-6650" class="menu-item menu-item-type-custom menu-item-object-custom"><a target="_blank" href="https://ikarus.fiesta.club" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Botschafter</span></a></li>
+</ul>
+</li>
+<li role="menuitem" id="menu-item-9392" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-top-level menu-item-top-level-3"><a href="/#artists" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Line-Up</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li role="menuitem" id="menu-item-8829" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-top-level menu-item-top-level-4"><a target="_blank" href="https://ikarus.stoffmotion.de" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Merch-Shop</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li role="menuitem" id="menu-item-4497" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-top-level menu-item-top-level-5"><a href="https://www.ikarus-festival.de/camping/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Camping</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a>
+
+
+<ul class="sub-menu">
+	<li role="menuitem" id="menu-item-7731" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="https://www.ikarus-festival.de/comfort-camping/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Comfort Camping</span></a></li>
+	<li role="menuitem" id="menu-item-4498" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="https://www.ikarus-festival.de/camping-faq/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">FAQ</span></a></li>
+</ul>
+</li>
+<li role="menuitem" id="menu-item-4359" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-top-level menu-item-top-level-6"><a href="https://www.ikarus-festival.de/anreise/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Anreise</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a>
+
+
+<ul class="sub-menu">
+	<li role="menuitem" id="menu-item-6248" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="https://www.ikarus-festival.de/partybusse/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Partybusse</span></a></li>
+</ul>
+</li>
+<li role="menuitem" id="menu-item-438" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-top-level menu-item-top-level-7"><a href="https://www.ikarus-festival.de/historie/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Historie</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a>
+
+
+<ul class="sub-menu">
+	<li role="menuitem" id="menu-item-5405" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="https://www.ikarus-festival.de/historie/ikarus-festival-2023/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">2023</span></a></li>
+	<li role="menuitem" id="menu-item-3949" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="https://www.ikarus-festival.de/historie/ikarus-festival-2022/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">2022</span></a></li>
+	<li role="menuitem" id="menu-item-610" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="https://www.ikarus-festival.de/historie/ikarus-festival-2019/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">2019</span></a></li>
+	<li role="menuitem" id="menu-item-612" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="https://www.ikarus-festival.de/historie/ikarus-festival-2018/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">2018</span></a></li>
+	<li role="menuitem" id="menu-item-611" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="https://www.ikarus-festival.de/historie/ikarus-festival-2017/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">2017</span></a></li>
+	<li role="menuitem" id="menu-item-680" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="https://www.ikarus-festival.de/historie/ikarus-festival-2016/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">2016</span></a></li>
+	<li role="menuitem" id="menu-item-679" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="https://www.ikarus-festival.de/historie/ikarus-festival-2015/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">2015</span></a></li>
+</ul>
+</li>
+<li role="menuitem" id="menu-item-7100" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-top-level menu-item-top-level-8"><a target="_blank" href="https://rt1.imsueden.de/ikarus-festivalradio/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Festival Radio</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li role="menuitem" id="menu-item-4496" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-top-level menu-item-top-level-9"><a href="https://www.ikarus-festival.de/faq/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">FAQ</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li class='av-language-switch-item language_de avia_current_lang'><a href="https://www.ikarus-festival.de/"><span class='language_flag'><img title='Deutsch' src='https://www.ikarus-festival.de/wp-content/plugins/sitepress-multilingual-cms/res/flags/de.png' /></span></a></li><li class="av-burger-menu-main menu-item-avia-special " role="menuitem">
+	        			<a href="#" aria-label="Menü" aria-hidden="false">
+							<span class="av-hamburger av-hamburger--spin av-js-hamburger">
+								<span class="av-hamburger-box">
+						          <span class="av-hamburger-inner"></span>
+						          <strong>Menü</strong>
+								</span>
+							</span>
+							<span class="avia_hidden_link_text">Menü</span>
+						</a>
+	        		   </li></ul></div><a href="https://www.paulaner.de/" target="_blank" id="paulaner"><img src="/wp-content/uploads/paulaner-logo.png" alt="Paulaner" /></a><ul class='noLightbox social_bookmarks icon_count_4'><li class='social_bookmarks_facebook av-social-link-facebook social_icon_1 avia_social_iconfont'><a  target="_blank" aria-label="Link zu Facebook" href='https://www.facebook.com/ikarusfestival/' data-av_icon='' data-av_iconfont='entypo-fontello' title="Link zu Facebook" desc="Link zu Facebook" title='Link zu Facebook'><span class='avia_hidden_link_text'>Link zu Facebook</span></a></li><li class='social_bookmarks_instagram av-social-link-instagram social_icon_2 avia_social_iconfont'><a  target="_blank" aria-label="Link zu Instagram" href='https://www.instagram.com/ikarus.festival/' data-av_icon='' data-av_iconfont='entypo-fontello' title="Link zu Instagram" desc="Link zu Instagram" title='Link zu Instagram'><span class='avia_hidden_link_text'>Link zu Instagram</span></a></li><li class='social_bookmarks_tumblr av-social-link-tumblr social_icon_3 avia_social_iconfont'><a  target="_blank" aria-label="Link zu Tumblr" href='https://www.tiktok.com/@ikarusfestival' data-av_icon='' data-av_iconfont='entypo-fontello' title="Link zu Tumblr" desc="Link zu Tumblr" title='Link zu Tumblr'><span class='avia_hidden_link_text'>Link zu Tumblr</span></a></li><li class='social_bookmarks_youtube av-social-link-youtube social_icon_4 avia_social_iconfont'><a  target="_blank" aria-label="Link zu Youtube" href='https://www.youtube.com/channel/UCeK89m0PIAJKHQ3ICEGvJdA/featured' data-av_icon='' data-av_iconfont='entypo-fontello' title="Link zu Youtube" desc="Link zu Youtube" title='Link zu Youtube'><span class='avia_hidden_link_text'>Link zu Youtube</span></a></li></ul></nav><nav class='sub_menu'  role="navigation" itemscope="itemscope" itemtype="https://schema.org/SiteNavigationElement" ><ul id="avia2-menu" class="menu"><li id="menu-item-6682" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6682"><a href="https://www.ikarus-festival.de/festivaljobs/">Festivaljobs</a></li>
+<li id="menu-item-6683" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6683"><a href="https://www.ikarus-festival.de/festivaljobs/">Volunteers</a></li>
+<li id="menu-item-1307" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1307"><a href="https://www.ikarus-festival.de/newsletter/">Newsletter</a></li>
+<li id="menu-item-516" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-516"><a href="https://www.ikarus-festival.de/partner/">Partner</a></li>
+<li id="menu-item-749" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-749"><a href="https://www.ikarus-festival.de/presse/">Presse</a></li>
+<li id="menu-item-513" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-513"><a href="https://www.ikarus-festival.de/agb/">AGB</a></li>
+<li id="menu-item-515" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-515"><a href="https://www.ikarus-festival.de/impressum/">Impressum</a></li>
+<li id="menu-item-514" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-514"><a href="https://www.ikarus-festival.de/datenschutz/">Datenschutz</a></li>
+</ul></nav></div> </div> 
+		<!-- end container_wrap-->
+		</div>
+		<div class='header_bg'></div>
+
+<!-- end header -->
+</header>
+
+	<div id='main' class='all_colors' data-scroll-offset='88'>
+
+			<div class='container_wrap container_wrap_first main_color fullsize'>
+
+			
+			<div class='container'>
+
+				<main class='template-page content av-content-full alpha units av-main-404'  role="main" itemprop="mainContentOfPage" >
+
+                    <div class="entry entry-content-wrapper clearfix" id='search-fail'>
+                    
+<p class='entry-content'><strong>Es konnte leider nichts gefunden werden</strong><br/>
+
+Entschuldigung, aber der gesuchte Eintrag ist nicht verfügbar. Willst Du eine neue Suche starten?</p>
+
+<search>
+	<form action="https://www.ikarus-festival.de/" id="searchform" method="get" class="av_disable_ajax_search">
+		<div>
+<span class='av_searchform_search avia-svg-icon avia-font-svg_entypo-fontello' data-av_svg_icon='search' data-av_iconset='svg_entypo-fontello'><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="25" height="32" viewBox="0 0 25 32" preserveAspectRatio="xMidYMid meet" aria-labelledby='av-svg-title-1' aria-describedby='av-svg-desc-1' role="graphics-symbol" aria-hidden="true">
+<title id='av-svg-title-1'>Search</title>
+<desc id='av-svg-desc-1'>Search</desc>
+<path d="M24.704 24.704q0.96 1.088 0.192 1.984l-1.472 1.472q-1.152 1.024-2.176 0l-6.080-6.080q-2.368 1.344-4.992 1.344-4.096 0-7.136-3.040t-3.040-7.136 2.88-7.008 6.976-2.912 7.168 3.040 3.072 7.136q0 2.816-1.472 5.184zM3.008 13.248q0 2.816 2.176 4.992t4.992 2.176 4.832-2.016 2.016-4.896q0-2.816-2.176-4.96t-4.992-2.144-4.832 2.016-2.016 4.832z"></path>
+</svg></span>			<input type="submit" value="" id="searchsubmit" class="button" title="Click to start search" />
+			<input type="search" id="s" name="s" value="" aria-label='Suche' placeholder='Suche' required />
+		</div>
+	</form>
+</search>
+
+
+
+<div class='hr_invisible'></div>
+
+<section class="404_recommendation">
+    <p><strong>Um die besten Suchergebnisse zu erhalten, beachte bitte folgende Hinweise:</strong></p>
+    <ul class='borderlist-not'>
+        <li>Überprüfe die Rechtschreibung immer sorgfältig.</li>
+        <li>Versuche es mit einem ähnlichen Suchbegriff: z.B. Tablet anstelle von Laptop.</li>
+        <li>Versuche mehr als einen Suchbegriff zu verwenden.</li>
+    </ul>
+
+    <div class='hr_invisible'></div>
+
+    </section>
+                    </div>
+
+				<!--end content-->
+				</main>
+
+				
+			</div><!--end container-->
+
+		</div><!-- close default .container_wrap element -->
+
+				<div class='container_wrap footer_color' id='footer'>
+
+					<div class='container'>
+
+						<div class='flex_column av_one_half  first el_before_av_one_half'><section id="text-2" class="widget clearfix widget_text"><h3 class="widgettitle">Über Ikarus</h3>			<div class="textwidget"><p>Das Ikarus findet an einem idyllischen und gleichermaßen einzigartigen Ort statt: Ein ehemaliger Militärflugplatz, bestückt mit saftigen Wäldern und dunklen Sheltern. Perfekt für ein drei-tägiges Spektakel, wie Ihr es noch nie erlebt habt. Unzählige nationale und internationale Acts, die auf 8 Bühnen aller Art bis in die frühen Morgenstunden besten elektronischen Sound abliefern.</p>
+</div>
+		<span class="seperator extralight-border"></span></section></div><div class='flex_column av_one_half  el_after_av_one_half el_before_av_one_half '><section id="text-3" class="widget clearfix widget_text"><h3 class="widgettitle">Infos</h3>			<div class="textwidget"><p>– 3 Tage und Nächte<br />
+– elektronisches Camping Festival<br />
+– 150 Künstler<br />
+– 8 individuelle Bühnen<br />
+– Psy-Trance Stage Hosting<br />
+– Street Food Mile<br />
+– Workshops<br />
+– ehem. Militärflugplatz</p>
+</div>
+		<span class="seperator extralight-border"></span></section></div>
+					</div>
+
+				<!-- ####### END FOOTER CONTAINER ####### -->
+				</div>
+
+	
+
+	
+				<footer class='container_wrap socket_color' id='socket'  role="contentinfo" itemscope="itemscope" itemtype="https://schema.org/WPFooter" aria-label="Copyright and company info" >
+                    <div class='container'>
+
+                        <span class='copyright'>© Permanent Entertainment GmbH </span>
+
+                        <nav class='sub_menu_socket'  role="navigation" itemscope="itemscope" itemtype="https://schema.org/SiteNavigationElement" ><div class="avia3-menu"><ul role="menu" class="menu" id="avia3-menu"><li role="menuitem" id="menu-item-6682" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-top-level menu-item-top-level-1"><a href="https://www.ikarus-festival.de/festivaljobs/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Festivaljobs</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li role="menuitem" id="menu-item-6683" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-top-level menu-item-top-level-2"><a href="https://www.ikarus-festival.de/festivaljobs/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Volunteers</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li role="menuitem" id="menu-item-1307" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-top-level menu-item-top-level-3"><a href="https://www.ikarus-festival.de/newsletter/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Newsletter</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li role="menuitem" id="menu-item-516" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-top-level menu-item-top-level-4"><a href="https://www.ikarus-festival.de/partner/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Partner</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li role="menuitem" id="menu-item-749" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-top-level menu-item-top-level-5"><a href="https://www.ikarus-festival.de/presse/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Presse</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li role="menuitem" id="menu-item-513" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-top-level menu-item-top-level-6"><a href="https://www.ikarus-festival.de/agb/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">AGB</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li role="menuitem" id="menu-item-515" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-top-level menu-item-top-level-7"><a href="https://www.ikarus-festival.de/impressum/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Impressum</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+<li role="menuitem" id="menu-item-514" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-top-level menu-item-top-level-8"><a href="https://www.ikarus-festival.de/datenschutz/" itemprop="url" tabindex="0"><span class="avia-bullet"></span><span class="avia-menu-text">Datenschutz</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>
+</ul></div></nav>
+                    </div>
+
+	            <!-- ####### END SOCKET CONTAINER ####### -->
+				</footer>
+
+
+					<!-- end main -->
+		</div>
+
+		<!-- end wrap_all --></div>
+<a href='#top' title='Nach oben scrollen' id='scroll-top-link' class='avia-svg-icon avia-font-svg_entypo-fontello' data-av_svg_icon='up-open' data-av_iconset='svg_entypo-fontello' tabindex='-1' aria-hidden='true'>
+	<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="19" height="32" viewBox="0 0 19 32" preserveAspectRatio="xMidYMid meet" aria-labelledby='av-svg-title-2' aria-describedby='av-svg-desc-2' role="graphics-symbol" aria-hidden="true">
+<title id='av-svg-title-2'>Nach oben scrollen</title>
+<desc id='av-svg-desc-2'>Nach oben scrollen</desc>
+<path d="M18.048 18.24q0.512 0.512 0.512 1.312t-0.512 1.312q-1.216 1.216-2.496 0l-6.272-6.016-6.272 6.016q-1.28 1.216-2.496 0-0.512-0.512-0.512-1.312t0.512-1.312l7.488-7.168q0.512-0.512 1.28-0.512t1.28 0.512z"></path>
+</svg>	<span class="avia_hidden_link_text">Nach oben scrollen</span>
+</a>
+
+<div id="fb-root"></div>
+
+<div class="avia-cookie-consent-wrap" aria-hidden="true"><div class='avia-cookie-consent cookiebar-hidden  avia-cookiemessage-bottom-left'  aria-hidden='true'  data-contents='214a44030d58f5d24ff3a9c1550fda17||v1.0' ><div class="container"><p class='avia_cookie_text'>Diese Seite verwendet Cookies. Durch die weitere Nutzung der Website stimmst Du der Verwendung von Cookies zu.</p><a href='#' class='avia-button avia-color-theme-color-highlight avia-cookie-consent-button avia-cookie-consent-button-1  avia-cookie-close-bar '  title="Cookies erlauben, du kannst die verwendeten Cookies ändern." >Cookies erlauben</a><a href='#' class='avia-button avia-color-theme-color-highlight avia-cookie-consent-button avia-cookie-consent-button-2  avia-cookie-close-bar '  title="Cookies nicht erlauben und die Meldung ausblenden." >Meldung ausblenden</a><a href='#' class='avia-button avia-color-theme-color-highlight avia-cookie-consent-button avia-cookie-consent-button-3 av-extra-cookie-btn  avia-cookie-info-btn ' >Einstellungen</a></div></div><div id='av-consent-extra-info' data-nosnippet class='av-inline-modal main_color avia-hide-popup-close'>
+<style type="text/css" data-created_by="avia_inline_auto" id="style-css-av-av_heading-d3ef1e7a4ac82aae31ce5fc6fbf04837">
+#top .av-special-heading.av-av_heading-d3ef1e7a4ac82aae31ce5fc6fbf04837{
+margin:10px 0 0 0;
+padding-bottom:10px;
+}
+body .av-special-heading.av-av_heading-d3ef1e7a4ac82aae31ce5fc6fbf04837 .av-special-heading-tag .heading-char{
+font-size:25px;
+}
+.av-special-heading.av-av_heading-d3ef1e7a4ac82aae31ce5fc6fbf04837 .av-subheading{
+font-size:15px;
+}
+</style>
+<div  class='av-special-heading av-av_heading-d3ef1e7a4ac82aae31ce5fc6fbf04837 av-special-heading-h3 blockquote modern-quote'><h3 class='av-special-heading-tag '  itemprop="headline"  >Cookie und Datenschutz-Einstellungen</h3><div class="special-heading-border"><div class="special-heading-inner-border"></div></div></div><br />
+<style type="text/css" data-created_by="avia_inline_auto" id="style-css-av-jhe1dyat-4d09ad3ba40142c2b823d908995f0385">
+#top .hr.av-jhe1dyat-4d09ad3ba40142c2b823d908995f0385{
+margin-top:0px;
+margin-bottom:0px;
+}
+.hr.av-jhe1dyat-4d09ad3ba40142c2b823d908995f0385 .hr-inner{
+width:100%;
+}
+</style>
+<div  class='hr av-jhe1dyat-4d09ad3ba40142c2b823d908995f0385 hr-custom hr-left hr-icon-no'><span class='hr-inner inner-border-av-border-thin'><span class="hr-inner-style"></span></span></div><br /><div  class='tabcontainer av-jhds1skt-57ef9df26b3cd01206052db147fbe716 sidebar_tab sidebar_tab_left noborder_tabs'><section class='av_tab_section av_tab_section av-av_tab-b0854bba248a0a87db7495edc251434a' ><div id='tab-id-1-tab' class='tab active_tab' role='tab' aria-selected="true" tabindex="0" data-fake-id='#tab-id-1' aria-controls='tab-id-1-content' >Website Cookies</div><div id='tab-id-1-content' class='tab_content active_tab_content' role='tabpanel' aria-labelledby='tab-id-1-tab' aria-hidden="false"><div class='tab_inner_content invers-color' ><p>Diese Cookies sind zwingend erforderlich, um dir die über unsere Website verfügbare Dienste bereitzustellen und deren Funktionen zu nutzen. </p>
+<p> Da diese Cookies für die Bereitstellung der Website unbedingt erforderlich sind, hat die Ablehnung Auswirkungen auf die Funktionsweise unserer Website. Du kannst Cookies jederzeit blockieren oder löschen, indem Du Deine Browsereinstellungen änderst und das Blockieren aller Cookies auf dieser Website erzwingst. Die Website wird Dich jedoch immer dazu auffordern, Cookies zu akzeptieren / abzulehnen, wenn Du unsere Website erneut besuchst.</p>
+<p> Wir stellen Dir eine Liste der auf Deinem Computer in unserer Domain gespeicherten Cookies zur Verfügung, damit Du überprüfen kannst, was wir gespeichert haben. Aus Sicherheitsgründen können wir keine Cookies von anderen Domains anzeigen oder ändern. Du kannst diese in den Sicherheitseinstellungen Deines Browsers überprüfen. </p>
+<div class="av-switch-aviaPrivacyRefuseCookiesHideBar av-toggle-switch av-cookie-disable-external-toggle av-cookie-save-checked av-cookie-default-checked"><label><input type="checkbox" checked="checked" id="aviaPrivacyRefuseCookiesHideBar" class="aviaPrivacyRefuseCookiesHideBar " name="aviaPrivacyRefuseCookiesHideBar" ><span class="toggle-track"></span><span class="toggle-label-content">Aktivieren, damit die Nachrichtenleiste dauerhaft ausgeblendet wird und alle Cookies, denen nicht zugestimmt wurde, abgelehnt werden. Wir benötigen zwei Cookies, damit diese Einstellung gespeichert wird. Andernfalls wird diese Mitteilung bei jedem Seitenladen eingeblendet werden.</span></label></div>
+<div class="av-switch-aviaPrivacyEssentialCookiesEnabled av-toggle-switch av-cookie-disable-external-toggle av-cookie-save-checked av-cookie-default-checked"><label><input type="checkbox" checked="checked" id="aviaPrivacyEssentialCookiesEnabled" class="aviaPrivacyEssentialCookiesEnabled " name="aviaPrivacyEssentialCookiesEnabled" ><span class="toggle-track"></span><span class="toggle-label-content">Hier klicken, um notwendige Cookies zu aktivieren/deaktivieren.</span></label></div>
+</div></div></section><section class='av_tab_section av_tab_section av-av_tab-32f0fc46734f984b75a531984dcfb450' ><div id='tab-id-2-tab' class='tab' role='tab' aria-selected="false" tabindex="0" data-fake-id='#tab-id-2' aria-controls='tab-id-2-content' >Google Analytics</div><div id='tab-id-2-content' class='tab_content' role='tabpanel' aria-labelledby='tab-id-2-tab' aria-hidden="true"><div class='tab_inner_content invers-color' ><p>Diese Cookies sammeln Informationen, die entweder in aggregierter Form verwendet werden, um zu verstehen, wie unsere Website verwendet wird oder wie effektiv unsere Marketingkampagnen sind, oder um uns zu helfen, unsere Website und Anwendung für dich anzupassen, und dein Erlebnis zu verbessern. </p>
+<p> Wenn Du nicht möchtest, dass wir deinen Besuch auf unserer Website verfolgen, kannst du das Tracking in deinem Browser hier deaktivieren: <br /> <div data-disabled_by_browser="Bitte aktiviere diese Funktion in Ihren Browsereinstellungen und lade die Seite neu." class="av-switch-aviaPrivacyGoogleTrackingDisabled av-toggle-switch av-cookie-disable-external-toggle av-cookie-save-unchecked av-cookie-default-checked"><label><input type="checkbox" checked="checked" id="aviaPrivacyGoogleTrackingDisabled" class="aviaPrivacyGoogleTrackingDisabled " name="aviaPrivacyGoogleTrackingDisabled" ><span class="toggle-track"></span><span class="toggle-label-content">Hier klicken, um Google Analytics zu aktivieren/deaktivieren.</span></label></div></p>
+</div></div></section><section class='av_tab_section av_tab_section av-av_tab-912b9eccc5e87c9c8edbd5f4397202fd' ><div id='tab-id-3-tab' class='tab' role='tab' aria-selected="false" tabindex="0" data-fake-id='#tab-id-3' aria-controls='tab-id-3-content' >Andere externe Dienste</div><div id='tab-id-3-content' class='tab_content' role='tabpanel' aria-labelledby='tab-id-3-tab' aria-hidden="true"><div class='tab_inner_content invers-color' ><p>Wir verwenden verschiedene externe Dienste wie Google Webfonts, Google Maps und Vimeo. Da diese Anbieter möglicherweise personenbezogene Daten wie Deine IP-Adresse sammeln, kannst Du diese hier sperren. Bitte beachte, dass dies die Funktionalität und das Erscheinungsbild unserer Website erheblich beeinträchtigen kann. Änderungen werden wirksam, sobald Du die Seite neu lädst.</p>
+<p>Google Maps:<br /><div class="av-switch-aviaPrivacyGoogleMapsDisabled av-toggle-switch av-cookie-disable-external-toggle av-cookie-save-unchecked av-cookie-default-checked"><label><input type="checkbox" checked="checked" id="aviaPrivacyGoogleMapsDisabled" class="aviaPrivacyGoogleMapsDisabled " name="aviaPrivacyGoogleMapsDisabled" ><span class="toggle-track"></span><span class="toggle-label-content">Hier klicken, um Google Maps zu aktivieren/deaktivieren.</span></label></div>Google reCaptcha:<br /><div class="av-switch-aviaPrivacyGoogleReCaptchaDisabled av-toggle-switch av-cookie-disable-external-toggle av-cookie-save-unchecked av-cookie-default-checked"><label><input type="checkbox" checked="checked" id="aviaPrivacyGoogleReCaptchaDisabled" class="aviaPrivacyGoogleReCaptchaDisabled " name="aviaPrivacyGoogleReCaptchaDisabled" ><span class="toggle-track"></span><span class="toggle-label-content">Hier klicken, um Google reCaptcha zu aktivieren/deaktivieren.</span></label></div></p>
+<p>Vimeo Video Einbindungen:<br /><div class="av-switch-aviaPrivacyVideoEmbedsDisabled av-toggle-switch av-cookie-disable-external-toggle av-cookie-save-unchecked av-cookie-default-checked"><label><input type="checkbox" checked="checked" id="aviaPrivacyVideoEmbedsDisabled" class="aviaPrivacyVideoEmbedsDisabled " name="aviaPrivacyVideoEmbedsDisabled" ><span class="toggle-track"></span><span class="toggle-label-content">Hier klicken, um Videoeinbettungen zu aktivieren/deaktivieren.</span></label></div></p>
+</div></div></section><section class='av_tab_section av_tab_section av-av_tab-17e354e5b8a0c23ed15509e5c6c4f9dc' ><div id='tab-id-4-tab' class='tab' role='tab' aria-selected="false" tabindex="0" data-fake-id='#tab-id-4' aria-controls='tab-id-4-content' >Datenschutzerklärung</div><div id='tab-id-4-content' class='tab_content' role='tabpanel' aria-labelledby='tab-id-4-tab' aria-hidden="true"><div class='tab_inner_content invers-color' ><p>Sie können unsere Cookie- und Datenschutzeinstellungen im Detail in unserer Datenschutzerklärung nachlesen. </p>
+
+</div></div></section></div><div class="avia-cookie-consent-modal-buttons-wrap"><a href='#' class='avia-button avia-color-theme-color-highlight avia-cookie-consent-button avia-cookie-consent-button-4  avia-cookie-close-bar avia-cookie-consent-modal-button'  title="Wenn Du die Verwendung von Cookies zulässt, kannst du die verwendeten Cookies und Dienste jederzeit ändern." >Einstellungen speichern</a><a href='#' class='avia-button avia-color-theme-color-highlight avia-cookie-consent-button avia-cookie-consent-button-5 av-extra-cookie-btn avia-cookie-consent-modal-button avia-cookie-hide-notification'  title="Erlaube nicht, Cookies oder Dienste zu verwenden - einige Funktionen auf unserer Website funktionieren möglicherweise nicht wie erwartet." >Meldung ausblenden</a></div></div></div><script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/enfold-child/*","/wp-content/themes/enfold/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+
+
+
+
+  
+ <script type='text/javascript'>
+ /* <![CDATA[ */  
+var avia_framework_globals = avia_framework_globals || {};
+    avia_framework_globals.frameworkUrl = 'https://www.ikarus-festival.de/wp-content/themes/enfold/framework/';
+    avia_framework_globals.installedAt = 'https://www.ikarus-festival.de/wp-content/themes/enfold/';
+    avia_framework_globals.ajaxurl = 'https://www.ikarus-festival.de/wp-admin/admin-ajax.php?lang=de';
+/* ]]> */ 
+</script>
+ 
+     <!-- Meta Pixel Event Code -->
+    <script type='text/javascript'>
+        document.addEventListener( 'wpcf7mailsent', function( event ) {
+        if( "fb_pxl_code" in event.detail.apiResponse){
+            eval(event.detail.apiResponse.fb_pxl_code);
+        }
+        }, false );
+    </script>
+    <!-- End Meta Pixel Event Code -->
+        <div id='fb-pxl-ajax-code'></div><!-- Instagram Feed JS -->
+<script type="text/javascript">
+var sbiajaxurl = "https://www.ikarus-festival.de/wp-admin/admin-ajax.php";
+</script>
+<script type="text/javascript" src="https://www.ikarus-festival.de/wp-includes/js/dist/hooks.min.js?ver=dd5603f07f9220ed27f1" id="wp-hooks-js"></script>
+<script type="text/javascript" src="https://www.ikarus-festival.de/wp-includes/js/dist/i18n.min.js?ver=c26c3dc7bed366793375" id="wp-i18n-js"></script>
+<script type="text/javascript" id="wp-i18n-js-after">
+/* <![CDATA[ */
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+//# sourceURL=wp-i18n-js-after
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://www.ikarus-festival.de/wp-content/plugins/contact-form-7/includes/swv/js/index.js?ver=6.1.5" id="swv-js"></script>
+<script type="text/javascript" id="contact-form-7-js-translations">
+/* <![CDATA[ */
+( function( domain, translations ) {
+	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+	localeData[""].domain = domain;
+	wp.i18n.setLocaleData( localeData, domain );
+} )( "contact-form-7", {"translation-revision-date":"2026-02-20 12:33:20+0000","generator":"GlotPress\/4.0.3","domain":"messages","locale_data":{"messages":{"":{"domain":"messages","plural-forms":"nplurals=2; plural=n != 1;","lang":"de"},"This contact form is placed in the wrong place.":["Dieses Kontaktformular wurde an der falschen Stelle platziert."],"Error:":["Fehler:"]}},"comment":{"reference":"includes\/js\/index.js"}} );
+//# sourceURL=contact-form-7-js-translations
+/* ]]> */
+</script>
+<script type="text/javascript" id="contact-form-7-js-before">
+/* <![CDATA[ */
+var wpcf7 = {
+    "api": {
+        "root": "https:\/\/www.ikarus-festival.de\/wp-json\/",
+        "namespace": "contact-form-7\/v1"
+    },
+    "cached": 1
+};
+//# sourceURL=contact-form-7-js-before
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://www.ikarus-festival.de/wp-content/plugins/contact-form-7/includes/js/index.js?ver=6.1.5" id="contact-form-7-js"></script>
+<script type="text/javascript" id="avia-cookie-js-js-extra">
+/* <![CDATA[ */
+var AviaPrivacyCookieConsent = {"?":"Unbekannte Verwendung","aviaCookieConsent":"Die Benutzung und Speicherung von Cookies wurde akzeptiert. Bei anderen Cookies wurden Einschr\u00e4nkungen festgelegt","aviaPrivacyRefuseCookiesHideBar":"Bei weiteren Seitenaufrufen die Cookie-Bar ausblenden und Cookies verweigern, die nicht erlaubt wurden - aviaPrivacyEssentialCookiesEnabled muss gesetzt sein","aviaPrivacyEssentialCookiesEnabled":"Erlaube das Speichern von notwendigen Cookies, anderen Cookies und die Verwendung von Erweiterungen, wenn diese nicht abgelehnt wurden (Opt-Out)","aviaPrivacyVideoEmbedsDisabled":"Video-Einbettungen nicht zulassen","aviaPrivacyGoogleTrackingDisabled":"Cookie _gat_ (Speichert Informationen, die von Google Analytics ben\u00f6tigt werden) muss gel\u00f6scht werden","aviaPrivacyGoogleWebfontsDisabled":"Google Webfonts nicht zulassen","aviaPrivacyGoogleMapsDisabled":"Google Maps nicht zulassen","aviaPrivacyGoogleReCaptchaDisabled":"Google reCaptcha nicht zulassen","aviaPrivacyMustOptInSetting":"Einstellungen sind f\u00fcr Nutzer, die Cookies und Erweiterungen zustimmen m\u00fcssen (Opt-In)","PHPSESSID":"Internes Website-Funktions-Cookie - Verfolgt deine Sitzung","XDEBUG_SESSION":"Internes Website-Funktions-Cookie - PHP-Debugger-Sitzungs-Cookie","wp-settings*":"Internes Website-Funktions-Cookie","wordpress*":"Internes Website-Funktions-Cookie","tk_ai*":"Internes Shop-Cookie","woocommerce*":"Internes Shop-Cookie","wp_woocommerce*":"Internes Shop-Cookie","wp-wpml*":"Erforderlich, um verschiedene Sprachen zu verwalten","_ga":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden","_gid":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden","_gat_*":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden"};
+var AviaPrivacyCookieAdditionalData = {"cookie_refuse_button_alert":"When refusing all cookies this site might not be able to work as expected. Please check our settings page and opt out for cookies or functions you do not want to use and accept cookies. You will be shown this message every time you open a new window or a new tab.\n\nAre you sure you want to continue?","no_cookies_found":"In der Domain wurden keine erreichbaren Cookies gefunden","admin_keep_cookies":["PHPSESSID","wp-*","wordpress*","XDEBUG*"],"remove_custom_cookies":{"1":{"cookie_name":"_ga","cookie_path":"/","cookie_content":"Google Analytics Cookie","cookie_info_desc":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden","cookie_compare_action":"","avia_cookie_name":"aviaPrivacyGoogleTrackingDisabled"},"2":{"cookie_name":"_gid","cookie_path":"/","cookie_content":"Google Analytics Cookie","cookie_info_desc":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden","cookie_compare_action":"","avia_cookie_name":"aviaPrivacyGoogleTrackingDisabled"},"3":{"cookie_name":"_gat_","cookie_path":"/","cookie_content":"Google Analytics Cookie","cookie_info_desc":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden","cookie_compare_action":"starts_with","avia_cookie_name":"aviaPrivacyGoogleTrackingDisabled"}},"no_lightbox":"Wir ben\u00f6tigen eine Lightbox, um das modale Popup anzuzeigen. Bitte aktiviere im Theme-Optionen-Tab die eingebauten Lightbox oder f\u00fcge dien eigenes modales Fenster-Plugin hinzu.\\n\\nDu musst dieses Plugin in JavaScript mit Callback-Wrapper-Funktionen verbinden - siehe avia_cookie_consent_modal_callback in der Datei enfold \\ js via-snippet-cookieconsent.js "};
+//# sourceURL=avia-cookie-js-js-extra
+/* ]]> */
+</script>
+<script type="text/javascript" id="avia-footer-scripts-js-extra">
+/* <![CDATA[ */
+var AviaPrivacyCookieConsent = {"?":"Unbekannte Verwendung","aviaCookieConsent":"Die Benutzung und Speicherung von Cookies wurde akzeptiert. Bei anderen Cookies wurden Einschr\u00e4nkungen festgelegt","aviaPrivacyRefuseCookiesHideBar":"Bei weiteren Seitenaufrufen die Cookie-Bar ausblenden und Cookies verweigern, die nicht erlaubt wurden - aviaPrivacyEssentialCookiesEnabled muss gesetzt sein","aviaPrivacyEssentialCookiesEnabled":"Erlaube das Speichern von notwendigen Cookies, anderen Cookies und die Verwendung von Erweiterungen, wenn diese nicht abgelehnt wurden (Opt-Out)","aviaPrivacyVideoEmbedsDisabled":"Video-Einbettungen nicht zulassen","aviaPrivacyGoogleTrackingDisabled":"Cookie _gat_ (Speichert Informationen, die von Google Analytics ben\u00f6tigt werden) muss gel\u00f6scht werden","aviaPrivacyGoogleWebfontsDisabled":"Google Webfonts nicht zulassen","aviaPrivacyGoogleMapsDisabled":"Google Maps nicht zulassen","aviaPrivacyGoogleReCaptchaDisabled":"Google reCaptcha nicht zulassen","aviaPrivacyMustOptInSetting":"Einstellungen sind f\u00fcr Nutzer, die Cookies und Erweiterungen zustimmen m\u00fcssen (Opt-In)","PHPSESSID":"Internes Website-Funktions-Cookie - Verfolgt deine Sitzung","XDEBUG_SESSION":"Internes Website-Funktions-Cookie - PHP-Debugger-Sitzungs-Cookie","wp-settings*":"Internes Website-Funktions-Cookie","wordpress*":"Internes Website-Funktions-Cookie","tk_ai*":"Internes Shop-Cookie","woocommerce*":"Internes Shop-Cookie","wp_woocommerce*":"Internes Shop-Cookie","wp-wpml*":"Erforderlich, um verschiedene Sprachen zu verwalten","_ga":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden","_gid":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden","_gat_*":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden"};
+var AviaPrivacyCookieAdditionalData = {"cookie_refuse_button_alert":"When refusing all cookies this site might not be able to work as expected. Please check our settings page and opt out for cookies or functions you do not want to use and accept cookies. You will be shown this message every time you open a new window or a new tab.\n\nAre you sure you want to continue?","no_cookies_found":"In der Domain wurden keine erreichbaren Cookies gefunden","admin_keep_cookies":["PHPSESSID","wp-*","wordpress*","XDEBUG*"],"remove_custom_cookies":{"1":{"cookie_name":"_ga","cookie_path":"/","cookie_content":"Google Analytics Cookie","cookie_info_desc":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden","cookie_compare_action":"","avia_cookie_name":"aviaPrivacyGoogleTrackingDisabled"},"2":{"cookie_name":"_gid","cookie_path":"/","cookie_content":"Google Analytics Cookie","cookie_info_desc":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden","cookie_compare_action":"","avia_cookie_name":"aviaPrivacyGoogleTrackingDisabled"},"3":{"cookie_name":"_gat_","cookie_path":"/","cookie_content":"Google Analytics Cookie","cookie_info_desc":"Speichert Informationen, die von Google Analytics ben\u00f6tigt werden","cookie_compare_action":"starts_with","avia_cookie_name":"aviaPrivacyGoogleTrackingDisabled"}},"no_lightbox":"Wir ben\u00f6tigen eine Lightbox, um das modale Popup anzuzeigen. Bitte aktiviere im Theme-Optionen-Tab die eingebauten Lightbox oder f\u00fcge dien eigenes modales Fenster-Plugin hinzu.\\n\\nDu musst dieses Plugin in JavaScript mit Callback-Wrapper-Funktionen verbinden - siehe avia_cookie_consent_modal_callback in der Datei enfold \\ js via-snippet-cookieconsent.js "};
+//# sourceURL=avia-footer-scripts-js-extra
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://www.ikarus-festival.de/wp-content/uploads/dynamic_avia/avia-footer-scripts-2679d1cdf31447b4ec1d35ed9294eab2.js" id="avia-footer-scripts-js"></script>
+<script type='text/javascript'>function av_privacy_cookie_setter( cookie_name ){var cookie_check = jQuery('html').hasClass('av-cookies-needs-opt-in') || jQuery('html').hasClass('av-cookies-can-opt-out');var toggle = jQuery('.' + cookie_name);toggle.each(function(){var container = jQuery(this).closest('.av-toggle-switch');if( cookie_check && ! document.cookie.match(/aviaCookieConsent/) ){this.checked = container.hasClass( 'av-cookie-default-checked' );}else if( cookie_check && document.cookie.match(/aviaCookieConsent/) && ! document.cookie.match(/aviaPrivacyEssentialCookiesEnabled/) && cookie_name != 'aviaPrivacyRefuseCookiesHideBar' ){if( cookie_name == 'aviaPrivacyEssentialCookiesEnabled' ){this.checked = false;}else{this.checked = container.hasClass( 'av-cookie-default-checked' );}}else{if( container.hasClass('av-cookie-save-checked') ){this.checked = document.cookie.match(cookie_name) ? true : false;}else{this.checked = document.cookie.match(cookie_name) ? false : true;}}});jQuery('.' + 'av-switch-' + cookie_name).addClass('active');toggle.on('click', function(){/* sync if more checkboxes exist because user added them to normal page content */var check = this.checked;jQuery('.' + cookie_name).each( function(){this.checked = check;});var silent_accept_cookie = jQuery('html').hasClass('av-cookies-user-silent-accept');if( ! silent_accept_cookie && cookie_check && ! document.cookie.match(/aviaCookieConsent/) || sessionStorage.getItem( 'aviaCookieRefused' ) ){return;}var container = jQuery(this).closest('.av-toggle-switch');var action = '';if( container.hasClass('av-cookie-save-checked') ){action = this.checked ? 'save' : 'remove';}else{action = this.checked ? 'remove' : 'save';}if('remove' == action){document.cookie = cookie_name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';}else{var theDate = new Date();var oneYearLater = new Date( theDate.getTime() + 31536000000 );document.cookie = cookie_name + '=true; Path=/; Expires='+oneYearLater.toGMTString()+';';}});}; av_privacy_cookie_setter('aviaPrivacyRefuseCookiesHideBar');  av_privacy_cookie_setter('aviaPrivacyEssentialCookiesEnabled');  av_privacy_cookie_setter('aviaPrivacyGoogleTrackingDisabled');  av_privacy_cookie_setter('aviaPrivacyGoogleMapsDisabled');  av_privacy_cookie_setter('aviaPrivacyGoogleReCaptchaDisabled');  av_privacy_cookie_setter('aviaPrivacyVideoEmbedsDisabled'); </script>
+<script type='text/javascript'>
+
+	(function($) {
+
+			/*	check if google analytics tracking is disabled by user setting via cookie - or user must opt in.	*/
+
+			var analytics_code = "<!-- Global site tag (gtag.js) - Google Analytics -->\n<script async src=\"https:\/\/www.googletagmanager.com\/gtag\/js?id=G-VC1W3BXGWB\"><\/script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-VC1W3BXGWB', {'anonymize_ip': true});\n<\/script>\n<script>\nvar tp_rtrgt_segment = '';\nvar tp_rtrgt_random = Math.random() * 10000000000000000;\nvar tp_rtrgt_url = 'http'+(('https:'==document.location.protocol)?'s':'')+':\/\/ad.ad-srv.net\/retarget?a=48170&version=1';\ntp_rtrgt_url += '&segment=' + tp_rtrgt_segment;\ndocument.write('<div id=\"tp_rtrgt_div_' + tp_rtrgt_random + '\" style=\"position:absolute; visibility:hidden; left:0px; top:0px; width:1px; height:1px; border:0\"><iframe id=\"tp_rtrgt_iframe_' + tp_rtrgt_random + '\" name=\"tp_rtrgt_iframe_' + tp_rtrgt_random + '\" src=\"' + tp_rtrgt_url + '\" scrolling=\"no\" width=\"1\" height=\"1\"><\/iframe><\/div>);\n<\/script>".replace(/\"/g, '"' );
+			var html = document.getElementsByTagName('html')[0];
+
+			$('html').on( 'avia-cookie-settings-changed', function(e)
+			{
+					var cookie_check = html.className.indexOf('av-cookies-needs-opt-in') >= 0 || html.className.indexOf('av-cookies-can-opt-out') >= 0;
+					var allow_continue = true;
+					var silent_accept_cookie = html.className.indexOf('av-cookies-user-silent-accept') >= 0;
+					var script_loaded = $( 'script.google_analytics_scripts' );
+
+					if( cookie_check && ! silent_accept_cookie )
+					{
+						if( ! document.cookie.match(/aviaCookieConsent/) || html.className.indexOf('av-cookies-session-refused') >= 0 )
+						{
+							allow_continue = false;
+						}
+						else
+						{
+							if( ! document.cookie.match(/aviaPrivacyRefuseCookiesHideBar/) )
+							{
+								allow_continue = false;
+							}
+							else if( ! document.cookie.match(/aviaPrivacyEssentialCookiesEnabled/) )
+							{
+								allow_continue = false;
+							}
+							else if( document.cookie.match(/aviaPrivacyGoogleTrackingDisabled/) )
+							{
+								allow_continue = false;
+							}
+						}
+					}
+
+					//	allow 3-rd party plugins to hook (see enfold\config-cookiebot\cookiebot.js)
+					if( window['wp'] && wp.hooks )
+					{
+						allow_continue = wp.hooks.applyFilters( 'aviaCookieConsent_allow_continue', allow_continue );
+					}
+
+					if( ! allow_continue )
+					{
+//						window['ga-disable-G-VC1W3BXGWB'] = true;
+						if( script_loaded.length > 0 )
+						{
+							script_loaded.remove();
+						}
+					}
+					else
+					{
+						if( script_loaded.length == 0 )
+						{
+							$('head').append( analytics_code );
+						}
+					}
+			});
+
+			$('html').trigger( 'avia-cookie-settings-changed' );
+
+	})( jQuery );
+
+</script></body>
+</html>
+
+<!--
+Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/?utm_source=w3tc&utm_medium=footer_comment&utm_campaign=free_plugin
+
+Page Caching using Disk: Enhanced (Page is 404) 
+Database Caching 110/116 queries in 0.036 seconds using Disk
+
+Served from: www.ikarus-festival.de @ 2026-03-08 14:37:08 by W3 Total Cache
+-->
