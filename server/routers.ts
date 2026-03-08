@@ -81,6 +81,42 @@ export const appRouter = router({
     }),
   }),
 
+  // ============ GA4 ANALYTICS ============
+  analytics: router({
+    isConnected: adminProcedure.query(async () => {
+      const { isGA4Connected } = await import("./ga4Analytics");
+      return { connected: await isGA4Connected() };
+    }),
+    getOAuthUrl: adminProcedure.query(async () => {
+      const { getGA4OAuthUrl } = await import("./ga4Analytics");
+      return { url: getGA4OAuthUrl() };
+    }),
+    getOverview: adminProcedure.query(async () => {
+      const { getOverview } = await import("./ga4Analytics");
+      return getOverview();
+    }),
+    getTopPages: adminProcedure.query(async () => {
+      const { getTopPages } = await import("./ga4Analytics");
+      return getTopPages();
+    }),
+    getTrafficSources: adminProcedure.query(async () => {
+      const { getTrafficSources } = await import("./ga4Analytics");
+      return getTrafficSources();
+    }),
+    getCountries: adminProcedure.query(async () => {
+      const { getCountries } = await import("./ga4Analytics");
+      return getCountries();
+    }),
+    getDevices: adminProcedure.query(async () => {
+      const { getDevices } = await import("./ga4Analytics");
+      return getDevices();
+    }),
+    getPageViewsOverTime: adminProcedure.query(async () => {
+      const { getPageViewsOverTime } = await import("./ga4Analytics");
+      return getPageViewsOverTime();
+    }),
+  }),
+
   // ============ USERS ============
   users: router({
     count: adminProcedure.query(() => getUserCount()),

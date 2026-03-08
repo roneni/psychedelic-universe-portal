@@ -153,6 +153,22 @@ app.get("/api/oauth/youtube/callback", async (req, res) => {
   }
 });
 
+// GA4 Analytics OAuth callback
+app.get("/api/auth/callback/google-analytics", async (req, res) => {
+  const code = req.query.code as string;
+  if (!code) {
+    return res.status(400).send("Missing authorization code");
+  }
+  try {
+    const { exchangeGA4Code } = await import("./ga4Analytics");
+    await exchangeGA4Code(code);
+    res.redirect("/admin?tab=analytics&ga4=connected");
+  } catch (error) {
+    console.error("GA4 OAuth error:", error);
+    res.redirect("/admin?tab=analytics&ga4=error");
+  }
+});
+
 // tRPC API
 app.use(
   "/api/trpc",

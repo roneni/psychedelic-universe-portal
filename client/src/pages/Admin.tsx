@@ -8,8 +8,9 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { Music, Users, Settings, Mail, Plus, Trash2, Edit, Save, X, ArrowLeft, LogOut, BarChart3, ExternalLink, Eye, EyeOff, Check, Activity, Handshake, Disc3, Globe } from "lucide-react";
+import { Music, Users, Settings, Mail, Plus, Trash2, Edit, Save, X, ArrowLeft, LogOut, BarChart3, ExternalLink, Eye, EyeOff, Check, Activity, Handshake, Disc3, Globe, TrendingUp, TrendingDown, ArrowUpRight } from "lucide-react";
 import { useState, useEffect } from "react";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
 import { Link } from "wouter";
 import { getLoginUrl } from "@/const";
@@ -54,13 +55,24 @@ const defaultPartnerForm: PartnerFormData = {
 
 export default function Admin() {
   const { user, loading, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState("analytics");
+  // Handle URL params from OAuth redirect (e.g., ?tab=analytics&ga4=connected)
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialTab = urlParams.get("tab") || "analytics";
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [editingMixId, setEditingMixId] = useState<number | null>(null);
   const [editingPartnerId, setEditingPartnerId] = useState<number | null>(null);
   const [mixForm, setMixForm] = useState<MixFormData>(defaultMixForm);
   const [partnerForm, setPartnerForm] = useState<PartnerFormData>(defaultPartnerForm);
   const [showMixForm, setShowMixForm] = useState(false);
   const [showPartnerForm, setShowPartnerForm] = useState(false);
+
+  // Show toast on GA4 connection result
+  useEffect(() => {
+    const ga4Status = urlParams.get("ga4");
+    if (ga4Status === "connected") toast.success("Google Analytics connected successfully!");
+    if (ga4Status === "error") toast.error("Failed to connect Google Analytics. Please try again.");
+    if (ga4Status) window.history.replaceState({}, "", "/admin");
+  }, []);
 
   // Queries
   const mixesQuery = trpc.mixes.list.useQuery();
@@ -76,6 +88,29 @@ export default function Admin() {
   });
   const contentStatsQuery = trpc.admin.getContentStats.useQuery(undefined, {
     enabled: user?.role === "admin",
+  });
+
+  // GA4 Analytics queries
+  const ga4ConnectedQuery = trpc.analytics.isConnected.useQuery(undefined, {
+    enabled: user?.role === "admin",
+  });
+  const ga4OAuthUrlQuery = trpc.analytics.getOAuthUrl.useQuery(undefined, {
+    enabled: user?.role === "admin" && ga4ConnectedQuery.data?.connected === false,
+  });
+  const ga4OverviewQuery = trpc.analytics.getOverview.useQuery(undefined, {
+    enabled: user?.role === "admin" && ga4ConnectedQuery.data?.connected === true,
+  });
+  const ga4TopPagesQuery = trpc.analytics.getTopPages.useQuery(undefined, {
+    enabled: user?.role === "admin" && ga4ConnectedQuery.data?.connected === true,
+  });
+  const ga4TrafficQuery = trpc.analytics.getTrafficSources.useQuery(undefined, {
+    enabled: user?.role === "admin" && ga4ConnectedQuery.data?.connected === true,
+  });
+  const ga4CountriesQuery = trpc.analytics.getCountries.useQuery(undefined, {
+    enabled: user?.role === "admin" && ga4ConnectedQuery.data?.connected === true,
+  });
+  const ga4PageViewsQuery = trpc.analytics.getPageViewsOverTime.useQuery(undefined, {
+    enabled: user?.role === "admin" && ga4ConnectedQuery.data?.connected === true,
   });
 
   // Mutations
@@ -365,11 +400,171 @@ export default function Admin() {
           {/* ANALYTICS TAB */}
           <TabsContent value="analytics">
             <div className="space-y-6">
-              {/* Quick Links */}
+              {/* Section 1: Connection Status */}
+              {ga4ConnectedQuery.isLoading ? (
+                <Card className="bg-slate-900/50 border-slate-800">
+                  <CardContent className="p-8 text-center">
+                    <div className="animate-pulse text-cyan-400">Checking GA4 connection...</div>
+                  </CardContent>
+                </Card>
+              ) : ga4ConnectedQuery.data?.connected ? (
+                <>
+                  {/* Connected badge */}
+                  <div className="flex items-center gap-2 px-1">
+                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                    <span className="text-green-400 text-sm font-medium">GA4 Connected</span>
+                    <span className="text-xs text-slate-500 font-mono ml-2">G-4DMCLVD7MV</span>
+                  </div>
+
+                  {/* Section 2: Overview Cards */}
+                  {ga4OverviewQuery.data && 'pageViews' in ga4OverviewQuery.data ? (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <OverviewCard label="Page Views" value={ga4OverviewQuery.data.pageViews} change={ga4OverviewQuery.data.changes.pageViews} />
+                      <OverviewCard label="Users" value={ga4OverviewQuery.data.users} change={ga4OverviewQuery.data.changes.users} />
+                      <OverviewCard label="Sessions" value={ga4OverviewQuery.data.sessions} change={ga4OverviewQuery.data.changes.sessions} />
+                      <OverviewCard label="Avg Duration" value={ga4OverviewQuery.data.avgDuration} change={ga4OverviewQuery.data.changes.avgDuration} format="duration" />
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {[...Array(4)].map((_, i) => (
+                        <Card key={i} className="bg-slate-900/50 border-slate-800">
+                          <CardContent className="p-4 space-y-2">
+                            <div className="h-3 w-16 bg-slate-800 rounded animate-pulse" />
+                            <div className="h-7 w-20 bg-slate-800 rounded animate-pulse" />
+                            <div className="h-3 w-24 bg-slate-800 rounded animate-pulse" />
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Section 3: Page Views Chart */}
+                  <Card className="bg-slate-900/50 border-slate-800">
+                    <CardHeader>
+                      <CardTitle className="text-slate-100">Page Views — Last 30 Days</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {ga4PageViewsQuery.data && 'daily' in ga4PageViewsQuery.data ? (
+                        <ResponsiveContainer width="100%" height={300}>
+                          <LineChart data={ga4PageViewsQuery.data.daily}>
+                            <XAxis dataKey="date" stroke="#64748b" fontSize={12} tickLine={false} />
+                            <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                            <Tooltip
+                              contentStyle={{ backgroundColor: "#1e293b", border: "1px solid #334155", borderRadius: "8px" }}
+                              labelStyle={{ color: "#94a3b8" }}
+                              itemStyle={{ color: "#22d3ee" }}
+                            />
+                            <Line type="monotone" dataKey="views" stroke="#22d3ee" strokeWidth={2} dot={false} />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      ) : (
+                        <div className="h-[300px] flex items-center justify-center">
+                          <div className="animate-pulse text-slate-500">Loading chart data...</div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Section 4: Data Tables */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Top Pages */}
+                    <Card className="bg-slate-900/50 border-slate-800">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm text-slate-100">Top Pages</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        {ga4TopPagesQuery.data && 'pages' in ga4TopPagesQuery.data ? (
+                          <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                            {ga4TopPagesQuery.data.pages.map((p, i) => (
+                              <div key={i} className="flex items-center justify-between text-sm py-1.5 border-b border-slate-800/50 last:border-0">
+                                <span className="text-slate-300 truncate mr-2 max-w-[140px]" title={p.path}>{p.path}</span>
+                                <span className="text-cyan-400 font-medium tabular-nums">{p.views.toLocaleString()}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-slate-500 text-sm py-4 text-center animate-pulse">Loading...</div>
+                        )}
+                      </CardContent>
+                    </Card>
+
+                    {/* Traffic Sources */}
+                    <Card className="bg-slate-900/50 border-slate-800">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm text-slate-100">Traffic Sources</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        {ga4TrafficQuery.data && 'sources' in ga4TrafficQuery.data ? (
+                          <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                            {ga4TrafficQuery.data.sources.map((s, i) => (
+                              <div key={i} className="flex items-center justify-between text-sm py-1.5 border-b border-slate-800/50 last:border-0">
+                                <span className="text-slate-300 truncate mr-2 max-w-[140px]" title={s.source}>{s.source}</span>
+                                <span className="text-cyan-400 font-medium tabular-nums">{s.sessions.toLocaleString()}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-slate-500 text-sm py-4 text-center animate-pulse">Loading...</div>
+                        )}
+                      </CardContent>
+                    </Card>
+
+                    {/* Countries */}
+                    <Card className="bg-slate-900/50 border-slate-800">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm text-slate-100">Top Countries</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        {ga4CountriesQuery.data && 'countries' in ga4CountriesQuery.data ? (
+                          <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                            {ga4CountriesQuery.data.countries.map((c, i) => (
+                              <div key={i} className="flex items-center justify-between text-sm py-1.5 border-b border-slate-800/50 last:border-0">
+                                <span className="text-slate-300 truncate mr-2">{c.country}</span>
+                                <span className="text-cyan-400 font-medium tabular-nums">{c.users.toLocaleString()}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-slate-500 text-sm py-4 text-center animate-pulse">Loading...</div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </div>
+                </>
+              ) : (
+                /* Not connected — show Connect button */
+                <Card className="bg-slate-900/50 border-slate-800">
+                  <CardHeader>
+                    <CardTitle className="text-slate-100">Connect Google Analytics</CardTitle>
+                    <CardDescription className="text-slate-400">
+                      Link your GA4 property to view analytics data directly in your admin panel.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                      <div className="w-2 h-2 rounded-full bg-green-400" />
+                      <span className="text-slate-300">GA4 tracking is active on your site</span>
+                      <span className="ml-auto text-xs text-slate-500 font-mono">G-4DMCLVD7MV</span>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        if (ga4OAuthUrlQuery.data?.url) {
+                          window.location.href = ga4OAuthUrlQuery.data.url;
+                        }
+                      }}
+                      disabled={!ga4OAuthUrlQuery.data?.url}
+                      className="bg-cyan-500 hover:bg-cyan-600 text-slate-950"
+                    >
+                      <ArrowUpRight className="w-4 h-4 mr-2" /> Connect Google Analytics
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Section 5: Quick Links (always shown) */}
               <Card className="bg-slate-900/50 border-slate-800">
                 <CardHeader>
                   <CardTitle className="text-slate-100">Quick Links</CardTitle>
-                  <CardDescription className="text-slate-400">External dashboards and tools</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -388,30 +583,6 @@ export default function Admin() {
                       <span className="text-slate-100 font-medium">YouTube Studio</span>
                       <ExternalLink className="w-4 h-4 text-slate-500 ml-auto" />
                     </a>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* GA4 Status */}
-              <Card className="bg-slate-900/50 border-slate-800">
-                <CardHeader>
-                  <CardTitle className="text-slate-100">Analytics Integrations</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
-                      <div className="w-2 h-2 rounded-full bg-green-400" />
-                      <span className="text-slate-300">GA4 is active on your site</span>
-                      <span className="ml-auto text-xs text-slate-500 font-mono">G-4DMCLVD7MV</span>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
-                      <div className="w-2 h-2 rounded-full bg-green-400" />
-                      <span className="text-slate-300">Data collection started: March 8, 2026</span>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
-                      <div className="w-2 h-2 rounded-full bg-green-400" />
-                      <span className="text-slate-300">Search Console is linked to GA4</span>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -446,21 +617,9 @@ export default function Admin() {
                         <p className="text-lg font-bold text-slate-100">{contentStatsQuery.data.subscriberCount}</p>
                         <p className="text-xs text-slate-400">Subscribers</p>
                       </div>
-                      {contentStatsQuery.data.newestMixDate && (
-                        <div className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50">
-                          <p className="text-sm font-medium text-slate-100">{new Date(contentStatsQuery.data.newestMixDate).toLocaleDateString()}</p>
-                          <p className="text-xs text-slate-400">Newest Mix Added</p>
-                        </div>
-                      )}
-                      {contentStatsQuery.data.newestSubscriberDate && (
-                        <div className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50">
-                          <p className="text-sm font-medium text-slate-100">{new Date(contentStatsQuery.data.newestSubscriberDate).toLocaleDateString()}</p>
-                          <p className="text-xs text-slate-400">Newest Subscriber</p>
-                        </div>
-                      )}
                     </div>
                   ) : (
-                    <div className="text-center text-slate-500 py-8">Loading content stats...</div>
+                    <div className="text-center text-slate-500 py-8 animate-pulse">Loading content stats...</div>
                   )}
                 </CardContent>
               </Card>
@@ -828,6 +987,25 @@ export default function Admin() {
         </Tabs>
       </main>
     </div>
+  );
+}
+
+function OverviewCard({ label, value, change, format }: { label: string; value: number; change: number; format?: "number" | "duration" }) {
+  const displayValue = format === "duration"
+    ? `${Math.floor(value / 60)}m ${Math.round(value % 60)}s`
+    : value.toLocaleString();
+
+  return (
+    <Card className="bg-slate-900/50 border-slate-800">
+      <CardContent className="p-4">
+        <p className="text-xs text-slate-400 mb-1">{label}</p>
+        <p className="text-2xl font-bold text-slate-100">{displayValue}</p>
+        <div className={`flex items-center gap-1 text-xs mt-1 ${change >= 0 ? "text-green-400" : "text-red-400"}`}>
+          {change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+          <span>{Math.abs(change)}% vs prev 30d</span>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
