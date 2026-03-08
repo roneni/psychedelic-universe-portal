@@ -9,6 +9,7 @@ import { motion, useInView } from "framer-motion";
 import {
   ArrowLeft,
   Calendar,
+  CalendarPlus,
   MapPin,
   Globe,
   Search,
@@ -142,6 +143,23 @@ const formatDate = (dateStr: string) => {
 };
 
 const isPast = (dateStr: string) => new Date(dateStr) < new Date("2026-02-07");
+
+const getGoogleCalendarUrl = (f: Festival) => {
+  const fmt = (d: string) => d.replace(/-/g, "");
+  const start = fmt(f.startDate);
+  // endDate for Google Calendar needs to be the day AFTER (all-day event exclusive end)
+  const end = new Date(f.endDate);
+  end.setDate(end.getDate() + 1);
+  const endStr = end.toISOString().slice(0, 10).replace(/-/g, "");
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: f.name,
+    dates: `${start}/${endStr}`,
+    details: `${f.name} — ${f.duration} ${f.genre || "psytrance"} festival.${f.website ? `\n\n${f.website}` : ""}`,
+    location: `${f.location}, ${f.country}`,
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+};
 
 // ── Zone background wrapper ────────────────────────────────────────────────
 
@@ -304,6 +322,16 @@ function MonthGroup({
                     Website
                   </a>
                 )}
+                <a
+                  href={getGoogleCalendarUrl(f)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-purple-400 hover:text-purple-300 transition-colors flex items-center gap-1"
+                  title={`Add ${f.name} to Google Calendar`}
+                >
+                  <CalendarPlus className="w-3 h-3" />
+                  <span className="hidden sm:inline">Add to Cal</span>
+                </a>
               </div>
             </motion.div>
           );
@@ -338,14 +366,72 @@ function ZoneMonths({
   );
 }
 
+// ── Schema.org structured data for Google AI Overview ─────────────────────
+
+function useFestivalStructuredData(festivalList: Festival[]) {
+  useEffect(() => {
+    const events = festivalList.map((f) => ({
+      "@type": "Event",
+      name: f.name,
+      startDate: f.startDate,
+      endDate: f.endDate,
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      eventStatus: "https://schema.org/EventScheduled",
+      location: {
+        "@type": "Place",
+        name: `${f.location}, ${f.country}`,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: f.location,
+          addressCountry: f.country,
+        },
+      },
+      description: `${f.name} — a ${f.duration} ${f.genre || "psytrance"} festival in ${f.location}, ${f.country}.`,
+      organizer: {
+        "@type": "Organization",
+        name: f.name,
+        ...(f.website ? { url: f.website } : {}),
+      },
+      ...(f.website ? { url: f.website } : {}),
+    }));
+
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: "Psytrance Festival Calendar 2026",
+      description:
+        "Complete guide to 64+ psytrance and psychedelic trance festivals worldwide for 2026.",
+      numberOfItems: events.length,
+      itemListElement: events.map((event, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: event,
+      })),
+    };
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify(jsonLd);
+    script.id = "festivals-structured-data";
+    document.head.appendChild(script);
+
+    return () => {
+      const existing = document.getElementById("festivals-structured-data");
+      if (existing) existing.remove();
+    };
+  }, [festivalList]);
+}
+
 // ── Main component ─────────────────────────────────────────────────────────
 
 export default function Festivals() {
   usePageMeta({
     title: "Psytrance Festival Calendar 2026",
-    description: "Browse 56+ psytrance festivals worldwide for 2026. Boom Festival, Ozora, Universo Paralello, and more. Filter by region, month, and country.",
+    description: "Browse 64+ psytrance festivals worldwide for 2026. O.Z.O.R.A., MO:DEM, Universo Paralello, S.U.N. Festival, and more. Filter by region, month, and country.",
     canonicalPath: "/festivals",
   });
+
+  useFestivalStructuredData(festivals);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedContinent, setSelectedContinent] = useState("All");
@@ -465,6 +551,16 @@ export default function Festivals() {
                         <Clock className="w-3 h-3" />
                         {f.duration}
                       </span>
+                      <a
+                        href={getGoogleCalendarUrl(f)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-purple-400 hover:text-purple-300 transition-colors flex items-center gap-1 ml-auto"
+                        title={`Add ${f.name} to Google Calendar`}
+                      >
+                        <CalendarPlus className="w-3 h-3" />
+                        Add to Cal
+                      </a>
                     </div>
                   </motion.div>
                 ))}
