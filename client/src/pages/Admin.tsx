@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { Music, Users, Settings, Mail, Plus, Trash2, Edit, Save, X, ArrowLeft, LogOut } from "lucide-react";
+import { Music, Users, Settings, Mail, Plus, Trash2, Edit, Save, X, ArrowLeft, LogOut, BarChart3, ExternalLink, Eye, EyeOff, Check, Activity, Handshake, Disc3, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Link } from "wouter";
@@ -54,7 +54,7 @@ const defaultPartnerForm: PartnerFormData = {
 
 export default function Admin() {
   const { user, loading, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState("mixes");
+  const [activeTab, setActiveTab] = useState("analytics");
   const [editingMixId, setEditingMixId] = useState<number | null>(null);
   const [editingPartnerId, setEditingPartnerId] = useState<number | null>(null);
   const [mixForm, setMixForm] = useState<MixFormData>(defaultMixForm);
@@ -69,6 +69,12 @@ export default function Admin() {
     enabled: user?.role === "admin",
   });
   const settingsQuery = trpc.settings.list.useQuery(undefined, {
+    enabled: user?.role === "admin",
+  });
+  const userCountQuery = trpc.users.count.useQuery(undefined, {
+    enabled: user?.role === "admin",
+  });
+  const contentStatsQuery = trpc.admin.getContentStats.useQuery(undefined, {
     enabled: user?.role === "admin",
   });
 
@@ -278,8 +284,70 @@ export default function Admin() {
 
       {/* Main Content */}
       <main className="container py-8">
+        {/* Summary Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+          <Card className="bg-slate-900/50 border-slate-800">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-cyan-500/10">
+                <Music className="w-5 h-5 text-cyan-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-slate-100">{mixesQuery.data?.length ?? "—"}</p>
+                <p className="text-xs text-slate-400">Total Mixes</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="bg-slate-900/50 border-slate-800">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-purple-500/10">
+                <Handshake className="w-5 h-5 text-purple-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-slate-100">{partnersQuery.data?.length ?? "—"}</p>
+                <p className="text-xs text-slate-400">Total Partners</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="bg-slate-900/50 border-slate-800">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-blue-500/10">
+                <Mail className="w-5 h-5 text-blue-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-slate-100">{subscribersQuery.data?.length ?? "—"}</p>
+                <p className="text-xs text-slate-400">Subscribers</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="bg-slate-900/50 border-slate-800">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-amber-500/10">
+                <Users className="w-5 h-5 text-amber-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-slate-100">{userCountQuery.data ?? "—"}</p>
+                <p className="text-xs text-slate-400">Registered Users</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="bg-slate-900/50 border-slate-800">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-green-500/10">
+                <Activity className="w-5 h-5 text-green-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-green-400">Live</p>
+                <p className="text-xs text-slate-400">Site Status</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="mb-6 bg-slate-900/50 border border-slate-800">
+            <TabsTrigger value="analytics" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400">
+              <BarChart3 className="w-4 h-4 mr-2" /> Analytics
+            </TabsTrigger>
             <TabsTrigger value="mixes" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400">
               <Music className="w-4 h-4 mr-2" /> Mixes
             </TabsTrigger>
@@ -293,6 +361,111 @@ export default function Admin() {
               <Settings className="w-4 h-4 mr-2" /> Settings
             </TabsTrigger>
           </TabsList>
+
+          {/* ANALYTICS TAB */}
+          <TabsContent value="analytics">
+            <div className="space-y-6">
+              {/* Quick Links */}
+              <Card className="bg-slate-900/50 border-slate-800">
+                <CardHeader>
+                  <CardTitle className="text-slate-100">Quick Links</CardTitle>
+                  <CardDescription className="text-slate-400">External dashboards and tools</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors border border-slate-700/50">
+                      <BarChart3 className="w-5 h-5 text-cyan-400" />
+                      <span className="text-slate-100 font-medium">Google Analytics</span>
+                      <ExternalLink className="w-4 h-4 text-slate-500 ml-auto" />
+                    </a>
+                    <a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors border border-slate-700/50">
+                      <Globe className="w-5 h-5 text-green-400" />
+                      <span className="text-slate-100 font-medium">Search Console</span>
+                      <ExternalLink className="w-4 h-4 text-slate-500 ml-auto" />
+                    </a>
+                    <a href="https://studio.youtube.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors border border-slate-700/50">
+                      <Disc3 className="w-5 h-5 text-red-400" />
+                      <span className="text-slate-100 font-medium">YouTube Studio</span>
+                      <ExternalLink className="w-4 h-4 text-slate-500 ml-auto" />
+                    </a>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* GA4 Status */}
+              <Card className="bg-slate-900/50 border-slate-800">
+                <CardHeader>
+                  <CardTitle className="text-slate-100">Analytics Integrations</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                      <div className="w-2 h-2 rounded-full bg-green-400" />
+                      <span className="text-slate-300">GA4 is active on your site</span>
+                      <span className="ml-auto text-xs text-slate-500 font-mono">G-4DMCLVD7MV</span>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                      <div className="w-2 h-2 rounded-full bg-green-400" />
+                      <span className="text-slate-300">Data collection started: March 8, 2026</span>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                      <div className="w-2 h-2 rounded-full bg-green-400" />
+                      <span className="text-slate-300">Search Console is linked to GA4</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Content Stats */}
+              <Card className="bg-slate-900/50 border-slate-800">
+                <CardHeader>
+                  <CardTitle className="text-slate-100">Content Overview</CardTitle>
+                  <CardDescription className="text-slate-400">Breakdown of your site content</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {contentStatsQuery.data ? (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {contentStatsQuery.data.mixesByCategory.map((cat) => (
+                        <div key={cat.category} className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                          <p className="text-lg font-bold text-slate-100">{cat.count}</p>
+                          <p className="text-xs text-slate-400 capitalize">{cat.category.replace(/-/g, " ")}</p>
+                        </div>
+                      ))}
+                      <div className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                        <p className="text-lg font-bold text-cyan-400">{contentStatsQuery.data.featuredCount}</p>
+                        <p className="text-xs text-slate-400">Featured Mixes</p>
+                      </div>
+                      <div className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                        <p className="text-lg font-bold text-slate-100">
+                          {contentStatsQuery.data.partnerStats.active}
+                          <span className="text-sm font-normal text-slate-500"> / {contentStatsQuery.data.partnerStats.total}</span>
+                        </p>
+                        <p className="text-xs text-slate-400">Active / Total Partners</p>
+                      </div>
+                      <div className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                        <p className="text-lg font-bold text-slate-100">{contentStatsQuery.data.subscriberCount}</p>
+                        <p className="text-xs text-slate-400">Subscribers</p>
+                      </div>
+                      {contentStatsQuery.data.newestMixDate && (
+                        <div className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                          <p className="text-sm font-medium text-slate-100">{new Date(contentStatsQuery.data.newestMixDate).toLocaleDateString()}</p>
+                          <p className="text-xs text-slate-400">Newest Mix Added</p>
+                        </div>
+                      )}
+                      {contentStatsQuery.data.newestSubscriberDate && (
+                        <div className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                          <p className="text-sm font-medium text-slate-100">{new Date(contentStatsQuery.data.newestSubscriberDate).toLocaleDateString()}</p>
+                          <p className="text-xs text-slate-400">Newest Subscriber</p>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-center text-slate-500 py-8">Loading content stats...</div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
 
           {/* MIXES TAB */}
           <TabsContent value="mixes">
@@ -644,6 +817,7 @@ export default function Admin() {
                     settingKey="youtube_api_key"
                     placeholder="AIzaSy..."
                     description="Your YouTube Data API key"
+                    isSecret
                     settings={settingsQuery.data}
                     onSave={(key, value) => new Promise<void>((resolve, reject) => upsertSetting.mutate({ key, value }, { onSuccess: () => resolve(), onError: (e) => reject(e) }))}
                   />
@@ -662,14 +836,18 @@ interface SettingRowProps {
   settingKey: string;
   placeholder: string;
   description: string;
+  isSecret?: boolean;
   settings: { key: string; value: string | null }[] | undefined;
   onSave: (key: string, value: string) => Promise<void>;
 }
 
-function SettingRow({ label, settingKey, placeholder, description, settings, onSave }: SettingRowProps) {
+function SettingRow({ label, settingKey, placeholder, description, isSecret, settings, onSave }: SettingRowProps) {
   const currentValue = settings?.find((s) => s.key === settingKey)?.value || "";
   const [value, setValue] = useState(currentValue);
   const [isDirty, setIsDirty] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [showSaved, setShowSaved] = useState(false);
+  const [showSecret, setShowSecret] = useState(false);
 
   // Update local state when settings load
   useEffect(() => {
@@ -683,13 +861,13 @@ function SettingRow({ label, settingKey, placeholder, description, settings, onS
     setIsDirty(newValue !== currentValue);
   };
 
-  const [isSaving, setIsSaving] = useState(false);
-
   const handleSave = async () => {
     setIsSaving(true);
     try {
       await onSave(settingKey, value);
       setIsDirty(false);
+      setShowSaved(true);
+      setTimeout(() => setShowSaved(false), 2000);
     } finally {
       setIsSaving(false);
     }
@@ -699,19 +877,37 @@ function SettingRow({ label, settingKey, placeholder, description, settings, onS
     <div className="space-y-2">
       <Label className="text-slate-300">{label}</Label>
       <div className="flex gap-2">
-        <Input
-          value={value}
-          onChange={(e) => handleChange(e.target.value)}
-          placeholder={placeholder}
-          className="flex-1 bg-slate-900 border-slate-700 text-slate-100"
-        />
+        <div className="flex-1 relative">
+          <Input
+            type={isSecret && !showSecret ? "password" : "text"}
+            value={value}
+            onChange={(e) => handleChange(e.target.value)}
+            placeholder={placeholder}
+            className={`bg-slate-900 border-slate-700 text-slate-100 ${isSecret ? "pr-10" : ""}`}
+          />
+          {isSecret && (
+            <button
+              type="button"
+              onClick={() => setShowSecret(!showSecret)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 p-1"
+            >
+              {showSecret ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          )}
+        </div>
         <Button
           onClick={handleSave}
           disabled={!isDirty || isSaving}
           variant={isDirty ? "default" : "outline"}
-          className={isDirty ? "bg-cyan-500 hover:bg-cyan-600 text-slate-950" : "border-slate-700 text-slate-400"}
+          className={isDirty ? "bg-cyan-500 hover:bg-cyan-600 text-slate-950" : "border-slate-600 text-slate-500 hover:text-slate-300 hover:border-slate-500"}
         >
-          {isSaving ? <span className="w-4 h-4 animate-spin border-2 border-current border-t-transparent rounded-full inline-block" /> : <Save className="w-4 h-4" />}
+          {isSaving ? (
+            <span className="w-4 h-4 animate-spin border-2 border-current border-t-transparent rounded-full inline-block" />
+          ) : showSaved ? (
+            <Check className="w-4 h-4 text-green-400" />
+          ) : (
+            <Save className="w-4 h-4" />
+          )}
         </Button>
       </div>
       <p className="text-sm text-slate-500">{description}</p>

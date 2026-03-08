@@ -710,6 +710,70 @@ export async function deleteRonensPick(id: number): Promise<void> {
 }
 
 
+// ============ ADMIN STATS ============
+
+export async function getUserCount(): Promise<number> {
+  const pg = await tryPg(async db => {
+    const result = await db.select({ count: sql<number>`COUNT(*)` }).from(users);
+    return Number(result[0]?.count || 0);
+  });
+  if (pg !== null) return pg;
+  const rows = await restGet<{ id: number }>('users', 'select=id');
+  return rows.length;
+}
+
+export async function getContentStats() {
+  const pg = await tryPg(async db => {
+    const [mixesByCategory, featuredResult, allPartners, activePartners, subCount, newestMix, newestSub] = await Promise.all([
+      db.select({ category: mixes.category, count: sql<number>`COUNT(*)` }).from(mixes).groupBy(mixes.category),
+      db.select({ count: sql<number>`COUNT(*)` }).from(mixes).where(eq(mixes.featured, true)),
+      db.select({ count: sql<number>`COUNT(*)` }).from(partners),
+      db.select({ count: sql<number>`COUNT(*)` }).from(partners).where(eq(partners.active, true)),
+      db.select({ count: sql<number>`COUNT(*)` }).from(subscribers),
+      db.select({ createdAt: mixes.createdAt }).from(mixes).orderBy(desc(mixes.createdAt)).limit(1),
+      db.select({ subscribedAt: subscribers.subscribedAt }).from(subscribers).orderBy(desc(subscribers.subscribedAt)).limit(1),
+    ]);
+    return {
+      mixesByCategory: mixesByCategory.map(r => ({ category: r.category, count: Number(r.count) })),
+      featuredCount: Number(featuredResult[0]?.count || 0),
+      partnerStats: { total: Number(allPartners[0]?.count || 0), active: Number(activePartners[0]?.count || 0) },
+      subscriberCount: Number(subCount[0]?.count || 0),
+      newestMixDate: newestMix[0]?.createdAt ? String(newestMix[0].createdAt) : null,
+      newestSubscriberDate: newestSub[0]?.subscribedAt ? String(newestSub[0].subscribedAt) : null,
+    };
+  });
+  if (pg) return pg;
+
+  // REST fallback
+  const [allMixes, allPartnersRest, allSubsRest] = await Promise.all([
+    restGet<any>('mixes', 'select=category,featured,"createdAt"'),
+    restGet<any>('partners', 'select=active'),
+    restGet<any>('subscribers', 'select="subscribedAt"'),
+  ]);
+
+  const catCounts: Record<string, number> = {};
+  let featuredCount = 0;
+  let newestMixDate: string | null = null;
+  for (const m of allMixes) {
+    catCounts[m.category] = (catCounts[m.category] || 0) + 1;
+    if (m.featured) featuredCount++;
+    if (!newestMixDate || m.createdAt > newestMixDate) newestMixDate = m.createdAt;
+  }
+
+  const activeCount = allPartnersRest.filter((p: any) => p.active).length;
+  const sortedSubs = [...allSubsRest].sort((a: any, b: any) => String(b.subscribedAt).localeCompare(String(a.subscribedAt)));
+  const newestSubscriberDate = sortedSubs.length > 0 ? String(sortedSubs[0].subscribedAt) : null;
+
+  return {
+    mixesByCategory: Object.entries(catCounts).map(([category, count]) => ({ category, count })),
+    featuredCount,
+    partnerStats: { total: allPartnersRest.length, active: activeCount },
+    subscriberCount: allSubsRest.length,
+    newestMixDate,
+    newestSubscriberDate,
+  };
+}
+
 // ============ VAULT ============
 
 import { vaultAccess, vaultMixes, VaultMix } from "../drizzle/schema";

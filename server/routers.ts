@@ -62,6 +62,8 @@ import {
   getVaultMixes,
   createVaultMix,
   deleteVaultMix,
+  getUserCount,
+  getContentStats,
 } from "./db";
 
 const categoryEnum = z.enum(["progressive-psy", "psychedelic-trance", "goa-trance", "full-on"]);
@@ -77,6 +79,16 @@ export const appRouter = router({
         success: true,
       } as const;
     }),
+  }),
+
+  // ============ USERS ============
+  users: router({
+    count: adminProcedure.query(() => getUserCount()),
+  }),
+
+  // ============ ADMIN STATS ============
+  admin: router({
+    getContentStats: adminProcedure.query(() => getContentStats()),
   }),
 
   // ============ MIXES ============
