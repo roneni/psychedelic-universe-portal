@@ -5,6 +5,7 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { trpc } from "@/lib/trpc";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -19,6 +20,8 @@ import {
   ChevronDown,
   ChevronUp,
   Sparkles,
+  Plus,
+  Star,
 } from "lucide-react";
 
 // Festival data compiled from goabase.net, psymedia.co.za, psycalendar.com, psytranceportal.com
@@ -36,6 +39,14 @@ interface Festival {
   website?: string;
   featured?: boolean;
   genre?: string;
+  isSubmission?: boolean;
+}
+
+function computeDuration(start: string, end: string): string {
+  const s = new Date(start);
+  const e = new Date(end);
+  const days = Math.max(1, Math.round((e.getTime() - s.getTime()) / (1000 * 60 * 60 * 24)));
+  return days === 1 ? "1 day" : `${days} days`;
 }
 
 const festivals: Festival[] = [
@@ -141,7 +152,7 @@ const months = [
   "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 ];
 
-const continents = ["All", "Europe", "Asia", "South America", "Central America", "North America", "Africa", "Oceania", "Middle East"];
+const continents = ["All", "Europe", "Asia", "South America", "Central America", "North America", "Africa", "Oceania", "Middle East", "Community"];
 
 export default function Festivals() {
   usePageMeta({
@@ -155,19 +166,46 @@ export default function Festivals() {
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
+  // Fetch approved submissions from the database
+  const approvedQuery = trpc.festivalSubmissions.approved.useQuery();
+
+  // Merge hardcoded festivals with approved DB submissions
+  const allFestivals = useMemo(() => {
+    const merged: Festival[] = [...festivals];
+    if (approvedQuery.data) {
+      for (const sub of approvedQuery.data) {
+        merged.push({
+          name: sub.festivalName,
+          location: sub.locationName,
+          country: sub.locationCountry,
+          continent: "Community", // community submissions don't have continent
+          startDate: sub.startDate,
+          endDate: sub.endDate,
+          duration: computeDuration(sub.startDate, sub.endDate),
+          website: sub.websiteUrl || undefined,
+          featured: sub.status === "featured",
+          genre: sub.genres,
+          size: undefined,
+          isSubmission: true,
+        });
+      }
+    }
+    return merged;
+  }, [approvedQuery.data]);
+
   const filteredFestivals = useMemo(() => {
-    return festivals
+    return allFestivals
       .filter((f) => {
         const matchesSearch =
           f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           f.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
           f.location.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesContinent = selectedContinent === "All" || f.continent === selectedContinent;
+        const matchesContinent = selectedContinent === "All" || f.continent === selectedContinent || (selectedContinent === "Community" && f.isSubmission);
         const matchesMonth = !selectedMonth || new Date(f.startDate).toLocaleString("en", { month: "long" }) === selectedMonth;
         return matchesSearch && matchesContinent && matchesMonth;
       })
       .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-  }, [searchQuery, selectedContinent, selectedMonth]);
+  }, [searchQuery, selectedContinent, selectedMonth, allFestivals]);
 
   // Group by month
   const groupedByMonth = useMemo(() => {
@@ -180,7 +218,8 @@ export default function Festivals() {
     return groups;
   }, [filteredFestivals]);
 
-  const featuredFestivals = festivals.filter((f) => f.featured);
+  // Featured: both hardcoded and DB featured
+  const featuredFestivals = allFestivals.filter((f) => f.featured);
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
@@ -234,7 +273,7 @@ export default function Festivals() {
 
         {/* Labs Attribution */}
         <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4 flex-wrap">
             <a
               href="https://www.youtube.com/@PsychedelicUniverse"
               target="_blank"
@@ -246,6 +285,14 @@ export default function Festivals() {
                 Created in Psychedelic Universe <span className="text-cyan-400 font-bold">Labs</span>
               </span>
             </a>
+            <Link href="/festivals/submit">
+              <button className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 hover:border-purple-500/70 transition-all group shadow-[0_0_20px_-5px_rgba(168,85,247,0.3)] hover:shadow-[0_0_30px_-5px_rgba(168,85,247,0.5)]">
+                <Plus className="w-4 h-4 text-purple-400" />
+                <span className="font-orbitron text-xs tracking-widest text-purple-300 group-hover:text-purple-200 transition-colors uppercase">
+                  Submit Your <span className="text-purple-400 font-bold">Festival</span>
+                </span>
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -438,9 +485,19 @@ export default function Festivals() {
                               <h4 className={`font-bold text-sm ${f.featured ? "text-amber-400" : "text-foreground"} group-hover:text-cyan-400 transition-colors`}>
                                 {f.name}
                               </h4>
-                              {f.featured && (
+                              {f.featured && !f.isSubmission && (
                                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
                                   MAJOR
+                                </span>
+                              )}
+                              {f.featured && f.isSubmission && (
+                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center gap-1">
+                                  <Star className="w-2.5 h-2.5" /> FEATURED
+                                </span>
+                              )}
+                              {!f.featured && f.isSubmission && (
+                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+                                  COMMUNITY
                                 </span>
                               )}
                               {sizeBadge && (
@@ -506,7 +563,7 @@ export default function Festivals() {
               Last updated: February 7, 2026.
             </p>
             <p className="text-xs text-muted-foreground/40 mt-2">
-              Know of a festival we're missing? <Link href="/contact" className="text-cyan-400 hover:underline">Let us know</Link>
+              Know of a festival we're missing? <Link href="/festivals/submit" className="text-cyan-400 hover:underline">Submit it here</Link>
             </p>
           </div>
         </section>

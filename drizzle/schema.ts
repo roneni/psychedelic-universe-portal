@@ -19,6 +19,7 @@ export const karmaActionEnum = pgEnum("karma_action", [
   "artist_submit",
 ]);
 export const contentTypeEnum = pgEnum("content_type", ["mix", "track"]);
+export const festivalSubmissionStatusEnum = pgEnum("festival_submission_status", ["pending", "approved", "rejected", "featured"]);
 
 /**
  * Core user table backing auth flow.
@@ -278,3 +279,36 @@ export const vaultMixes = pgTable("vault_mixes", {
 
 export type VaultMix = typeof vaultMixes.$inferSelect;
 export type InsertVaultMix = typeof vaultMixes.$inferInsert;
+
+/**
+ * Festival Submissions table - stores user-submitted festivals for review
+ */
+export const festivalSubmissions = pgTable("festival_submissions", {
+  id: serial("id").primaryKey(),
+  festivalName: varchar("festivalName", { length: 255 }).notNull(),
+  websiteUrl: varchar("websiteUrl", { length: 500 }),
+  contactName: varchar("contactName", { length: 255 }).notNull(),
+  contactEmail: varchar("contactEmail", { length: 320 }).notNull(),
+  locationName: varchar("locationName", { length: 255 }).notNull(),
+  locationCountry: varchar("locationCountry", { length: 100 }).notNull(),
+  startDate: varchar("startDate", { length: 20 }).notNull(),
+  endDate: varchar("endDate", { length: 20 }).notNull(),
+  genres: text("genres").notNull(),
+  description: text("description").notNull(),
+  lineup: text("lineup"),
+  logoUrl: varchar("logoUrl", { length: 500 }),
+  photo1Url: varchar("photo1Url", { length: 500 }),
+  photo2Url: varchar("photo2Url", { length: 500 }),
+  photo3Url: varchar("photo3Url", { length: 500 }),
+  facebookUrl: varchar("facebookUrl", { length: 500 }),
+  instagramUrl: varchar("instagramUrl", { length: 500 }),
+  ticketUrl: varchar("ticketUrl", { length: 500 }),
+  status: festivalSubmissionStatusEnum("status").default("pending").notNull(),
+  adminNotes: text("adminNotes"),
+  reviewedAt: timestamp("reviewedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+export type FestivalSubmission = typeof festivalSubmissions.$inferSelect;
+export type InsertFestivalSubmission = typeof festivalSubmissions.$inferInsert;

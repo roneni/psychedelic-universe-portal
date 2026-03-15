@@ -62,6 +62,12 @@ import {
   getVaultMixes,
   createVaultMix,
   deleteVaultMix,
+  getAllFestivalSubmissions,
+  getFestivalSubmissionsByStatus,
+  getApprovedFestivals,
+  createFestivalSubmission,
+  updateFestivalSubmissionStatus,
+  deleteFestivalSubmission,
 } from "./db";
 
 const categoryEnum = z.enum(["progressive-psy", "psychedelic-trance", "goa-trance", "full-on"]);
@@ -486,6 +492,79 @@ export const appRouter = router({
     delete: adminProcedure
       .input(z.object({ id: z.number() }))
       .mutation(({ input }) => deleteRonensPick(input.id)),
+  }),
+
+  // ============ FESTIVAL SUBMISSIONS ============
+  festivalSubmissions: router({
+    // Public: create a new submission
+    create: publicProcedure
+      .input(z.object({
+        festivalName: z.string().min(1, "Festival name is required").max(255),
+        websiteUrl: z.string().max(500).optional(),
+        contactName: z.string().min(1, "Contact name is required").max(255),
+        contactEmail: z.string().email("Valid email is required").max(320),
+        locationName: z.string().min(1, "Location is required").max(255),
+        locationCountry: z.string().min(1, "Country is required").max(100),
+        startDate: z.string().min(1, "Start date is required").max(20),
+        endDate: z.string().min(1, "End date is required").max(20),
+        genres: z.string().min(1, "At least one genre is required"),
+        description: z.string().min(10, "Description must be at least 10 characters"),
+        lineup: z.string().optional(),
+        logoUrl: z.string().max(500).optional(),
+        photo1Url: z.string().max(500).optional(),
+        photo2Url: z.string().max(500).optional(),
+        photo3Url: z.string().max(500).optional(),
+        facebookUrl: z.string().max(500).optional(),
+        instagramUrl: z.string().max(500).optional(),
+        ticketUrl: z.string().max(500).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        await createFestivalSubmission(input);
+        return { success: true, message: "Festival submitted for review!" };
+      }),
+
+    // Public: get approved + featured festivals
+    approved: publicProcedure.query(() => getApprovedFestivals()),
+
+    // Admin: list all submissions
+    list: adminProcedure
+      .input(z.object({ status: z.enum(["pending", "approved", "rejected", "featured"]).optional() }).optional())
+      .query(({ input }) => {
+        if (input?.status) return getFestivalSubmissionsByStatus(input.status);
+        return getAllFestivalSubmissions();
+      }),
+
+    // Admin: update status
+    updateStatus: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        status: z.enum(["pending", "approved", "rejected", "featured"]),
+        adminNotes: z.string().optional(),
+      }))
+      .mutation(({ input }) => updateFestivalSubmissionStatus(input.id, input.status, input.adminNotes)),
+
+    // Admin: delete submission
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input }) => deleteFestivalSubmission(input.id)),
+
+    // Public: upload image for festival submission
+    uploadImage: publicProcedure
+      .input(z.object({
+        fileName: z.string(),
+        fileData: z.string(), // base64
+        contentType: z.string(),
+        slug: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        const buffer = Buffer.from(input.fileData, "base64");
+        const timestamp = Date.now();
+        const randomSuffix = Math.random().toString(36).substring(2, 8);
+        const extension = input.fileName.split(".").pop() || "png";
+        const key = `festival-submissions/${input.slug}/${timestamp}-${randomSuffix}.${extension}`;
+        const result = await storagePut(key, buffer, input.contentType);
+        return { url: result.url };
+      }),
   }),
 
   // ============ UNDERGROUND VAULT ============

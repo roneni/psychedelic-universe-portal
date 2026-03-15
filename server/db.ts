@@ -1,7 +1,7 @@
 
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
-import { eq, desc, asc, and, sql } from "drizzle-orm";
+import { eq, desc, asc, and, sql, or, inArray } from "drizzle-orm";
 import {
   InsertUser, users,
   mixes, InsertMix, Mix,
@@ -676,7 +676,7 @@ export async function deleteRonensPick(id: number): Promise<void> {
 
 // ============ VAULT ============
 
-import { vaultAccess, vaultMixes, VaultMix } from "../drizzle/schema";
+import { vaultAccess, vaultMixes, VaultMix, festivalSubmissions, InsertFestivalSubmission, FestivalSubmission } from "../drizzle/schema";
 
 const VAULT_PASSPHRASE = process.env.VAULT_PASSPHRASE || "UndergroundLounge";
 
@@ -731,4 +731,61 @@ export async function deleteVaultMix(id: number): Promise<void> {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   await db.delete(vaultMixes).where(eq(vaultMixes.id, id));
+}
+
+
+// ============ FESTIVAL SUBMISSIONS ============
+
+export async function getAllFestivalSubmissions(): Promise<FestivalSubmission[]> {
+  const pg = await tryPg(db => db.select().from(festivalSubmissions).orderBy(desc(festivalSubmissions.createdAt)));
+  if (pg) return pg;
+  return restGet<FestivalSubmission>('festival_submissions', 'select=*&order="createdAt".desc');
+}
+
+export async function getFestivalSubmissionsByStatus(status: FestivalSubmission["status"]): Promise<FestivalSubmission[]> {
+  const pg = await tryPg(db => db.select().from(festivalSubmissions).where(eq(festivalSubmissions.status, status)).orderBy(desc(festivalSubmissions.createdAt)));
+  if (pg) return pg;
+  return restGet<FestivalSubmission>('festival_submissions', `select=*&status=eq.${encodeURIComponent(status)}&order="createdAt".desc`);
+}
+
+export async function getApprovedFestivals(): Promise<FestivalSubmission[]> {
+  const pg = await tryPg(db =>
+    db.select().from(festivalSubmissions)
+      .where(or(eq(festivalSubmissions.status, "approved"), eq(festivalSubmissions.status, "featured")))
+      .orderBy(asc(festivalSubmissions.startDate))
+  );
+  if (pg) return pg;
+  return restGet<FestivalSubmission>('festival_submissions', 'select=*&or=(status.eq.approved,status.eq.featured)&order="startDate".asc');
+}
+
+export async function createFestivalSubmission(data: InsertFestivalSubmission): Promise<void> {
+  const pg = await tryPg(db => db.insert(festivalSubmissions).values(data));
+  if (pg !== null) return;
+  await restPost('festival_submissions', data as any);
+}
+
+export async function updateFestivalSubmissionStatus(
+  id: number,
+  status: FestivalSubmission["status"],
+  adminNotes?: string
+): Promise<void> {
+  const updateData: Record<string, unknown> = {
+    status,
+    reviewedAt: new Date(),
+    updatedAt: new Date(),
+  };
+  if (adminNotes !== undefined) {
+    updateData.adminNotes = adminNotes;
+  }
+  const pg = await tryPg(db =>
+    db.update(festivalSubmissions).set(updateData).where(eq(festivalSubmissions.id, id))
+  );
+  if (pg !== null) return;
+  await restPatch('festival_submissions', `id=eq.${id}`, updateData);
+}
+
+export async function deleteFestivalSubmission(id: number): Promise<void> {
+  const pg = await tryPg(db => db.delete(festivalSubmissions).where(eq(festivalSubmissions.id, id)));
+  if (pg !== null) return;
+  await restDelete('festival_submissions', `id=eq.${id}`);
 }

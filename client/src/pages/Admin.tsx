@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { Music, Users, Settings, Mail, Plus, Trash2, Edit, Save, X, ArrowLeft, LogOut } from "lucide-react";
+import { Music, Users, Settings, Mail, Plus, Trash2, Edit, Save, X, ArrowLeft, LogOut, Tent, Check, Star, XCircle, ChevronDown, ChevronUp, Eye, MapPin, Calendar, Globe, ExternalLink } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Link } from "wouter";
@@ -61,6 +61,9 @@ export default function Admin() {
   const [partnerForm, setPartnerForm] = useState<PartnerFormData>(defaultPartnerForm);
   const [showMixForm, setShowMixForm] = useState(false);
   const [showPartnerForm, setShowPartnerForm] = useState(false);
+  const [festivalStatusFilter, setFestivalStatusFilter] = useState<string>("all");
+  const [expandedSubmissionId, setExpandedSubmissionId] = useState<number | null>(null);
+  const [adminNotesMap, setAdminNotesMap] = useState<Record<number, string>>({});
 
   // Queries
   const mixesQuery = trpc.mixes.list.useQuery();
@@ -71,6 +74,10 @@ export default function Admin() {
   const settingsQuery = trpc.settings.list.useQuery(undefined, {
     enabled: user?.role === "admin",
   });
+  const festivalSubmissionsQuery = trpc.festivalSubmissions.list.useQuery(
+    festivalStatusFilter === "all" ? undefined : { status: festivalStatusFilter as any },
+    { enabled: user?.role === "admin" }
+  );
 
   // Mutations
   const createMix = trpc.mixes.create.useMutation({
@@ -141,6 +148,22 @@ export default function Admin() {
     onSuccess: () => {
       toast.success("Setting saved!");
       settingsQuery.refetch();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const updateFestivalStatus = trpc.festivalSubmissions.updateStatus.useMutation({
+    onSuccess: () => {
+      toast.success("Status updated!");
+      festivalSubmissionsQuery.refetch();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const deleteFestivalSubmission = trpc.festivalSubmissions.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Submission deleted!");
+      festivalSubmissionsQuery.refetch();
     },
     onError: (err) => toast.error(err.message),
   });
@@ -288,6 +311,14 @@ export default function Admin() {
             </TabsTrigger>
             <TabsTrigger value="subscribers" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400">
               <Mail className="w-4 h-4 mr-2" /> Subscribers
+            </TabsTrigger>
+            <TabsTrigger value="festivals" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 relative">
+              <Tent className="w-4 h-4 mr-2" /> Festivals
+              {festivalSubmissionsQuery.data && festivalSubmissionsQuery.data.filter(s => s.status === "pending").length > 0 && (
+                <span className="ml-1.5 inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-bold">
+                  {festivalSubmissionsQuery.data.filter(s => s.status === "pending").length}
+                </span>
+              )}
             </TabsTrigger>
             <TabsTrigger value="settings" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400">
               <Settings className="w-4 h-4 mr-2" /> Settings
@@ -614,6 +645,234 @@ export default function Admin() {
             </Card>
           </TabsContent>
 
+          {/* FESTIVALS TAB */}
+          <TabsContent value="festivals">
+            <Card className="bg-slate-900/50 border-slate-800">
+              <CardHeader>
+                <div>
+                  <CardTitle className="text-slate-100">Festival Submissions</CardTitle>
+                  <CardDescription className="text-slate-400">
+                    Review and manage community-submitted festivals.
+                    {festivalSubmissionsQuery.data && ` ${festivalSubmissionsQuery.data.length} total submissions.`}
+                  </CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {/* Status filter */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {["all", "pending", "approved", "featured", "rejected"].map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => setFestivalStatusFilter(status)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all capitalize ${
+                        festivalStatusFilter === status
+                          ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30"
+                          : "bg-slate-800/50 text-slate-400 border border-slate-700/50 hover:border-slate-600"
+                      }`}
+                    >
+                      {status}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="space-y-3">
+                  {festivalSubmissionsQuery.data?.map((sub) => {
+                    const isExpanded = expandedSubmissionId === sub.id;
+                    return (
+                      <div
+                        key={sub.id}
+                        className="rounded-lg bg-slate-800/50 border border-slate-700/50 overflow-hidden"
+                      >
+                        {/* Summary row */}
+                        <div
+                          className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-800 transition-colors"
+                          onClick={() => setExpandedSubmissionId(isExpanded ? null : sub.id)}
+                        >
+                          <div className="flex items-center gap-4 flex-1 min-w-0">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <h4 className="font-medium text-slate-100 truncate">{sub.festivalName}</h4>
+                                <FestivalStatusBadge status={sub.status} />
+                              </div>
+                              <p className="text-sm text-slate-400 mt-0.5 flex items-center gap-3 flex-wrap">
+                                <span className="flex items-center gap-1">
+                                  <MapPin className="w-3 h-3" /> {sub.locationCountry}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="w-3 h-3" /> {sub.startDate} - {sub.endDate}
+                                </span>
+                                <span className="text-slate-500 text-xs">
+                                  Submitted {new Date(sub.createdAt).toLocaleDateString()}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 ml-4 shrink-0">
+                            {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                          </div>
+                        </div>
+
+                        {/* Expanded details */}
+                        {isExpanded && (
+                          <div className="border-t border-slate-700/50 p-4 space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div>
+                                <p className="text-xs text-slate-500 mb-1">Contact</p>
+                                <p className="text-sm text-slate-300">{sub.contactName}</p>
+                                <p className="text-sm text-slate-400">{sub.contactEmail}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-slate-500 mb-1">Location</p>
+                                <p className="text-sm text-slate-300">{sub.locationName}, {sub.locationCountry}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-slate-500 mb-1">Genres</p>
+                                <p className="text-sm text-slate-300">{sub.genres}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-slate-500 mb-1">Dates</p>
+                                <p className="text-sm text-slate-300">{sub.startDate} to {sub.endDate}</p>
+                              </div>
+                            </div>
+
+                            <div>
+                              <p className="text-xs text-slate-500 mb-1">Description</p>
+                              <p className="text-sm text-slate-300 whitespace-pre-wrap">{sub.description}</p>
+                            </div>
+
+                            {sub.lineup && (
+                              <div>
+                                <p className="text-xs text-slate-500 mb-1">Lineup</p>
+                                <p className="text-sm text-slate-300 whitespace-pre-wrap">{sub.lineup}</p>
+                              </div>
+                            )}
+
+                            {/* Links */}
+                            <div className="flex flex-wrap gap-3">
+                              {sub.websiteUrl && (
+                                <a href={sub.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                                  <Globe className="w-3 h-3" /> Website
+                                </a>
+                              )}
+                              {sub.facebookUrl && (
+                                <a href={sub.facebookUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                                  <ExternalLink className="w-3 h-3" /> Facebook
+                                </a>
+                              )}
+                              {sub.instagramUrl && (
+                                <a href={sub.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                                  <ExternalLink className="w-3 h-3" /> Instagram
+                                </a>
+                              )}
+                              {sub.ticketUrl && (
+                                <a href={sub.ticketUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                                  <ExternalLink className="w-3 h-3" /> Tickets
+                                </a>
+                              )}
+                            </div>
+
+                            {/* Images */}
+                            {(sub.logoUrl || sub.photo1Url || sub.photo2Url || sub.photo3Url) && (
+                              <div>
+                                <p className="text-xs text-slate-500 mb-2">Uploaded Images</p>
+                                <div className="flex flex-wrap gap-3">
+                                  {sub.logoUrl && (
+                                    <a href={sub.logoUrl} target="_blank" rel="noopener noreferrer">
+                                      <img src={sub.logoUrl} alt="Logo" className="w-20 h-20 object-contain rounded-lg border border-slate-700 bg-slate-900" />
+                                    </a>
+                                  )}
+                                  {[sub.photo1Url, sub.photo2Url, sub.photo3Url].filter(Boolean).map((url, i) => (
+                                    <a key={i} href={url!} target="_blank" rel="noopener noreferrer">
+                                      <img src={url!} alt={`Photo ${i + 1}`} className="w-32 h-20 object-cover rounded-lg border border-slate-700" />
+                                    </a>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Admin notes */}
+                            <div>
+                              <Label className="text-slate-400 text-xs">Admin Notes</Label>
+                              <Textarea
+                                value={adminNotesMap[sub.id] ?? sub.adminNotes ?? ""}
+                                onChange={(e) => setAdminNotesMap(prev => ({ ...prev, [sub.id]: e.target.value }))}
+                                placeholder="Internal notes about this submission..."
+                                rows={2}
+                                className="mt-1 bg-slate-900 border-slate-700 text-slate-100 text-sm"
+                              />
+                            </div>
+
+                            {/* Action buttons */}
+                            <div className="flex flex-wrap gap-2 pt-2">
+                              <Button
+                                size="sm"
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                                disabled={updateFestivalStatus.isPending}
+                                onClick={() => updateFestivalStatus.mutate({
+                                  id: sub.id,
+                                  status: "approved",
+                                  adminNotes: adminNotesMap[sub.id] ?? sub.adminNotes ?? undefined,
+                                })}
+                              >
+                                <Check className="w-3 h-3 mr-1" /> Approve
+                              </Button>
+                              <Button
+                                size="sm"
+                                className="bg-amber-600 hover:bg-amber-700 text-white"
+                                disabled={updateFestivalStatus.isPending}
+                                onClick={() => updateFestivalStatus.mutate({
+                                  id: sub.id,
+                                  status: "featured",
+                                  adminNotes: adminNotesMap[sub.id] ?? sub.adminNotes ?? undefined,
+                                })}
+                              >
+                                <Star className="w-3 h-3 mr-1" /> Feature
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="border-red-700/50 text-red-400 hover:bg-red-900/30"
+                                disabled={updateFestivalStatus.isPending}
+                                onClick={() => updateFestivalStatus.mutate({
+                                  id: sub.id,
+                                  status: "rejected",
+                                  adminNotes: adminNotesMap[sub.id] ?? sub.adminNotes ?? undefined,
+                                })}
+                              >
+                                <XCircle className="w-3 h-3 mr-1" /> Reject
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="text-slate-400 hover:text-red-400 ml-auto"
+                                onClick={() => {
+                                  if (confirm("Delete this submission permanently?")) {
+                                    deleteFestivalSubmission.mutate({ id: sub.id });
+                                  }
+                                }}
+                              >
+                                <Trash2 className="w-3 h-3 mr-1" /> Delete
+                              </Button>
+                            </div>
+
+                            {sub.reviewedAt && (
+                              <p className="text-xs text-slate-500">
+                                Last reviewed: {new Date(sub.reviewedAt).toLocaleString()}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                  {(!festivalSubmissionsQuery.data || festivalSubmissionsQuery.data.length === 0) && (
+                    <p className="text-center text-slate-500 py-8">No festival submissions yet.</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* SETTINGS TAB */}
           <TabsContent value="settings">
             <Card className="bg-slate-900/50 border-slate-800">
@@ -654,6 +913,20 @@ export default function Admin() {
         </Tabs>
       </main>
     </div>
+  );
+}
+
+function FestivalStatusBadge({ status }: { status: string }) {
+  const styles: Record<string, string> = {
+    pending: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+    approved: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+    featured: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+    rejected: "bg-red-500/20 text-red-400 border-red-500/30",
+  };
+  return (
+    <span className={`text-[10px] px-2 py-0.5 rounded-full border capitalize ${styles[status] || "bg-slate-500/20 text-slate-400 border-slate-500/30"}`}>
+      {status}
+    </span>
   );
 }
 

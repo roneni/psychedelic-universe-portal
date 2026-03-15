@@ -16,6 +16,7 @@ import Submit from "./pages/Submit";
 import Stats from "./pages/Stats";
 import Suggestions from "./pages/Suggestions";
 import Festivals from "./pages/Festivals";
+import FestivalSubmit from "./pages/FestivalSubmit";
 import Community from "./pages/Community";
 import Underground from "./pages/Underground";
 import AuthCallback from "./pages/AuthCallback";
@@ -37,6 +38,7 @@ function Router() {
       <Route path={"/stats"} component={Stats} />
       <Route path={"/suggestions"} component={Suggestions} />
       <Route path={"/festivals"} component={Festivals} />
+      <Route path={"/festivals/submit"} component={FestivalSubmit} />
       <Route path={"/community"} component={Community} />
       <Route path={"/underground"} component={Underground} />
       <Route path={"/auth/callback"} component={AuthCallback} />
