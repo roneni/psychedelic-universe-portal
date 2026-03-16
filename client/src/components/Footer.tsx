@@ -27,7 +27,7 @@ export function Footer() {
               <span className="text-xl font-bold tracking-wider">PSYCHEDELIC UNIVERSE</span>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              The global hub for psychedelic trance culture. Connecting artists, labels, and fans through the power of trance.
+              The global hub for psychedelic trance culture. Connecting artists, labels, and fans throughout the multiverse 🛰️
             </p>
             <div className="flex gap-4">
               <a 
