@@ -5,7 +5,9 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "";
 
 /** Admin client for server-side operations (uses service role key) */
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey);
+export const supabaseAdmin = supabaseServiceRoleKey
+  ? createClient(supabaseUrl, supabaseServiceRoleKey)
+  : createClient(supabaseUrl, supabaseAnonKey);
 
 /** Public client for auth verification (uses anon key) */
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

@@ -40,6 +40,7 @@ interface Festival {
   featured?: boolean;
   genre?: string;
   imageUrl?: string;
+  description?: string;
   isSubmission?: boolean;
 }
 
@@ -70,7 +71,7 @@ const festivals: Festival[] = [
   { name: "Sati Festival", location: "Pokhara", country: "Nepal", continent: "Asia", startDate: "2026-04-30", endDate: "2026-05-03", duration: "3 days", size: "medium", website: "https://www.goabase.net/festival/sati-festival/115927", imageUrl: "/images/festivals/sati-festival.webp", genre: "Psychedelic Trance" },
   { name: "Hai in den Mai Festival", location: "Stemwede", country: "Germany", continent: "Europe", startDate: "2026-04-30", endDate: "2026-05-03", duration: "3 days", size: "large", website: "https://waldfrieden.de", imageUrl: "/images/festivals/hai-in-den-mai.jpg", genre: "Psychedelic Trance" },
   // May 2026
-  { name: "Arkana Festival 2026", location: "Cusco", country: "Peru", continent: "South America", startDate: "2026-05-01", endDate: "2026-05-03", duration: "2 days", size: "medium", website: "https://arkanafestival.com/", genre: "Psychedelic Trance" },
+  { name: "Arkana Festival 2026", location: "Sacred Valley, Cusco", country: "Peru", continent: "South America", startDate: "2026-05-01", endDate: "2026-05-03", duration: "3 days", size: "medium", website: "https://www.arkanafestival.net/", imageUrl: "/images/festivals/arkana-festival.jpg", genre: "Psytrance, Dark Progressive, Techno", featured: true, description: "Since 2012, Arkana Festival has returned to the Sacred Valley like the opening of a portal between ancestral mountains. Here, time slows down and music stitches together past and future." },
   { name: "Burning Nest", location: "nr Exeter, Devon", country: "United Kingdom", continent: "Europe", startDate: "2026-05-18", endDate: "2026-05-25", duration: "7 days", size: "medium", website: "https://burningnest.co.uk/", imageUrl: "/images/festivals/burning-nest.jpg", genre: "Multi-genre" },
   { name: "Ikarus Festival", location: "Southern Germany", country: "Germany", continent: "Europe", startDate: "2026-05-22", endDate: "2026-05-25", duration: "3 days", size: "large", website: "https://www.ikarus-festival.de/", imageUrl: "/images/festivals/ikarus-festival.svg", genre: "Psychedelic Trance" },
   { name: "Quantum Awakening Festival 3.0", location: "Hammonton, New Jersey", country: "USA", continent: "North America", startDate: "2026-05-22", endDate: "2026-05-25", duration: "3 days", size: "medium", website: "https://quantumawakeningfestival.com/", imageUrl: "/images/festivals/quantum-awakening.png", genre: "Psychedelic Trance" },
@@ -687,6 +688,9 @@ export default function Festivals() {
                         </p>
                       </div>
                     </div>
+                    {f.description && (
+                      <p className="text-gray-400 text-xs mb-3 line-clamp-2 italic">{f.description}</p>
+                    )}
                     <div className="flex items-center gap-3 text-xs">
                       <span className="flex items-center gap-1 text-amber-400">
                         <Calendar className="w-3 h-3" />

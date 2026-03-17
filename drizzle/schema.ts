@@ -312,3 +312,32 @@ export const festivalSubmissions = pgTable("festival_submissions", {
 
 export type FestivalSubmission = typeof festivalSubmissions.$inferSelect;
 export type InsertFestivalSubmission = typeof festivalSubmissions.$inferInsert;
+
+/**
+ * Festivals table - searchable festival directory
+ */
+export const festivalSizeEnum = pgEnum("festival_size", ["small", "medium", "large", "major"]);
+
+export const festivals = pgTable("festivals", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  location: varchar("location", { length: 255 }).notNull(),
+  country: varchar("country", { length: 100 }).notNull(),
+  continent: varchar("continent", { length: 50 }).notNull(),
+  startDate: varchar("start_date", { length: 10 }).notNull(),
+  endDate: varchar("end_date", { length: 10 }).notNull(),
+  duration: varchar("duration", { length: 50 }).notNull(),
+  size: varchar("size", { length: 20 }).default("medium"),
+  website: varchar("website", { length: 500 }),
+  imageUrl: varchar("image_url", { length: 500 }),
+  genre: varchar("genre", { length: 255 }),
+  description: text("description"),
+  featured: boolean("featured").default(false).notNull(),
+  active: boolean("active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type Festival = typeof festivals.$inferSelect;
+export type InsertFestival = typeof festivals.$inferInsert;

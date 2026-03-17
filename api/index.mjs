@@ -10,7 +10,7 @@ var __export = (target, all) => {
 
 // drizzle/schema.ts
 import { serial, pgTable, pgEnum, text, timestamp, varchar, boolean, integer } from "drizzle-orm/pg-core";
-var roleEnum, mixCategoryEnum, notificationTypeEnum, suggestionCategoryEnum, suggestionStatusEnum, karmaActionEnum, contentTypeEnum, users, mixes, partners, siteSettings, subscribers, artists, notifications, youtubeOAuthTokens, youtubeAnalyticsCache, suggestions, karmaPoints, favorites, ronensPicks, vaultAccess, vaultMixes;
+var roleEnum, mixCategoryEnum, notificationTypeEnum, suggestionCategoryEnum, suggestionStatusEnum, karmaActionEnum, contentTypeEnum, festivalSubmissionStatusEnum, users, mixes, partners, siteSettings, subscribers, artists, notifications, youtubeOAuthTokens, youtubeAnalyticsCache, suggestions, karmaPoints, favorites, ronensPicks, vaultAccess, vaultMixes, festivalSubmissions, festivalSizeEnum, festivals;
 var init_schema = __esm({
   "drizzle/schema.ts"() {
     "use strict";
@@ -30,6 +30,7 @@ var init_schema = __esm({
       "artist_submit"
     ]);
     contentTypeEnum = pgEnum("content_type", ["mix", "track"]);
+    festivalSubmissionStatusEnum = pgEnum("festival_submission_status", ["pending", "approved", "rejected", "featured"]);
     users = pgTable("users", {
       id: serial("id").primaryKey(),
       /** OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
@@ -178,6 +179,53 @@ var init_schema = __esm({
       sortOrder: integer("sortOrder").default(0).notNull(),
       createdAt: timestamp("createdAt").defaultNow().notNull()
     });
+    festivalSubmissions = pgTable("festival_submissions", {
+      id: serial("id").primaryKey(),
+      festivalName: varchar("festivalName", { length: 255 }).notNull(),
+      websiteUrl: varchar("websiteUrl", { length: 500 }),
+      contactName: varchar("contactName", { length: 255 }).notNull(),
+      contactEmail: varchar("contactEmail", { length: 320 }).notNull(),
+      locationName: varchar("locationName", { length: 255 }).notNull(),
+      locationCountry: varchar("locationCountry", { length: 100 }).notNull(),
+      startDate: varchar("startDate", { length: 20 }).notNull(),
+      endDate: varchar("endDate", { length: 20 }).notNull(),
+      genres: text("genres").notNull(),
+      description: text("description").notNull(),
+      lineup: text("lineup"),
+      logoUrl: varchar("logoUrl", { length: 500 }),
+      photo1Url: varchar("photo1Url", { length: 500 }),
+      photo2Url: varchar("photo2Url", { length: 500 }),
+      photo3Url: varchar("photo3Url", { length: 500 }),
+      facebookUrl: varchar("facebookUrl", { length: 500 }),
+      instagramUrl: varchar("instagramUrl", { length: 500 }),
+      ticketUrl: varchar("ticketUrl", { length: 500 }),
+      status: festivalSubmissionStatusEnum("status").default("pending").notNull(),
+      adminNotes: text("adminNotes"),
+      reviewedAt: timestamp("reviewedAt"),
+      createdAt: timestamp("createdAt").defaultNow().notNull(),
+      updatedAt: timestamp("updatedAt").defaultNow().notNull()
+    });
+    festivalSizeEnum = pgEnum("festival_size", ["small", "medium", "large", "major"]);
+    festivals = pgTable("festivals", {
+      id: serial("id").primaryKey(),
+      name: varchar("name", { length: 255 }).notNull(),
+      slug: varchar("slug", { length: 255 }).notNull().unique(),
+      location: varchar("location", { length: 255 }).notNull(),
+      country: varchar("country", { length: 100 }).notNull(),
+      continent: varchar("continent", { length: 50 }).notNull(),
+      startDate: varchar("start_date", { length: 10 }).notNull(),
+      endDate: varchar("end_date", { length: 10 }).notNull(),
+      duration: varchar("duration", { length: 50 }).notNull(),
+      size: varchar("size", { length: 20 }).default("medium"),
+      website: varchar("website", { length: 500 }),
+      imageUrl: varchar("image_url", { length: 500 }),
+      genre: varchar("genre", { length: 255 }),
+      description: text("description"),
+      featured: boolean("featured").default(false).notNull(),
+      active: boolean("active").default(true).notNull(),
+      createdAt: timestamp("created_at").defaultNow().notNull(),
+      updatedAt: timestamp("updated_at").defaultNow().notNull()
+    });
   }
 });
 
@@ -216,7 +264,7 @@ var init_notification = __esm({
 // server/db.ts
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
-import { eq, desc, asc, and, sql } from "drizzle-orm";
+import { eq, desc, asc, and, sql, or } from "drizzle-orm";
 function parseDbUrl(url) {
   const m = url.match(/^postgresql:\/\/([^:]+):(.+)@([^:]+):(\d+)\/(.+?)(\?.*)?$/);
   if (!m) return null;
@@ -236,14 +284,16 @@ function createClient(url) {
       ssl: useSSL ? "require" : false,
       max: 10,
       idle_timeout: 20,
-      connect_timeout: 10
+      connect_timeout: 10,
+      prepare: false
     });
   }
   return postgres(url, {
     ssl: useSSL ? "require" : false,
     max: 10,
     idle_timeout: 20,
-    connect_timeout: 10
+    connect_timeout: 10,
+    prepare: false
   });
 }
 async function getDb() {
@@ -322,7 +372,7 @@ async function tryPg(fn) {
     return await fn(db);
   } catch (e) {
     const cause = String(e.cause || e.message || "");
-    if (cause.includes("ENOTFOUND") || cause.includes("CONNECT_TIMEOUT") || cause.includes("Tenant or user not found")) {
+    if (cause.includes("ENOTFOUND") || cause.includes("CONNECT_TIMEOUT") || cause.includes("ECONNRESET") || cause.includes("Tenant or user not found")) {
       _pgBroken = true;
       console.warn("[Database] PG connection failed, switching to REST fallback");
     }
@@ -717,6 +767,61 @@ async function deleteRonensPick(id) {
   if (!db) throw new Error("Database not available");
   await db.delete(ronensPicks).where(eq(ronensPicks.id, id));
 }
+async function getUserCount() {
+  const pg = await tryPg(async (db) => {
+    const result = await db.select({ count: sql`COUNT(*)` }).from(users);
+    return Number(result[0]?.count || 0);
+  });
+  if (pg !== null) return pg;
+  const rows = await restGet("users", "select=id");
+  return rows.length;
+}
+async function getContentStats() {
+  const pg = await tryPg(async (db) => {
+    const [mixesByCategory, featuredResult, allPartners, activePartners, subCount, newestMix, newestSub] = await Promise.all([
+      db.select({ category: mixes.category, count: sql`COUNT(*)` }).from(mixes).groupBy(mixes.category),
+      db.select({ count: sql`COUNT(*)` }).from(mixes).where(eq(mixes.featured, true)),
+      db.select({ count: sql`COUNT(*)` }).from(partners),
+      db.select({ count: sql`COUNT(*)` }).from(partners).where(eq(partners.active, true)),
+      db.select({ count: sql`COUNT(*)` }).from(subscribers),
+      db.select({ createdAt: mixes.createdAt }).from(mixes).orderBy(desc(mixes.createdAt)).limit(1),
+      db.select({ subscribedAt: subscribers.subscribedAt }).from(subscribers).orderBy(desc(subscribers.subscribedAt)).limit(1)
+    ]);
+    return {
+      mixesByCategory: mixesByCategory.map((r) => ({ category: r.category, count: Number(r.count) })),
+      featuredCount: Number(featuredResult[0]?.count || 0),
+      partnerStats: { total: Number(allPartners[0]?.count || 0), active: Number(activePartners[0]?.count || 0) },
+      subscriberCount: Number(subCount[0]?.count || 0),
+      newestMixDate: newestMix[0]?.createdAt ? String(newestMix[0].createdAt) : null,
+      newestSubscriberDate: newestSub[0]?.subscribedAt ? String(newestSub[0].subscribedAt) : null
+    };
+  });
+  if (pg) return pg;
+  const [allMixes, allPartnersRest, allSubsRest] = await Promise.all([
+    restGet("mixes", 'select=category,featured,"createdAt"'),
+    restGet("partners", "select=active"),
+    restGet("subscribers", 'select="subscribedAt"')
+  ]);
+  const catCounts = {};
+  let featuredCount = 0;
+  let newestMixDate = null;
+  for (const m of allMixes) {
+    catCounts[m.category] = (catCounts[m.category] || 0) + 1;
+    if (m.featured) featuredCount++;
+    if (!newestMixDate || m.createdAt > newestMixDate) newestMixDate = m.createdAt;
+  }
+  const activeCount = allPartnersRest.filter((p) => p.active).length;
+  const sortedSubs = [...allSubsRest].sort((a, b) => String(b.subscribedAt).localeCompare(String(a.subscribedAt)));
+  const newestSubscriberDate = sortedSubs.length > 0 ? String(sortedSubs[0].subscribedAt) : null;
+  return {
+    mixesByCategory: Object.entries(catCounts).map(([category, count]) => ({ category, count })),
+    featuredCount,
+    partnerStats: { total: allPartnersRest.length, active: activeCount },
+    subscriberCount: allSubsRest.length,
+    newestMixDate,
+    newestSubscriberDate
+  };
+}
 async function verifyVaultPassphrase(userId, passphrase) {
   if (passphrase.toLowerCase().trim() !== VAULT_PASSPHRASE.toLowerCase().trim()) {
     return false;
@@ -749,6 +854,48 @@ async function deleteVaultMix(id) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   await db.delete(vaultMixes).where(eq(vaultMixes.id, id));
+}
+async function getAllFestivalSubmissions() {
+  const pg = await tryPg((db) => db.select().from(festivalSubmissions).orderBy(desc(festivalSubmissions.createdAt)));
+  if (pg) return pg;
+  return restGet("festival_submissions", 'select=*&order="createdAt".desc');
+}
+async function getFestivalSubmissionsByStatus(status) {
+  const pg = await tryPg((db) => db.select().from(festivalSubmissions).where(eq(festivalSubmissions.status, status)).orderBy(desc(festivalSubmissions.createdAt)));
+  if (pg) return pg;
+  return restGet("festival_submissions", `select=*&status=eq.${encodeURIComponent(status)}&order="createdAt".desc`);
+}
+async function getApprovedFestivals() {
+  const pg = await tryPg(
+    (db) => db.select().from(festivalSubmissions).where(or(eq(festivalSubmissions.status, "approved"), eq(festivalSubmissions.status, "featured"))).orderBy(asc(festivalSubmissions.startDate))
+  );
+  if (pg) return pg;
+  return restGet("festival_submissions", 'select=*&or=(status.eq.approved,status.eq.featured)&order="startDate".asc');
+}
+async function createFestivalSubmission(data) {
+  const pg = await tryPg((db) => db.insert(festivalSubmissions).values(data));
+  if (pg !== null) return;
+  await restPost("festival_submissions", data);
+}
+async function updateFestivalSubmissionStatus(id, status, adminNotes) {
+  const updateData = {
+    status,
+    reviewedAt: /* @__PURE__ */ new Date(),
+    updatedAt: /* @__PURE__ */ new Date()
+  };
+  if (adminNotes !== void 0) {
+    updateData.adminNotes = adminNotes;
+  }
+  const pg = await tryPg(
+    (db) => db.update(festivalSubmissions).set(updateData).where(eq(festivalSubmissions.id, id))
+  );
+  if (pg !== null) return;
+  await restPatch("festival_submissions", `id=eq.${id}`, updateData);
+}
+async function deleteFestivalSubmission(id) {
+  const pg = await tryPg((db) => db.delete(festivalSubmissions).where(eq(festivalSubmissions.id, id)));
+  if (pg !== null) return;
+  await restDelete("festival_submissions", `id=eq.${id}`);
 }
 var _db, _pgBroken, KARMA_VALUES, VAULT_PASSPHRASE;
 var init_db = __esm({
@@ -1090,6 +1237,303 @@ var init_youtubeAnalytics = __esm({
   }
 });
 
+// server/ga4Analytics.ts
+var ga4Analytics_exports = {};
+__export(ga4Analytics_exports, {
+  exchangeGA4Code: () => exchangeGA4Code,
+  getCountries: () => getCountries,
+  getDevices: () => getDevices,
+  getGA4OAuthUrl: () => getGA4OAuthUrl,
+  getOverview: () => getOverview,
+  getPageViewsOverTime: () => getPageViewsOverTime,
+  getTopPages: () => getTopPages,
+  getTrafficSources: () => getTrafficSources,
+  isGA4Connected: () => isGA4Connected
+});
+function getClientId() {
+  return process.env.GOOGLE_CLIENT_ID || "";
+}
+function getClientSecret() {
+  return process.env.GOOGLE_CLIENT_SECRET || "";
+}
+function getRedirectUri() {
+  if (process.env.VERCEL) {
+    return "https://psychedelic-universe.com/api/auth/callback/google-analytics";
+  }
+  return "http://localhost:3000/api/auth/callback/google-analytics";
+}
+function getGA4OAuthUrl() {
+  const params = new URLSearchParams({
+    client_id: getClientId(),
+    redirect_uri: getRedirectUri(),
+    response_type: "code",
+    scope: "https://www.googleapis.com/auth/analytics.readonly",
+    access_type: "offline",
+    prompt: "consent"
+  });
+  return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+}
+async function exchangeGA4Code(code) {
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      code,
+      client_id: getClientId(),
+      client_secret: getClientSecret(),
+      redirect_uri: getRedirectUri(),
+      grant_type: "authorization_code"
+    })
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    console.error("[GA4] Token exchange failed:", err);
+    throw new Error("Failed to exchange GA4 authorization code");
+  }
+  const data = await res.json();
+  if (data.refresh_token) {
+    await upsertSetting("ga4_refresh_token", data.refresh_token, "GA4 OAuth refresh token");
+  } else {
+    throw new Error("No refresh token received from Google");
+  }
+}
+async function getAccessToken() {
+  const refreshToken = await getSetting("ga4_refresh_token");
+  if (!refreshToken) return null;
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      refresh_token: refreshToken,
+      client_id: getClientId(),
+      client_secret: getClientSecret(),
+      grant_type: "refresh_token"
+    })
+  });
+  if (!res.ok) {
+    if (res.status === 400 || res.status === 401) {
+      console.warn("[GA4] Refresh token invalid, clearing");
+      await upsertSetting("ga4_refresh_token", "", "GA4 OAuth refresh token (cleared)");
+      return null;
+    }
+    console.error("[GA4] Token refresh failed:", res.status);
+    return null;
+  }
+  const data = await res.json();
+  return data.access_token;
+}
+async function isGA4Connected() {
+  const token = await getSetting("ga4_refresh_token");
+  return !!token && token.length > 0;
+}
+function getCached(key) {
+  const entry = cache.get(key);
+  if (entry && Date.now() < entry.expiresAt) return entry.data;
+  cache.delete(key);
+  return null;
+}
+function setCache(key, data) {
+  cache.set(key, { data, expiresAt: Date.now() + CACHE_TTL });
+}
+async function runReport(body) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return null;
+  const res = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${GA4_PROPERTY_ID}:runReport`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    }
+  );
+  if (!res.ok) {
+    console.error("[GA4] Report API error:", res.status, await res.text());
+    return null;
+  }
+  return res.json();
+}
+function pctChange(curr, prev) {
+  if (prev === 0) return curr > 0 ? 100 : 0;
+  return Math.round((curr - prev) / prev * 100);
+}
+function metricVal(row, index) {
+  return parseFloat(row?.metricValues?.[index]?.value) || 0;
+}
+async function getOverview() {
+  const cached = getCached("overview");
+  if (cached) return cached;
+  const connected = await isGA4Connected();
+  if (!connected) return { connected: false };
+  const data = await runReport({
+    dateRanges: [
+      { startDate: "30daysAgo", endDate: "today" },
+      { startDate: "60daysAgo", endDate: "31daysAgo" }
+    ],
+    metrics: [
+      { name: "screenPageViews" },
+      { name: "activeUsers" },
+      { name: "sessions" },
+      { name: "averageSessionDuration" }
+    ]
+  });
+  if (!data?.rows?.length) {
+    const result2 = {
+      connected: true,
+      pageViews: 0,
+      users: 0,
+      sessions: 0,
+      avgDuration: 0,
+      changes: { pageViews: 0, users: 0, sessions: 0, avgDuration: 0 }
+    };
+    setCache("overview", result2);
+    return result2;
+  }
+  const currentRow = data.rows.find((r) => r.dimensionValues?.[0]?.value === "date_range_0") || data.rows[0];
+  const prevRow = data.rows.find((r) => r.dimensionValues?.[0]?.value === "date_range_1") || data.rows[1];
+  const current = {
+    pageViews: metricVal(currentRow, 0),
+    users: metricVal(currentRow, 1),
+    sessions: metricVal(currentRow, 2),
+    avgDuration: metricVal(currentRow, 3)
+  };
+  const prev = prevRow ? {
+    pageViews: metricVal(prevRow, 0),
+    users: metricVal(prevRow, 1),
+    sessions: metricVal(prevRow, 2),
+    avgDuration: metricVal(prevRow, 3)
+  } : { pageViews: 0, users: 0, sessions: 0, avgDuration: 0 };
+  const result = {
+    connected: true,
+    ...current,
+    changes: {
+      pageViews: pctChange(current.pageViews, prev.pageViews),
+      users: pctChange(current.users, prev.users),
+      sessions: pctChange(current.sessions, prev.sessions),
+      avgDuration: pctChange(current.avgDuration, prev.avgDuration)
+    }
+  };
+  setCache("overview", result);
+  return result;
+}
+async function getTopPages() {
+  const cached = getCached("topPages");
+  if (cached) return cached;
+  const connected = await isGA4Connected();
+  if (!connected) return { connected: false };
+  const data = await runReport({
+    dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
+    dimensions: [{ name: "pagePath" }],
+    metrics: [
+      { name: "screenPageViews" },
+      { name: "activeUsers" }
+    ],
+    orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
+    limit: 20
+  });
+  const pages = (data?.rows || []).map((row) => ({
+    path: row.dimensionValues[0].value,
+    views: parseInt(row.metricValues[0].value) || 0,
+    users: parseInt(row.metricValues[1].value) || 0
+  }));
+  const result = { connected: true, pages };
+  setCache("topPages", result);
+  return result;
+}
+async function getTrafficSources() {
+  const cached = getCached("trafficSources");
+  if (cached) return cached;
+  const connected = await isGA4Connected();
+  if (!connected) return { connected: false };
+  const data = await runReport({
+    dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
+    dimensions: [{ name: "sessionSourceMedium" }],
+    metrics: [{ name: "sessions" }],
+    orderBys: [{ metric: { metricName: "sessions" }, desc: true }],
+    limit: 20
+  });
+  const sources = (data?.rows || []).map((row) => ({
+    source: row.dimensionValues[0].value,
+    sessions: parseInt(row.metricValues[0].value) || 0
+  }));
+  const result = { connected: true, sources };
+  setCache("trafficSources", result);
+  return result;
+}
+async function getCountries() {
+  const cached = getCached("countries");
+  if (cached) return cached;
+  const connected = await isGA4Connected();
+  if (!connected) return { connected: false };
+  const data = await runReport({
+    dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
+    dimensions: [{ name: "country" }],
+    metrics: [{ name: "activeUsers" }],
+    orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+    limit: 15
+  });
+  const countries = (data?.rows || []).map((row) => ({
+    country: row.dimensionValues[0].value,
+    users: parseInt(row.metricValues[0].value) || 0
+  }));
+  const result = { connected: true, countries };
+  setCache("countries", result);
+  return result;
+}
+async function getDevices() {
+  const cached = getCached("devices");
+  if (cached) return cached;
+  const connected = await isGA4Connected();
+  if (!connected) return { connected: false };
+  const data = await runReport({
+    dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
+    dimensions: [{ name: "deviceCategory" }],
+    metrics: [{ name: "sessions" }],
+    orderBys: [{ metric: { metricName: "sessions" }, desc: true }]
+  });
+  const devices = (data?.rows || []).map((row) => ({
+    device: row.dimensionValues[0].value,
+    sessions: parseInt(row.metricValues[0].value) || 0
+  }));
+  const result = { connected: true, devices };
+  setCache("devices", result);
+  return result;
+}
+async function getPageViewsOverTime() {
+  const cached = getCached("pageViewsOverTime");
+  if (cached) return cached;
+  const connected = await isGA4Connected();
+  if (!connected) return { connected: false };
+  const data = await runReport({
+    dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
+    dimensions: [{ name: "date" }],
+    metrics: [{ name: "screenPageViews" }],
+    orderBys: [{ dimension: { dimensionName: "date" } }]
+  });
+  const daily = (data?.rows || []).map((row) => {
+    const d = row.dimensionValues[0].value;
+    return {
+      date: `${d.slice(4, 6)}/${d.slice(6, 8)}`,
+      views: parseInt(row.metricValues[0].value) || 0
+    };
+  });
+  const result = { connected: true, daily };
+  setCache("pageViewsOverTime", result);
+  return result;
+}
+var GA4_PROPERTY_ID, cache, CACHE_TTL;
+var init_ga4Analytics = __esm({
+  "server/ga4Analytics.ts"() {
+    "use strict";
+    init_db();
+    GA4_PROPERTY_ID = "527492497";
+    cache = /* @__PURE__ */ new Map();
+    CACHE_TTL = 5 * 60 * 1e3;
+  }
+});
+
 // server/vercel-api.ts
 import express from "express";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
@@ -1141,7 +1585,7 @@ import { createClient as createClient2 } from "@supabase/supabase-js";
 var supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "";
 var supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 var supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "";
-var supabaseAdmin = createClient2(supabaseUrl, supabaseServiceRoleKey);
+var supabaseAdmin = supabaseServiceRoleKey ? createClient2(supabaseUrl, supabaseServiceRoleKey) : createClient2(supabaseUrl, supabaseAnonKey);
 var supabase = createClient2(supabaseUrl, supabaseAnonKey);
 
 // server/_core/sdk.ts
@@ -1445,6 +1889,49 @@ var appRouter = router({
       };
     })
   }),
+  // ============ GA4 ANALYTICS ============
+  analytics: router({
+    isConnected: adminProcedure.query(async () => {
+      const { isGA4Connected: isGA4Connected2 } = await Promise.resolve().then(() => (init_ga4Analytics(), ga4Analytics_exports));
+      return { connected: await isGA4Connected2() };
+    }),
+    getOAuthUrl: adminProcedure.query(async () => {
+      const { getGA4OAuthUrl: getGA4OAuthUrl2 } = await Promise.resolve().then(() => (init_ga4Analytics(), ga4Analytics_exports));
+      return { url: getGA4OAuthUrl2() };
+    }),
+    getOverview: adminProcedure.query(async () => {
+      const { getOverview: getOverview2 } = await Promise.resolve().then(() => (init_ga4Analytics(), ga4Analytics_exports));
+      return getOverview2();
+    }),
+    getTopPages: adminProcedure.query(async () => {
+      const { getTopPages: getTopPages2 } = await Promise.resolve().then(() => (init_ga4Analytics(), ga4Analytics_exports));
+      return getTopPages2();
+    }),
+    getTrafficSources: adminProcedure.query(async () => {
+      const { getTrafficSources: getTrafficSources2 } = await Promise.resolve().then(() => (init_ga4Analytics(), ga4Analytics_exports));
+      return getTrafficSources2();
+    }),
+    getCountries: adminProcedure.query(async () => {
+      const { getCountries: getCountries2 } = await Promise.resolve().then(() => (init_ga4Analytics(), ga4Analytics_exports));
+      return getCountries2();
+    }),
+    getDevices: adminProcedure.query(async () => {
+      const { getDevices: getDevices2 } = await Promise.resolve().then(() => (init_ga4Analytics(), ga4Analytics_exports));
+      return getDevices2();
+    }),
+    getPageViewsOverTime: adminProcedure.query(async () => {
+      const { getPageViewsOverTime: getPageViewsOverTime2 } = await Promise.resolve().then(() => (init_ga4Analytics(), ga4Analytics_exports));
+      return getPageViewsOverTime2();
+    })
+  }),
+  // ============ USERS ============
+  users: router({
+    count: adminProcedure.query(() => getUserCount())
+  }),
+  // ============ ADMIN STATS ============
+  admin: router({
+    getContentStats: adminProcedure.query(() => getContentStats())
+  }),
   // ============ MIXES ============
   mixes: router({
     // Public endpoints
@@ -1740,6 +2227,64 @@ var appRouter = router({
     })).mutation(({ input }) => createRonensPick(input)),
     delete: adminProcedure.input(z2.object({ id: z2.number() })).mutation(({ input }) => deleteRonensPick(input.id))
   }),
+  // ============ FESTIVAL SUBMISSIONS ============
+  festivalSubmissions: router({
+    // Public: create a new submission
+    create: publicProcedure.input(z2.object({
+      festivalName: z2.string().min(1, "Festival name is required").max(255),
+      websiteUrl: z2.string().max(500).optional(),
+      contactName: z2.string().min(1, "Contact name is required").max(255),
+      contactEmail: z2.string().email("Valid email is required").max(320),
+      locationName: z2.string().min(1, "Location is required").max(255),
+      locationCountry: z2.string().min(1, "Country is required").max(100),
+      startDate: z2.string().min(1, "Start date is required").max(20),
+      endDate: z2.string().min(1, "End date is required").max(20),
+      genres: z2.string().min(1, "At least one genre is required"),
+      description: z2.string().min(10, "Description must be at least 10 characters"),
+      lineup: z2.string().optional(),
+      logoUrl: z2.string().max(500).optional(),
+      photo1Url: z2.string().max(500).optional(),
+      photo2Url: z2.string().max(500).optional(),
+      photo3Url: z2.string().max(500).optional(),
+      facebookUrl: z2.string().max(500).optional(),
+      instagramUrl: z2.string().max(500).optional(),
+      ticketUrl: z2.string().max(500).optional()
+    })).mutation(async ({ input }) => {
+      await createFestivalSubmission(input);
+      return { success: true, message: "Festival submitted for review!" };
+    }),
+    // Public: get approved + featured festivals
+    approved: publicProcedure.query(() => getApprovedFestivals()),
+    // Admin: list all submissions
+    list: adminProcedure.input(z2.object({ status: z2.enum(["pending", "approved", "rejected", "featured"]).optional() }).optional()).query(({ input }) => {
+      if (input?.status) return getFestivalSubmissionsByStatus(input.status);
+      return getAllFestivalSubmissions();
+    }),
+    // Admin: update status
+    updateStatus: adminProcedure.input(z2.object({
+      id: z2.number(),
+      status: z2.enum(["pending", "approved", "rejected", "featured"]),
+      adminNotes: z2.string().optional()
+    })).mutation(({ input }) => updateFestivalSubmissionStatus(input.id, input.status, input.adminNotes)),
+    // Admin: delete submission
+    delete: adminProcedure.input(z2.object({ id: z2.number() })).mutation(({ input }) => deleteFestivalSubmission(input.id)),
+    // Public: upload image for festival submission
+    uploadImage: publicProcedure.input(z2.object({
+      fileName: z2.string(),
+      fileData: z2.string(),
+      // base64
+      contentType: z2.string(),
+      slug: z2.string()
+    })).mutation(async ({ input }) => {
+      const buffer = Buffer.from(input.fileData, "base64");
+      const timestamp2 = Date.now();
+      const randomSuffix = Math.random().toString(36).substring(2, 8);
+      const extension = input.fileName.split(".").pop() || "png";
+      const key = `festival-submissions/${input.slug}/${timestamp2}-${randomSuffix}.${extension}`;
+      const result = await storagePut(key, buffer, input.contentType);
+      return { url: result.url };
+    })
+  }),
   // ============ UNDERGROUND VAULT ============
   vault: router({
     // Check if user has vault access
@@ -1916,6 +2461,20 @@ app.get("/api/oauth/youtube/callback", async (req, res) => {
   } catch (error) {
     console.error("YouTube OAuth error:", error);
     res.redirect("/stats?error=oauth_failed");
+  }
+});
+app.get("/api/auth/callback/google-analytics", async (req, res) => {
+  const code = req.query.code;
+  if (!code) {
+    return res.status(400).send("Missing authorization code");
+  }
+  try {
+    const { exchangeGA4Code: exchangeGA4Code2 } = await Promise.resolve().then(() => (init_ga4Analytics(), ga4Analytics_exports));
+    await exchangeGA4Code2(code);
+    res.redirect("/admin?tab=analytics&ga4=connected");
+  } catch (error) {
+    console.error("GA4 OAuth error:", error);
+    res.redirect("/admin?tab=analytics&ga4=error");
   }
 });
 app.use(

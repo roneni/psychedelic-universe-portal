@@ -6,7 +6,6 @@ import { ArrowLeft, Globe, Youtube, Music2, Headphones, Instagram, Facebook, Ext
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
-import { usePageMeta } from "@/hooks/usePageMeta";
 
 // Genre badge colors
 const genreColors: Record<string, string> = {
