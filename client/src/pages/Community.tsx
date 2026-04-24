@@ -102,10 +102,62 @@ export default function Community() {
               The Tribe
             </h1>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Every action earns Karma. Favorite mixes, share content, visit daily, and climb the ranks. 
+              Every action earns Karma. Favorite mixes, share content, visit daily, and climb the ranks.
               The most engaged members of our community earn recognition and exclusive perks.
             </p>
           </div>
+
+          {/* Community Tools — Featured Project */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-12"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <Sparkles className="w-5 h-5 text-purple-400" />
+              <h2 className="text-xl font-bold text-white">Community Tools</h2>
+            </div>
+            <a
+              href="https://universe.diffusion.psychedelic-universe.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block relative overflow-hidden rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-950/40 via-black to-cyan-950/40 hover:border-purple-400/60 hover:shadow-[0_0_40px_-10px_rgba(168,85,247,0.4)] transition-all duration-500"
+            >
+              <div className="relative aspect-[21/9] overflow-hidden">
+                <img
+                  src="/images/universe-diffusion.jpg"
+                  alt="Universe Diffusion — AI visual lab"
+                  loading="lazy"
+                  className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+              </div>
+              <div className="relative p-6 md:p-8 -mt-20 md:-mt-24">
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                  <div>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-200 text-xs mb-3 backdrop-blur">
+                      <Sparkles className="w-3 h-3" />
+                      Featured · AI Visual Lab
+                    </div>
+                    <h3 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-200 via-pink-200 to-cyan-200 bg-clip-text text-transparent mb-3">
+                      Universe Diffusion
+                    </h3>
+                    <p className="text-gray-300 max-w-xl text-sm md:text-base">
+                      State-of-the-art text-to-image and image-to-image diffusion. Generate psychedelic visuals from a prompt, or remix your own art through the cosmos.
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 border border-white/20 text-white text-sm font-medium backdrop-blur group-hover:bg-white/20 group-hover:border-white/40 transition-all">
+                      Launch tool
+                      <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </motion.section>
 
           {/* User Profile Card (if logged in) */}
           {isAuthenticated && myKarma ? (
